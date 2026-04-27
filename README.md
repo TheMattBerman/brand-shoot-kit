@@ -82,6 +82,16 @@ Opt-in live generation/vision (requires `OPENAI_API_KEY` and explicit `--live`):
 ./scripts/qa-images.py --packet <packet-dir> --live
 ```
 
+Reference-image controls for live generation:
+
+```bash
+# Explicit local file or URL reference (cached into <packet>/assets/reference-images/)
+./scripts/generate-images.py --packet <packet-dir> --live --reference-image ./path/to/product.png
+
+# Auto-select from scout.json image_evidence/image_urls (default for packet+live runs)
+./scripts/generate-images.py --packet <packet-dir> --live --auto-reference-image
+```
+
 Config-driven fallback:
 
 ```bash

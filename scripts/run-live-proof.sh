@@ -9,6 +9,7 @@ Usage: ./scripts/run-live-proof.sh --url PRODUCT_URL --out OUTDIR [options]
 
 Operator-safe one-product proof pipeline:
   scout/packet -> generate -> qa -> reroll (optional) -> export -> summary
+  live generation auto-selects a safe reference image from scout evidence when available.
 
 Required:
   --url PRODUCT_URL      Product URL to proof
@@ -206,7 +207,7 @@ fi
 # 2) generate
 GEN_CMD=("$ROOT_DIR/scripts/generate-images.py" --packet "$OUT" --limit "$MAX_SHOTS")
 if [[ "$MODE" == "live" ]]; then
-  GEN_CMD+=(--live)
+  GEN_CMD+=(--live --auto-reference-image)
 fi
 run_cmd "${GEN_CMD[@]}"
 

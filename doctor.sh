@@ -99,6 +99,7 @@ check_file "evals/execution-evals.md"
 check_file "evals/output-quality-rubric.md"
 check_file "evals/run.py"
 check_file "examples/scout-samples/skincare-serum-scout.json"
+check_file "evals/fixtures/reference-product.png"
 check_file "examples/live-proof-review-template.json"
 check_dir "examples/golden-runs"
 
@@ -160,6 +161,10 @@ check_help "./scripts/build-golden-runs.sh"
 check_help "./scripts/build-golden-runs.sh --check"
 rm -rf "./output/doctor-live-proof-dry"
 check_help "./scripts/run-live-proof.sh --dry-run --url https://example.com/products/sample --out ./output/doctor-live-proof-dry --max-shots 2"
+rm -rf "./output/doctor-reference-packet"
+check_help "./scripts/run-brand-shoot.py --scout-json ./evals/fixtures/scout-coffee.json --out ./output/doctor-reference-packet"
+check_help "./scripts/generate-images.py --packet ./output/doctor-reference-packet --limit 1 --reference-image ./evals/fixtures/reference-product.png"
+check_help "python3 -c \"import json; from pathlib import Path; m=json.loads(Path('./output/doctor-reference-packet/assets/generated/generation-manifest.json').read_text(encoding='utf-8')); e=(m.get('entries') or [{}])[0]; assert m.get('reference_image_path'); assert e.get('reference_image_path')\""
 
 # Basic dependency checks
 command -v bash >/dev/null 2>&1 && pass "binary available: bash" || fail "missing binary: bash"

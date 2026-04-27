@@ -169,6 +169,51 @@ def eval_dry_run_loop(errors: List[str]) -> None:
     assert_true((packet / "assets" / "exports" / "final" / "export-manifest.json").exists(), "export manifest produced", errors)
 
 
+def eval_reference_image_manifest(errors: List[str]) -> None:
+    packet = run_packet_from_fixture("reference-image", FIXTURES / "scout-coffee.json")
+    reference_image = FIXTURES / "reference-product.png"
+    assert_true(reference_image.exists(), "reference fixture exists", errors)
+    if not reference_image.exists():
+        return
+
+    proc = run(
+        [
+            "scripts/generate-images.py",
+            "--packet",
+            str(packet),
+            "--limit",
+            "1",
+            "--overwrite",
+            "--reference-image",
+            str(reference_image),
+        ]
+    )
+    assert_true(proc.returncode == 0, "reference-image dry generation command succeeds", errors)
+    if proc.returncode != 0:
+        return
+
+    manifest = load_json(packet / "assets" / "generated" / "generation-manifest.json")
+    ref_path = manifest.get("reference_image_path")
+    assert_true(isinstance(ref_path, str) and ref_path != "", "manifest run metadata has reference_image_path", errors)
+    assert_true(manifest.get("reference_image_url") is None, "manifest run metadata has null reference_image_url for local source", errors)
+    entries = manifest.get("entries") or []
+    assert_true(len(entries) == 1, "reference-image eval limited to one shot", errors)
+    if entries:
+        entry = entries[0]
+        assert_true(
+            isinstance(entry.get("reference_image_path"), str) and entry.get("reference_image_path") != "",
+            "entry metadata has reference_image_path",
+            errors,
+        )
+        assert_true(
+            entry.get("reference_image_url") is None,
+            "entry metadata has null reference_image_url for local source",
+            errors,
+        )
+        cache_path = Path(str(entry.get("reference_image_path")))
+        assert_true(cache_path.exists(), "cached reference image file exists", errors)
+
+
 def eval_golden_bundle_completeness(errors: List[str]) -> None:
     build = run(["scripts/build-golden-runs.sh"])
     assert_true(build.returncode == 0, "golden bundles build successfully", errors)
@@ -217,6 +262,7 @@ def main() -> int:
         eval_prompt_differentiation(errors)
         eval_module_entrypoints(errors)
         eval_dry_run_loop(errors)
+        eval_reference_image_manifest(errors)
         eval_golden_bundle_completeness(errors)
         eval_live_proof_tooling(errors)
     except Exception as exc:

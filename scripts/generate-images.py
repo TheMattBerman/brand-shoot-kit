@@ -10,14 +10,20 @@ from __future__ import annotations
 import argparse
 import base64
 import hashlib
+import html
 import json
+import mimetypes
 import os
+import shutil
 import sys
 import urllib.error
 import urllib.request
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional, Tuple
+from urllib.parse import urlparse
+import ipaddress
+import uuid
 
 from packet_utils import dump_json, ensure_packet_dir, parse_generation_prompts, read_brand_product, slug
 
@@ -32,7 +38,12 @@ class OpenAIImageProvider:
         self.model = model
         self.size = size
 
-    def generate(self, prompt: str) -> bytes:
+    def generate(self, prompt: str, reference_image_path: Optional[Path] = None) -> Tuple[bytes, str]:
+        if reference_image_path:
+            return self._generate_with_reference(prompt, reference_image_path)
+        return self._generate_text_only(prompt)
+
+    def _generate_text_only(self, prompt: str) -> Tuple[bytes, str]:
         payload = {
             "model": self.model,
             "prompt": prompt,
@@ -58,23 +69,100 @@ class OpenAIImageProvider:
         except urllib.error.URLError as exc:
             raise RuntimeError(f"OpenAI request failed: {exc}") from exc
 
-        items = body.get("data") or []
-        if not items:
-            raise RuntimeError(f"OpenAI response missing data: {body}")
-        first = items[0]
-        b64 = first.get("b64_json")
-        if b64:
-            return base64.b64decode(b64)
+        return extract_openai_image_bytes(body), "images/generations"
 
-        image_url = first.get("url")
-        if image_url:
+    def _generate_with_reference(self, prompt: str, reference_image_path: Path) -> Tuple[bytes, str]:
+        image_bytes = reference_image_path.read_bytes()
+        mime_type = mimetypes.guess_type(reference_image_path.name)[0] or "image/png"
+        filename = reference_image_path.name
+
+        # Some API variants accept `image[]`; others accept `image`. Try both.
+        attempts = [("image[]",), ("image",)]
+        last_error = ""
+        for field_name_tuple in attempts:
+            field_name = field_name_tuple[0]
+            boundary = f"----brandshootkit-{uuid.uuid4().hex}"
+            body = build_multipart_form_data(
+                boundary=boundary,
+                fields={
+                    "model": self.model,
+                    "prompt": prompt,
+                    "size": self.size,
+                },
+                files=[(field_name, filename, mime_type, image_bytes)],
+            )
+            req = urllib.request.Request(
+                "https://api.openai.com/v1/images/edits",
+                data=body,
+                headers={
+                    "Authorization": f"Bearer {self.api_key}",
+                    "Content-Type": f"multipart/form-data; boundary={boundary}",
+                },
+                method="POST",
+            )
             try:
-                with urllib.request.urlopen(image_url, timeout=120) as image_resp:
-                    return image_resp.read()
+                with urllib.request.urlopen(req, timeout=180) as resp:
+                    payload = json.loads(resp.read().decode("utf-8"))
+                return extract_openai_image_bytes(payload), f"images/edits:{field_name}"
+            except urllib.error.HTTPError as exc:
+                details = exc.read().decode("utf-8", errors="replace")
+                last_error = f"OpenAI image edit failed ({exc.code}) [{field_name}]: {details}"
+                if exc.code not in {400, 404, 409, 415, 422}:
+                    raise RuntimeError(last_error) from exc
             except urllib.error.URLError as exc:
-                raise RuntimeError(f"OpenAI image URL download failed: {exc}") from exc
+                raise RuntimeError(f"OpenAI request failed: {exc}") from exc
 
-        raise RuntimeError(f"OpenAI response missing b64_json/url: {body}")
+        raise RuntimeError(last_error or "OpenAI image edit failed for unknown reason")
+
+
+def build_multipart_form_data(
+    *,
+    boundary: str,
+    fields: Dict[str, str],
+    files: List[Tuple[str, str, str, bytes]],
+) -> bytes:
+    chunks: List[bytes] = []
+
+    for name, value in fields.items():
+        chunks.append(f"--{boundary}\r\n".encode("utf-8"))
+        chunks.append(f'Content-Disposition: form-data; name="{name}"\r\n\r\n'.encode("utf-8"))
+        chunks.append(str(value).encode("utf-8"))
+        chunks.append(b"\r\n")
+
+    for field_name, filename, mime_type, data in files:
+        chunks.append(f"--{boundary}\r\n".encode("utf-8"))
+        chunks.append(
+            (
+                f'Content-Disposition: form-data; name="{field_name}"; '
+                f'filename="{filename}"\r\n'
+            ).encode("utf-8")
+        )
+        chunks.append(f"Content-Type: {mime_type}\r\n\r\n".encode("utf-8"))
+        chunks.append(data)
+        chunks.append(b"\r\n")
+
+    chunks.append(f"--{boundary}--\r\n".encode("utf-8"))
+    return b"".join(chunks)
+
+
+def extract_openai_image_bytes(body: Dict[str, Any]) -> bytes:
+    items = body.get("data") or []
+    if not items:
+        raise RuntimeError(f"OpenAI response missing data: {body}")
+    first = items[0]
+    b64 = first.get("b64_json")
+    if b64:
+        return base64.b64decode(b64)
+
+    image_url = first.get("url")
+    if image_url:
+        try:
+            with urllib.request.urlopen(image_url, timeout=120) as image_resp:
+                return image_resp.read()
+        except urllib.error.URLError as exc:
+            raise RuntimeError(f"OpenAI image URL download failed: {exc}") from exc
+
+    raise RuntimeError(f"OpenAI response missing b64_json/url: {body}")
 
 
 def parse_args() -> argparse.Namespace:
@@ -90,6 +178,17 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--overwrite", action="store_true", help="Overwrite existing image files")
     p.add_argument("--asset-ids", default="", help="Comma-separated asset IDs to generate (default: all)")
     p.add_argument("--prompt-overrides", help="JSON map of asset_id -> prompt override")
+    p.add_argument(
+        "--reference-image",
+        help="Reference image file path or URL; used in live mode and cached inside the packet",
+    )
+    p.add_argument(
+        "--auto-reference-image",
+        dest="auto_reference_image",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="Auto-select reference from scout.json image_evidence/image_urls for live packet runs",
+    )
     return p.parse_args()
 
 
@@ -157,6 +256,197 @@ def load_prompt_overrides(path: str | None) -> Dict[str, str]:
     return {str(k): str(v) for k, v in payload.items()}
 
 
+def is_url(value: str) -> bool:
+    parsed = urlparse(value)
+    return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
+
+
+def is_safe_reference_url(url: str) -> bool:
+    parsed = urlparse(url)
+    if parsed.scheme not in {"http", "https"}:
+        return False
+    host = (parsed.hostname or "").strip().lower()
+    if not host:
+        return False
+    if host in {"localhost", "127.0.0.1", "::1"} or host.endswith(".local"):
+        return False
+    try:
+        ip = ipaddress.ip_address(host)
+        if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast:
+            return False
+    except ValueError:
+        pass
+    return True
+
+
+def reference_url_score(url: str, confidence: float, rank: int) -> float:
+    lower = url.lower()
+    if any(token in lower for token in [".svg", "logo", "icon", "checkmark", "review", "clinical"]):
+        return -1000.0
+    score = confidence * 100.0 - (rank * 0.01)
+    if any(token in lower for token in ["shop", "tile", "sticker", "pack", "product", "front", "galleryimage", "hero", "gusset", "can"]):
+        score += 25.0
+    if any(token in lower for token in ["shop", "sticker", "gusset", "pack", "product", "front"]):
+        score += 30.0
+    if any(token in lower for token in ["nutrition", "nlabel"]):
+        score -= 18.0
+    elif "label" in lower:
+        score += 4.0
+    if any(token in lower for token in ["adults", "og-"]):
+        score += 5.0
+    return score
+
+
+def pick_auto_reference_url(packet_dir: Path) -> Optional[str]:
+    scout_path = packet_dir / "scout.json"
+    if not scout_path.exists():
+        return None
+    try:
+        scout = json.loads(scout_path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+    candidates: List[Tuple[float, int, str]] = []
+    evidence = scout.get("image_evidence")
+    if isinstance(evidence, list):
+        for idx, item in enumerate(evidence):
+            if not isinstance(item, dict):
+                continue
+            url = html.unescape(str(item.get("url") or "").strip())
+            if not url:
+                continue
+            confidence = 0.0
+            try:
+                confidence = float(item.get("confidence", 0.0))
+            except (TypeError, ValueError):
+                confidence = 0.0
+            rank = item.get("rank")
+            try:
+                rank_int = int(rank)
+            except (TypeError, ValueError):
+                rank_int = idx + 1
+            candidates.append((reference_url_score(url, confidence, rank_int), rank_int, url))
+
+    urls = scout.get("image_urls")
+    if isinstance(urls, list):
+        for idx, raw in enumerate(urls):
+            url = html.unescape(str(raw).strip())
+            if not url:
+                continue
+            rank = idx + 1001
+            candidates.append((reference_url_score(url, 0.0, rank), rank, url))
+
+    if not candidates:
+        return None
+
+    candidates.sort(key=lambda x: (-x[0], x[1]))
+    for _score, _rank, url in candidates:
+        if is_safe_reference_url(url):
+            return url
+    return None
+
+
+def image_extension_for(url_or_path: str, content_type: str = "") -> str:
+    parsed = urlparse(url_or_path)
+    ext = Path(parsed.path if parsed.scheme else url_or_path).suffix.lower()
+    if ext in {".png", ".jpg", ".jpeg", ".webp"}:
+        return ".jpg" if ext == ".jpeg" else ext
+    if "image/png" in content_type:
+        return ".png"
+    if "image/jpeg" in content_type:
+        return ".jpg"
+    if "image/webp" in content_type:
+        return ".webp"
+    return ".png"
+
+
+def cache_reference_image(
+    source: str,
+    *,
+    packet_dir: Path,
+    allow_network: bool,
+) -> Dict[str, Optional[str]]:
+    cache_dir = packet_dir / "assets" / "reference-images"
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    if is_url(source):
+        if not allow_network:
+            raise RuntimeError("reference image URL caching is disabled outside live mode")
+        if not is_safe_reference_url(source):
+            raise RuntimeError(f"reference URL blocked as unsafe: {source}")
+        req = urllib.request.Request(
+            source,
+            headers={"User-Agent": "brand-shoot-kit/0.2"},
+            method="GET",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                body = resp.read()
+                content_type = str(resp.headers.get("Content-Type", "")).lower()
+        except urllib.error.HTTPError as exc:
+            details = exc.read().decode("utf-8", errors="replace")
+            raise RuntimeError(f"reference image download failed ({exc.code}): {details}") from exc
+        except urllib.error.URLError as exc:
+            raise RuntimeError(f"reference image download failed: {exc}") from exc
+
+        if not body:
+            raise RuntimeError("reference image download returned empty body")
+        ext = image_extension_for(source, content_type)
+        digest = hashlib.sha256(source.encode("utf-8")).hexdigest()[:16]
+        out_path = cache_dir / f"reference-url-{digest}{ext}"
+        out_path.write_bytes(body)
+        return {"reference_image_path": str(out_path), "reference_image_url": source}
+
+    local = Path(source).expanduser().resolve()
+    if not local.exists():
+        raise RuntimeError(f"reference image file not found: {local}")
+    if not local.is_file():
+        raise RuntimeError(f"reference image path is not a file: {local}")
+    ext = image_extension_for(str(local))
+    digest = hashlib.sha256(str(local).encode("utf-8")).hexdigest()[:16]
+    out_path = cache_dir / f"reference-local-{digest}{ext}"
+    if local != out_path:
+        shutil.copy2(local, out_path)
+    return {"reference_image_path": str(out_path), "reference_image_url": None}
+
+
+def resolve_reference_image(
+    *,
+    args: argparse.Namespace,
+    packet_dir: Path,
+    mode: str,
+) -> Tuple[Optional[Path], Optional[str], List[str], str]:
+    notes: List[str] = []
+    source: Optional[str] = args.reference_image
+    auto_selected = False
+
+    auto_default = bool(args.live and args.packet)
+    auto_enabled = args.auto_reference_image if args.auto_reference_image is not None else auto_default
+
+    if not source and auto_enabled and mode == "live":
+        source = pick_auto_reference_url(packet_dir)
+        if source:
+            auto_selected = True
+            notes.append("auto_reference_image:selected_from_scout")
+        else:
+            notes.append("auto_reference_image:no_safe_candidate_found")
+    elif not source and auto_enabled and mode != "live":
+        notes.append("auto_reference_image:skipped_non_live_mode")
+
+    if not source:
+        return None, None, notes, "none"
+
+    try:
+        cached = cache_reference_image(source, packet_dir=packet_dir, allow_network=(mode == "live"))
+    except Exception as exc:
+        notes.append(f"reference_image_error:{exc}")
+        return None, source if is_url(source) else None, notes, "none"
+
+    ref_path = Path(cached["reference_image_path"]) if cached["reference_image_path"] else None
+    ref_url = cached["reference_image_url"]
+    source_mode = "auto" if auto_selected else "explicit"
+    return ref_path, ref_url, notes, source_mode
+
+
 def main() -> int:
     args = parse_args()
     paths = resolve_paths(args)
@@ -202,6 +492,12 @@ def main() -> int:
         provider = OpenAIImageProvider(os.environ["OPENAI_API_KEY"], args.model, args.size)
         mode = "live"
 
+    reference_image_path, reference_image_url, reference_notes, reference_mode = resolve_reference_image(
+        args=args,
+        packet_dir=packet_dir,
+        mode=mode,
+    )
+
     run_stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     entries: List[Dict[str, Any]] = []
 
@@ -217,6 +513,8 @@ def main() -> int:
                     "provider": mode,
                     "dry_run": mode != "live",
                     "image_path": str(image_path),
+                    "reference_image_path": str(reference_image_path) if reference_image_path else None,
+                    "reference_image_url": reference_image_url,
                 }
             )
             continue
@@ -227,13 +525,16 @@ def main() -> int:
             "provider": mode,
             "dry_run": mode != "live",
             "image_path": str(image_path),
+            "reference_image_path": str(reference_image_path) if reference_image_path else None,
+            "reference_image_url": reference_image_url,
         }
 
         if mode == "live" and provider is not None:
             try:
-                png_bytes = provider.generate(shot["prompt"])
+                png_bytes, endpoint_used = provider.generate(shot["prompt"], reference_image_path=reference_image_path)
                 image_path.write_bytes(png_bytes)
                 entry["image_sha256"] = hashlib.sha256(png_bytes).hexdigest()
+                entry["openai_image_endpoint"] = endpoint_used
             except Exception as exc:  # pragma: no cover
                 entry["status"] = "error"
                 entry["error"] = str(exc)
@@ -252,6 +553,10 @@ def main() -> int:
         "provider": mode,
         "model": args.model if mode == "live" else "none",
         "size": args.size,
+        "reference_image_mode": reference_mode,
+        "reference_image_path": str(reference_image_path) if reference_image_path else None,
+        "reference_image_url": reference_image_url,
+        "reference_image_notes": reference_notes,
         "brand": brand_product["brand"],
         "product": brand_product["product"],
         "total_shots": len(shots),

@@ -86,3 +86,22 @@ Also updated every `skills/*/SKILL.md` to declare executable path + artifact own
   - `doctor.sh` now checks live-proof script help and executes a cheap dry proof command
   - `evals/run.py` now verifies live-proof script presence/executable/help
   - `README.md` now documents dry and live proof commands
+
+## Product Reference Image Support (live generation)
+
+- `scripts/generate-images.py` now supports:
+  - `--reference-image` (local file path or URL)
+  - `--auto-reference-image/--no-auto-reference-image`
+- Live packet runs can auto-select a safe source image from `scout.json` (`image_evidence` first, then `image_urls`), cache it into `assets/reference-images/`, and pass it as a visual reference to OpenAI.
+- OpenAI provider now supports:
+  - text-only generation via `POST /v1/images/generations`
+  - reference-guided generation via direct multipart `POST /v1/images/edits` with robust fallback between `image[]` and `image` form field conventions.
+- `generation-manifest.json` now records:
+  - run-level `reference_image_path`, `reference_image_url`, `reference_image_mode`, and notes
+  - entry-level `reference_image_path` and `reference_image_url`
+- `scripts/run-live-proof.sh` now uses `--auto-reference-image` for live generation calls.
+- No-spend defaults remain unchanged (`generate-images.py` still defaults to dry-run placeholders unless `--live` is set).
+- Added deterministic no-spend coverage:
+  - new fixture `evals/fixtures/reference-product.png`
+  - `evals/run.py` check asserting reference metadata + cached file path in dry mode with explicit local reference
+  - `doctor.sh` command checks for reference-image manifest metadata
