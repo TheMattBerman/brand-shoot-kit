@@ -8,7 +8,7 @@ usage() {
 Usage: ./scripts/run-live-proof.sh --url PRODUCT_URL --out OUTDIR [options]
 
 Operator-safe one-product proof pipeline:
-  scout/packet -> generate -> qa -> reroll (optional) -> export -> summary
+  scout/packet -> generate -> qa -> reroll (optional) -> export -> review-pack -> summary
   live generation auto-selects a safe reference image from scout evidence when available.
 
 Required:
@@ -224,7 +224,7 @@ if [[ "$REROLL_MODE" == "off" ]]; then
 else
   REROLL_CMD=("$ROOT_DIR/scripts/reroll-failed.py" --packet "$OUT")
   if [[ "$REROLL_MODE" == "live" ]]; then
-    REROLL_CMD+=(--live)
+    REROLL_CMD+=(--live --live-qa --qa-threshold "$QA_THRESHOLD")
   fi
   run_cmd "${REROLL_CMD[@]}"
 fi
@@ -232,7 +232,10 @@ fi
 # 5) export
 run_cmd "$ROOT_DIR/scripts/export-packager.py" --packet "$OUT"
 
-# 6) summary
+# 6) review artifact packager (human JSON template + HTML contact sheet)
+run_cmd "$ROOT_DIR/scripts/package-review-artifacts.py" --packet "$OUT"
+
+# 7) summary
 printf '%s\n' "${COMMANDS[@]}" > "$RUN_LOG"
 
 python3 - "$OUT" "$SUMMARY" "$URL" "$MODE" "$MAX_SHOTS" "$QA_THRESHOLD" "$REROLL_MODE" "$RUN_LOG" <<'PY'
@@ -258,6 +261,9 @@ def load(path):
 man_gen = out / "assets" / "generated" / "generation-manifest.json"
 man_qa = out / "assets" / "generated" / "qa-results.json"
 man_reroll = out / "assets" / "generated" / "reroll-manifest.json"
+man_review_pack = out / "assets" / "review" / "artifact-pack-manifest.json"
+man_review_template = out / "assets" / "review" / "human-review-template.json"
+man_contact_sheet = out / "assets" / "review" / "contact-sheet.html"
 
 export_manifests = sorted(out.glob("assets/exports/**/export-manifest.json"))
 export_manifest = export_manifests[-1] if export_manifests else None
@@ -266,10 +272,17 @@ gen = load(man_gen) or {}
 qa = load(man_qa) or {}
 reroll = load(man_reroll) or {}
 export = load(export_manifest) if export_manifest else {}
+review_pack = load(man_review_pack) or {}
 
 qa_summary = qa.get("summary", {})
 reroll_summary = reroll.get("summary", {})
 export_summary = export.get("summary", {})
+review_summary = review_pack.get("summary", {})
+decision_summary = (
+    review_summary.get("suggested_decisions")
+    or export_summary.get("decision_summary")
+    or {"approve": 0, "reroll": 0, "reject": 0}
+)
 
 command_lines = run_log.read_text(encoding="utf-8").strip().splitlines() if run_log.exists() else []
 
@@ -318,6 +331,9 @@ lines.extend(
         artifact_line(man_qa),
         artifact_line(man_reroll),
         artifact_line(export_manifest) if export_manifest else "- missing: export manifest",
+        artifact_line(man_review_pack),
+        artifact_line(man_review_template),
+        artifact_line(man_contact_sheet),
         "",
         "## Outcome Snapshot",
         f"- generated_entries: {len(gen.get('entries', []) or [])}",
@@ -330,6 +346,9 @@ lines.extend(
         f"- reroll_exhausted: {reroll_summary.get('reroll_exhausted', 0)}",
         f"- export_packaged_assets: {export_summary.get('packaged_assets', 0)}",
         f"- export_copied_files: {export_summary.get('copied_files', 0)}",
+        f"- suggested_approve: {decision_summary.get('approve', 0)}",
+        f"- suggested_reroll: {decision_summary.get('reroll', 0)}",
+        f"- suggested_reject: {decision_summary.get('reject', 0)}",
         "",
         "## Cost Tracking",
     ]

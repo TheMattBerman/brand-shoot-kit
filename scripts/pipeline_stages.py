@@ -164,12 +164,14 @@ def infer_product_type(scout: Dict[str, Any], product: str) -> str:
         ]
     ).lower()
 
-    if any(k in corpus for k in ["serum", "cleanser", "moistur", "dropper", "skincare"]):
+    if any(k in corpus for k in ["lip treatment", "serum", "cleanser", "moistur", "dropper", "skincare"]):
         return "skincare bottle"
     if any(k in corpus for k in ["coffee", "beans", "brew", "roast"]):
         return "sealed coffee bag"
     if any(k in corpus for k in ["greens", "supplement", "powder", "vitamin"]):
         return "supplement tub"
+    if any(k in corpus for k in ["clean essentials", "cleaning", "cleaner", "spray", "refill", "laundry", "dish soap"]):
+        return "cleaning kit"
     if any(k in corpus for k in ["candle", "jar", "wax", "home fragrance"]):
         return "glass jar candle"
     return "packaged consumer product"
@@ -185,13 +187,15 @@ def infer_category(scout: Dict[str, Any], product_type: str, product: str) -> st
         ]
     ).lower()
 
-    if any(k in corpus for k in ["serum", "skincare", "moistur", "cleanser", "dropper", "cream"]):
+    if any(k in corpus for k in ["lip treatment", "serum", "skincare", "moistur", "cleanser", "dropper", "cream"]):
         return "skincare"
     if any(k in corpus for k in ["coffee", "espresso", "beans", "brew", "roast"]):
         return "coffee"
     if any(k in corpus for k in ["supplement", "greens", "protein", "powder", "capsule", "vitamin"]):
         return "supplement"
-    if any(k in corpus for k in ["candle", "home", "decor", "jar", "sofa", "linen", "room spray"]):
+    if any(k in corpus for k in ["clean essentials", "cleaning kit", "cleaner", "multi-surface", "dish soap", "laundry", "refill", "spray"]):
+        return "generic"
+    if any(k in corpus for k in ["candle", "home fragrance", "decor", "sofa", "linen", "room spray"]):
         return "home-goods"
     return "generic"
 

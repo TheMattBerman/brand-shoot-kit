@@ -214,6 +214,93 @@ def eval_reference_image_manifest(errors: List[str]) -> None:
         assert_true(cache_path.exists(), "cached reference image file exists", errors)
 
 
+def eval_reference_selection_ranking(errors: List[str]) -> None:
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from reference_selector import pick_auto_reference_url_from_scout  # type: ignore
+
+    scout = {
+        "product_name": "Summit Roast Coffee",
+        "brand_name": "Alpine Goods",
+        "image_evidence": [
+            {"url": "https://cdn.example.com/assets/logo.svg", "confidence": 0.97, "rank": 1},
+            {"url": "https://cdn.example.com/images/nutrition-facts-panel.jpg", "confidence": 0.96, "rank": 2},
+            {"url": "https://cdn.example.com/images/summit-roast-front-packshot.jpg", "confidence": 0.81, "rank": 4},
+        ],
+        "image_urls": [
+            "https://cdn.example.com/images/review-stars.png",
+            "https://cdn.example.com/images/summit-roast-hero-product.jpg",
+        ],
+    }
+    picked = pick_auto_reference_url_from_scout(scout)
+    assert_true(
+        picked == "https://cdn.example.com/images/summit-roast-front-packshot.jpg",
+        "reference selection prefers product/package imagery over logo/nutrition/review assets",
+        errors,
+    )
+
+
+def eval_review_artifact_packager(errors: List[str]) -> None:
+    packet = run_packet_from_fixture("review-pack", FIXTURES / "scout-coffee.json")
+    for cmd in [
+        ["scripts/generate-images.py", "--packet", str(packet), "--limit", "3"],
+        ["scripts/qa-images.py", "--packet", str(packet)],
+        ["scripts/reroll-failed.py", "--packet", str(packet)],
+        ["scripts/export-packager.py", "--packet", str(packet), "--out", str(packet / "assets" / "exports" / "final")],
+        ["scripts/package-review-artifacts.py", "--packet", str(packet)],
+    ]:
+        proc = run(cmd)
+        label = " ".join(Path(c).name if i == 0 else c for i, c in enumerate(cmd))
+        assert_true(proc.returncode == 0, f"command succeeds: {label}", errors)
+
+    review_root = packet / "assets" / "review"
+    template = review_root / "human-review-template.json"
+    contact = review_root / "contact-sheet.html"
+    manifest = review_root / "artifact-pack-manifest.json"
+    assert_true(template.exists(), "review artifact exists: human-review-template.json", errors)
+    assert_true(contact.exists(), "review artifact exists: contact-sheet.html", errors)
+    assert_true(manifest.exists(), "review artifact exists: artifact-pack-manifest.json", errors)
+    if manifest.exists():
+        payload = load_json(manifest)
+        summary = payload.get("summary", {})
+        decisions = summary.get("suggested_decisions", {})
+        assert_true(isinstance(decisions, dict), "review artifact summary includes suggested_decisions", errors)
+        assert_true(
+            {"approve", "reroll", "reject"}.issubset(set(decisions.keys())),
+            "review artifact summary has approve/reroll/reject keys",
+            errors,
+        )
+
+
+def eval_live_proof_no_spend_defaults(errors: List[str]) -> None:
+    out = TMP / "live-proof-no-spend"
+    if out.exists():
+        shutil.rmtree(out)
+    proc = run(
+        [
+            "scripts/run-live-proof.sh",
+            "--url",
+            "https://example.com/products/no-spend-proof",
+            "--out",
+            str(out),
+            "--max-shots",
+            "2",
+        ]
+    )
+    assert_true(proc.returncode == 0, "live-proof default run succeeds in dry no-spend mode", errors)
+    if proc.returncode != 0:
+        return
+    gen = load_json(out / "assets" / "generated" / "generation-manifest.json")
+    assert_true(gen.get("provider") == "dry-run", "live-proof default generation provider is dry-run", errors)
+    run_log = out / "live-proof-commands.log"
+    assert_true(run_log.exists(), "live-proof command log exists", errors)
+    if run_log.exists():
+        cmd_text = run_log.read_text(encoding="utf-8")
+        assert_true(" --live" not in cmd_text, "live-proof dry run does not invoke live flags", errors)
+    summary = load_json(out / "assets" / "review" / "artifact-pack-manifest.json").get("summary", {})
+    decision_keys = set((summary.get("suggested_decisions") or {}).keys())
+    assert_true({"approve", "reroll", "reject"}.issubset(decision_keys), "live-proof review pack has decision summary keys", errors)
+
+
 def eval_golden_bundle_completeness(errors: List[str]) -> None:
     build = run(["scripts/build-golden-runs.sh"])
     assert_true(build.returncode == 0, "golden bundles build successfully", errors)
@@ -244,11 +331,16 @@ def eval_golden_bundle_completeness(errors: List[str]) -> None:
 
 def eval_live_proof_tooling(errors: List[str]) -> None:
     script = ROOT / "scripts" / "run-live-proof.sh"
+    review_script = ROOT / "scripts" / "package-review-artifacts.py"
     assert_true(script.exists(), "live proof script exists", errors)
     assert_true(script.stat().st_mode & 0o111 != 0, "live proof script is executable", errors)
+    assert_true(review_script.exists(), "review packager script exists", errors)
+    assert_true(review_script.stat().st_mode & 0o111 != 0, "review packager script is executable", errors)
 
     proc = run(["scripts/run-live-proof.sh", "--help"])
     assert_true(proc.returncode == 0, "live proof help command succeeds", errors)
+    proc2 = run(["scripts/package-review-artifacts.py", "--help"])
+    assert_true(proc2.returncode == 0, "review packager help command succeeds", errors)
 
 
 def main() -> int:
@@ -263,8 +355,11 @@ def main() -> int:
         eval_module_entrypoints(errors)
         eval_dry_run_loop(errors)
         eval_reference_image_manifest(errors)
+        eval_reference_selection_ranking(errors)
+        eval_review_artifact_packager(errors)
         eval_golden_bundle_completeness(errors)
         eval_live_proof_tooling(errors)
+        eval_live_proof_no_spend_defaults(errors)
     except Exception as exc:
         print(f"FAIL harness runtime error: {exc}")
         errors.append(f"runtime error: {exc}")

@@ -105,3 +105,31 @@ Also updated every `skills/*/SKILL.md` to declare executable path + artifact own
   - new fixture `evals/fixtures/reference-product.png`
   - `evals/run.py` check asserting reference metadata + cached file path in dry mode with explicit local reference
   - `doctor.sh` command checks for reference-image manifest metadata
+
+## P2 Productionization Layer (this pass)
+
+- Added `scripts/package-review-artifacts.py`:
+  - creates `assets/review/human-review-template.json`
+  - creates `assets/review/contact-sheet.html`
+  - creates `assets/review/artifact-pack-manifest.json` with suggested `approve|reroll|reject` summary counts
+- Wired live proof flow to run artifact packaging immediately after export:
+  - `scripts/run-live-proof.sh` stage chain is now `... -> export -> review-pack -> summary`
+  - `LIVE_PROOF_SUMMARY.md` now includes suggested approve/reroll/reject counts and review artifact presence lines.
+- Improved auto reference-image selection:
+  - extracted deterministic selector to `scripts/reference_selector.py`
+  - strongly penalizes logo/icon/nutrition/review assets and strongly favors product/package/hero/front imagery
+  - deterministic tie-breaking and ranking remain stable for evals.
+- Improved export manifest summaries:
+  - `scripts/export-packager.py` now emits `qa_status_counts`, `reroll_status_counts`, and `decision_summary` (`approve|reroll|reject`)
+  - per-record entries now include `reroll_status` and `decision`.
+
+## Closed-loop Live Reroll Validation
+
+- `scripts/reroll-failed.py` now supports `--live-qa` and `--qa-threshold`.
+- In live reroll mode, each reroll attempt writes an isolated reroll generation manifest and can immediately re-score that asset through `qa-images.py --live`.
+- `scripts/run-live-proof.sh --reroll live` now uses `--live-qa` so live rerolls are fail -> regenerate with reference image -> re-score -> converge/exhaust, not just “generated again.”
+- Validated on the Grüns 12-shot packet with a forced one-asset QA failure: one live reroll attempt regenerated `shot-01`, re-scored it, and converged with a passing QA score.
+- No-spend + gating checks expanded:
+  - `evals/run.py` adds deterministic reference-ranking check, review artifact packager checks, and dry live-proof no-spend assertions
+  - `doctor.sh` checks review packager executable/help and validates dry live-proof + decision-summary outputs
+  - no live APIs were invoked in this pass.

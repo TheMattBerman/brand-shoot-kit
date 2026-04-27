@@ -10,7 +10,6 @@ from __future__ import annotations
 import argparse
 import base64
 import hashlib
-import html
 import json
 import mimetypes
 import os
@@ -22,10 +21,10 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urlparse
-import ipaddress
 import uuid
 
 from packet_utils import dump_json, ensure_packet_dir, parse_generation_prompts, read_brand_product, slug
+from reference_selector import is_safe_reference_url, pick_auto_reference_url
 
 TINY_PLACEHOLDER_PNG = base64.b64decode(
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAJq4QW0AAAAASUVORK5CYII="
@@ -259,91 +258,6 @@ def load_prompt_overrides(path: str | None) -> Dict[str, str]:
 def is_url(value: str) -> bool:
     parsed = urlparse(value)
     return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
-
-
-def is_safe_reference_url(url: str) -> bool:
-    parsed = urlparse(url)
-    if parsed.scheme not in {"http", "https"}:
-        return False
-    host = (parsed.hostname or "").strip().lower()
-    if not host:
-        return False
-    if host in {"localhost", "127.0.0.1", "::1"} or host.endswith(".local"):
-        return False
-    try:
-        ip = ipaddress.ip_address(host)
-        if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast:
-            return False
-    except ValueError:
-        pass
-    return True
-
-
-def reference_url_score(url: str, confidence: float, rank: int) -> float:
-    lower = url.lower()
-    if any(token in lower for token in [".svg", "logo", "icon", "checkmark", "review", "clinical"]):
-        return -1000.0
-    score = confidence * 100.0 - (rank * 0.01)
-    if any(token in lower for token in ["shop", "tile", "sticker", "pack", "product", "front", "galleryimage", "hero", "gusset", "can"]):
-        score += 25.0
-    if any(token in lower for token in ["shop", "sticker", "gusset", "pack", "product", "front"]):
-        score += 30.0
-    if any(token in lower for token in ["nutrition", "nlabel"]):
-        score -= 18.0
-    elif "label" in lower:
-        score += 4.0
-    if any(token in lower for token in ["adults", "og-"]):
-        score += 5.0
-    return score
-
-
-def pick_auto_reference_url(packet_dir: Path) -> Optional[str]:
-    scout_path = packet_dir / "scout.json"
-    if not scout_path.exists():
-        return None
-    try:
-        scout = json.loads(scout_path.read_text(encoding="utf-8"))
-    except Exception:
-        return None
-
-    candidates: List[Tuple[float, int, str]] = []
-    evidence = scout.get("image_evidence")
-    if isinstance(evidence, list):
-        for idx, item in enumerate(evidence):
-            if not isinstance(item, dict):
-                continue
-            url = html.unescape(str(item.get("url") or "").strip())
-            if not url:
-                continue
-            confidence = 0.0
-            try:
-                confidence = float(item.get("confidence", 0.0))
-            except (TypeError, ValueError):
-                confidence = 0.0
-            rank = item.get("rank")
-            try:
-                rank_int = int(rank)
-            except (TypeError, ValueError):
-                rank_int = idx + 1
-            candidates.append((reference_url_score(url, confidence, rank_int), rank_int, url))
-
-    urls = scout.get("image_urls")
-    if isinstance(urls, list):
-        for idx, raw in enumerate(urls):
-            url = html.unescape(str(raw).strip())
-            if not url:
-                continue
-            rank = idx + 1001
-            candidates.append((reference_url_score(url, 0.0, rank), rank, url))
-
-    if not candidates:
-        return None
-
-    candidates.sort(key=lambda x: (-x[0], x[1]))
-    for _score, _rank, url in candidates:
-        if is_safe_reference_url(url):
-            return url
-    return None
 
 
 def image_extension_for(url_or_path: str, content_type: str = "") -> str:

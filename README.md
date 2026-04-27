@@ -1,7 +1,7 @@
 # Brand Shoot Kit
 
 Brand Shoot Kit turns a product URL into an ecommerce visual production workflow:
-`product URL -> scout.json -> preservation.json -> visual-gaps.json -> shoot-plan.json -> prompts.json -> packet docs -> generation manifest -> QA results -> reroll manifest -> export package`.
+`product URL -> scout.json -> preservation.json -> visual-gaps.json -> shoot-plan.json -> prompts.json -> packet docs -> generation manifest -> QA results -> reroll manifest -> export package -> review artifact pack`.
 
 This kit is for product photography and ecommerce asset libraries. It is explicitly not an ad spy/ad intelligence workflow.
 
@@ -39,6 +39,7 @@ Dry-run executable v0.2 flow (no paid API calls):
 ./scripts/qa-images.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
 ./scripts/reroll-failed.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
 ./scripts/export-packager.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
+./scripts/package-review-artifacts.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
 ```
 
 Operator-safe live proof runner (default no-spend unless `--live-confirm`):
@@ -82,6 +83,17 @@ Opt-in live generation/vision (requires `OPENAI_API_KEY` and explicit `--live`):
 ./scripts/qa-images.py --packet <packet-dir> --live
 ```
 
+Closed-loop live reroll validation (explicit live spend only):
+
+```bash
+./scripts/reroll-failed.py \
+  --packet <packet-dir> \
+  --live \
+  --live-qa \
+  --qa-threshold 80 \
+  --max-attempts 1
+```
+
 Reference-image controls for live generation:
 
 ```bash
@@ -113,6 +125,10 @@ Without `OPENAI_API_KEY` (or other optional keys), the kit still produces:
 - deterministic/manual QA JSON + markdown report append
 - deterministic reroll simulation manifest + QA reroll history append
 - deterministic channel export package + export manifest
+- deterministic review artifact pack:
+  - `assets/review/human-review-template.json`
+  - `assets/review/contact-sheet.html`
+  - `assets/review/artifact-pack-manifest.json`
 - operator proof summary (`LIVE_PROOF_SUMMARY.md`) with run commands, artifact status, and go/no-go decisions
 
 ## Repo Layout
@@ -138,6 +154,14 @@ Each suite module has an independent executable owner path:
 - `scripts/modules/qa_reroll.py` -> `assets/generated/reroll-manifest.json` (and optional QA refresh)
 - `scripts/modules/export_packager.py` -> export manifest
 - `scripts/modules/memory_writer.py` -> `memory/*.md`
+
+Review artifact packaging:
+
+```bash
+./scripts/package-review-artifacts.py --packet <packet-dir>
+```
+
+This generates a human-review JSON template and an HTML contact sheet tied to generated assets, QA outcomes, reroll status, reference image metadata, and export outputs.
 
 ## Install
 

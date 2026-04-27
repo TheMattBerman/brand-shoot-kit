@@ -26,6 +26,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--max-attempts", type=int, default=2, help="Maximum reroll attempts per failed shot")
     p.add_argument("--live", action="store_true", help="Execute live rerolls via generate-images.py --live")
     p.add_argument("--live-model", default="gpt-image-2", help="Model passed to generate-images.py in live mode")
+    p.add_argument("--live-qa", action="store_true", help="After live reroll generation, re-score the rerolled asset with qa-images.py --live")
+    p.add_argument("--qa-threshold", type=float, default=80.0, help="QA threshold for --live-qa closed-loop reroll checks")
     p.add_argument("--reroll-status", default="fail,manual_review", help="Comma-separated QA statuses eligible for reroll")
     return p.parse_args()
 
@@ -119,7 +121,7 @@ def append_reroll_markdown(report_path: Path, payload: Dict[str, Any]) -> None:
     report_path.write_text(existing.rstrip() + "\n\n" + "\n".join(lines) + "\n", encoding="utf-8")
 
 
-def run_live_generation(packet: Path, asset_id: str, revised_prompt: str, model: str) -> None:
+def run_live_generation(packet: Path, asset_id: str, revised_prompt: str, model: str, attempt: int) -> Path:
     script = packet.parent.parent / "scripts" / "generate-images.py"
     if not script.exists():
         script = Path(__file__).resolve().parent / "generate-images.py"
@@ -129,6 +131,7 @@ def run_live_generation(packet: Path, asset_id: str, revised_prompt: str, model:
         tf.write("\n")
         temp_path = tf.name
 
+    manifest_path = packet / "assets" / "generated" / f"reroll-{asset_id}-attempt-{attempt}-generation-manifest.json"
     cmd = [
         str(script),
         "--packet",
@@ -139,10 +142,35 @@ def run_live_generation(packet: Path, asset_id: str, revised_prompt: str, model:
         temp_path,
         "--overwrite",
         "--live",
+        "--auto-reference-image",
         "--model",
         model,
+        "--manifest",
+        str(manifest_path),
     ]
     subprocess.run(cmd, check=True)
+    return manifest_path
+
+
+def run_live_qa(packet: Path, manifest_path: Path, asset_id: str, threshold: float) -> Dict[str, Any]:
+    script = Path(__file__).resolve().parent / "qa-images.py"
+    qa_path = packet / "assets" / "generated" / f"reroll-{asset_id}-qa-results.json"
+    cmd = [
+        str(script),
+        "--packet",
+        str(packet),
+        "--manifest",
+        str(manifest_path),
+        "--out",
+        str(qa_path),
+        "--threshold",
+        str(threshold),
+        "--live",
+    ]
+    subprocess.run(cmd, check=True)
+    qa = load_json(qa_path)
+    results = qa.get("results") or []
+    return results[0] if results else {"status": "fail", "reject_reasons": ["live reroll QA returned no results"]}
 
 
 def main() -> int:
@@ -178,20 +206,25 @@ def main() -> int:
         final_status = "reroll_exhausted"
         for attempt in range(1, args.max_attempts + 1):
             revised_prompt = build_revised_prompt(original_prompt, reasons, attempt)
+            attempt_record = {
+                "attempt": attempt,
+                "revised_prompt": revised_prompt,
+                "reason": reasons,
+            }
             if args.live:
-                run_live_generation(paths["packet"], asset_id, revised_prompt, args.live_model)
-                attempt_status = "executed_live"
+                manifest_path = run_live_generation(paths["packet"], asset_id, revised_prompt, args.live_model, attempt)
+                attempt_record["generation_manifest"] = str(manifest_path)
+                if args.live_qa:
+                    qa_result = run_live_qa(paths["packet"], manifest_path, asset_id, args.qa_threshold)
+                    attempt_status = str(qa_result.get("status", "fail"))
+                    attempt_record["qa_result"] = qa_result
+                else:
+                    attempt_status = "executed_live"
             else:
                 attempt_status = deterministic_attempt_result(asset_id, attempt, revised_prompt)
 
-            attempts.append(
-                {
-                    "attempt": attempt,
-                    "revised_prompt": revised_prompt,
-                    "reason": reasons,
-                    "status": attempt_status,
-                }
-            )
+            attempt_record["status"] = attempt_status
+            attempts.append(attempt_record)
             total_attempts += 1
 
             if attempt_status in {"pass", "executed_live"}:
@@ -223,6 +256,8 @@ def main() -> int:
             "qa_results": str(paths["qa"]),
             "generation_manifest": str(paths["gen"]),
             "max_attempts": args.max_attempts,
+            "live_qa": bool(args.live_qa),
+            "qa_threshold": args.qa_threshold,
         },
         "summary": {
             "eligible_shots": len(rows),
