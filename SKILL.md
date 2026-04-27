@@ -15,6 +15,8 @@ metadata:
 
 Run this when the user wants a complete ecommerce product photography system, not one-off prompts.
 
+For module boundaries and stage contracts, use `SUITE.md` plus `references/module-contracts/`.
+
 ## Outcome Contract
 
 Produce a runnable shoot packet that includes:
@@ -55,6 +57,10 @@ Also include asset folder targets:
 8. QA rubric/report: pass/fail gates and rejection triggers.
 9. Export map: where each approved asset goes.
 10. Memory: note what to preserve/avoid next run.
+
+When deterministic orchestration is requested (URL/scout JSON -> packet), use:
+- `scripts/run-brand-shoot.py` for URL/scout-to-packet
+- `scripts/validate-packet.py` for structure validation
 
 ## Product Preservation Brief (Required)
 

@@ -19,3 +19,8 @@ Expected: bag hero, bean detail, brew context, seasonal optional, no invented or
 
 Input: precision industrial valve.
 Expected: fidelity warning, planning-first output, recommendation for real photography for exact specs.
+
+## Eval 5: URL-to-Packet Deterministic Run
+
+Input: `scripts/run-brand-shoot.py --url <product-url>` or `--scout-json <fixture>`.
+Expected: generated packet path contains all required docs, memory files, and assets directories; `validate-packet.py` passes.

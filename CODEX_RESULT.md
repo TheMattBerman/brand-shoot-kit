@@ -1,74 +1,87 @@
 # CODEX_RESULT
 
-## What Was Built
+## Review Outcome
 
-Brand Shoot Kit was upgraded from a SPEC-only repo into a shippable reusable skill kit with:
+A full critical productized-system review was completed in `REVIEW.md`.
 
-- Core behavior skill: `SKILL.md` (lean, behavior-changing, ecommerce creative-director workflow)
-- Product docs: `README.md`, `VERSION`, `.env.example`, `openclaw.example.json`
-- Lifecycle scripts: `install.sh`, `doctor.sh`, `uninstall.sh`
-- Helper scripts:
-  - `scripts/scaffold-output.sh` (creates canonical packet directory/files)
-  - `scripts/create-shoot-packet.py` (generates full planning packet from config)
-  - `scripts/validate-packet.py` (validates packet structure)
-  - `scripts/scout-url.sh` (lightweight URL extraction for title/desc/H1/images)
-- Deep references:
-  - `references/visual-gap-rubric.md`
-  - `references/product-preservation.md`
-  - `references/ecommerce-shot-taxonomy.md`
-  - `references/set-design-patterns.md`
-  - `references/model-casting-guide.md`
-  - `references/qa-rubric.md`
-  - `references/prompt-patterns.md`
-  - `references/anti-patterns.md`
-- Evals:
-  - `evals/trigger-evals.md`
-  - `evals/execution-evals.md`
-  - `evals/output-quality-rubric.md`
-- Examples:
-  - `examples/skincare-serum/config.json`
-  - `examples/supplement-greens/config.json`
-  - `examples/coffee-bag/config.json`
-  - `examples/home-goods-candle/config.json`
-  - generated packet folders for each example
+Headline verdict:
+- Repo quality is early alpha, not yet a production-grade visual system.
+- Current maturity score: **4.2/10**.
+- BigSkills rubric score: **29/45** (major revision needed).
 
-## Scope/Boundary Handling
+Core diagnosis:
+- Strong strategy and boundaries.
+- Useful references and decent operational scaffolding.
+- But current execution is mostly planning templates and scaffold-level automation, not a real URL-to-image production loop.
 
-- Explicitly constrained to product photography and ecommerce visual production.
-- Explicitly excludes ad-spy/ad-intelligence workflows (StealAds boundary).
-- Added graceful degradation:
-  - no required API keys for planning mode
-  - packet generation still works without browsing/image APIs
-  - QA report marks generation as not run when unavailable
+## Highest-Leverage Improvements Implemented
+
+This pass focused on architecture and practical usefulness, not fake bulk.
+
+### 1) Added suite architecture layer
+
+- Added `SUITE.md` to define moduleized system architecture and current implementation status.
+- Added first-pass module I/O contracts:
+  - `references/module-contracts/brand-scout.md`
+  - `references/module-contracts/product-preservation.md`
+  - `references/module-contracts/visual-gap-audit.md`
+  - `references/module-contracts/shoot-director.md`
+  - `references/module-contracts/prompt-factory.md`
+  - `references/module-contracts/qa-reroll.md`
+  - `references/module-contracts/export-packager.md`
+  - `references/module-contracts/memory-writer.md`
+
+### 2) Added deterministic URL/scout-to-packet orchestrator
+
+- New script: `scripts/run-brand-shoot.py`
+- Supports:
+  - `--url` (runs `scripts/scout-url.sh` then derives config)
+  - `--scout-json` (offline deterministic mode)
+  - optional brand/product overrides
+  - optional config save path
+  - packet generation + validation in one command
+
+This is a real usability jump: the repo now has a concrete orchestration entrypoint instead of only disconnected helper scripts.
+
+### 3) Added smoke-test path and fixture
+
+- New fixture: `examples/scout-samples/skincare-serum-scout.json`
+- New script: `scripts/run-smoke.sh`
+  - runs full offline orchestration
+  - validates packet structure
+
+### 4) Upgraded operational checks and docs
+
+- Updated `doctor.sh` to verify new architecture files/scripts and run smoke test.
+- Updated `README.md` quick start to include `run-brand-shoot.py` and smoke flow.
+- Updated `SKILL.md` to reference suite contracts and deterministic orchestration scripts.
+- Updated `examples/README.md` with scout-fixture usage.
+- Updated `evals/execution-evals.md` with deterministic URL-to-packet execution eval.
 
 ## Verification Run
 
 Commands executed:
 
 ```bash
-./scripts/create-shoot-packet.py --config examples/skincare-serum/config.json --out examples/skincare-serum/packet
-./scripts/create-shoot-packet.py --config examples/supplement-greens/config.json --out examples/supplement-greens/packet
-./scripts/create-shoot-packet.py --config examples/coffee-bag/config.json --out examples/coffee-bag/packet
-./scripts/create-shoot-packet.py --config examples/home-goods-candle/config.json --out examples/home-goods-candle/packet
-./scripts/validate-packet.py --packet examples/skincare-serum/packet
-./scripts/validate-packet.py --packet examples/supplement-greens/packet
-./scripts/validate-packet.py --packet examples/coffee-bag/packet
-./scripts/validate-packet.py --packet examples/home-goods-candle/packet
 ./doctor.sh
+./scripts/run-smoke.sh
+./scripts/run-brand-shoot.py --scout-json examples/scout-samples/skincare-serum-scout.json --out output/manual-check
+./scripts/validate-packet.py --packet output/manual-check
 ```
 
 Results:
-- All packet validations passed.
-- `doctor.sh` passed with `FAIL=0`.
-- Warnings were only optional env vars not set.
+- All core checks passed.
+- Smoke test passed.
+- URL/scout-to-packet orchestration succeeded and produced valid packet structure.
 
-## Notes
+## What Is Still Missing (Not Claimed As Done)
 
-- `/home/matt/clawd/skills/creative` was requested as a reference but not present on disk.
-- `/home/matt/clawd/skills/bigskills/SKILL.md` plus available strong local skills (`image-prompt-builder`, `content-dna`) were reviewed and used as quality/structure bar.
+- Provider-backed real image generation (`generate-images.py` equivalent).
+- Vision-based QA scoring + automated reroll loop.
+- Deterministic export packaging/cropping pipeline.
+- Golden examples with real generated assets and QA traces.
 
-## Next Recommended Steps
+## Commit
 
-1. Add real provider-backed generation script (`scripts/generate-images.py`) with OpenAI GPT Image integration.
-2. Add optional vision-based QA scoring (`scripts/qa-images.py`) to auto-fill `05-qa-report.md`.
-3. Run one real end-to-end product URL demo and publish resulting output packet under `examples/`.
+All changes from this pass were committed locally with a clear message.
+No push was performed.

@@ -1,0 +1,17 @@
+{
+  "url": "https://example.com/products/hydrating-face-serum",
+  "title": "Hydrating Face Serum | Example Skin",
+  "meta_description": "Hydrating serum with niacinamide and hyaluronic acid for daily barrier support.",
+  "og_title": "Hydrating Face Serum | Example Skin",
+  "og_description": "Clinical-grade hydration with a lightweight non-sticky finish.",
+  "h1": [
+    "Hydrating Face Serum"
+  ],
+  "image_urls": [
+    "https://example.com/cdn/serum-front.jpg",
+    "https://example.com/cdn/serum-angle.jpg",
+    "https://example.com/cdn/serum-in-use.jpg"
+  ],
+  "degraded_mode": true,
+  "note": "Fixture scout output for offline smoke tests."
+}

@@ -42,6 +42,7 @@ echo "Running Brand Shoot Kit doctor..."
 # Core structure
 check_file "README.md"
 check_file "SKILL.md"
+check_file "SUITE.md"
 check_file "VERSION"
 check_file ".env.example"
 check_file "openclaw.example.json"
@@ -63,7 +64,15 @@ for f in \
   "references/model-casting-guide.md" \
   "references/qa-rubric.md" \
   "references/prompt-patterns.md" \
-  "references/anti-patterns.md"; do
+  "references/anti-patterns.md" \
+  "references/module-contracts/brand-scout.md" \
+  "references/module-contracts/product-preservation.md" \
+  "references/module-contracts/visual-gap-audit.md" \
+  "references/module-contracts/shoot-director.md" \
+  "references/module-contracts/prompt-factory.md" \
+  "references/module-contracts/qa-reroll.md" \
+  "references/module-contracts/export-packager.md" \
+  "references/module-contracts/memory-writer.md"; do
   check_file "$f"
 done
 
@@ -71,6 +80,7 @@ done
 check_file "evals/trigger-evals.md"
 check_file "evals/execution-evals.md"
 check_file "evals/output-quality-rubric.md"
+check_file "examples/scout-samples/skincare-serum-scout.json"
 
 # Script checks
 for s in \
@@ -78,6 +88,8 @@ for s in \
   "doctor.sh" \
   "uninstall.sh" \
   "scripts/scout-url.sh" \
+  "scripts/run-brand-shoot.py" \
+  "scripts/run-smoke.sh" \
   "scripts/scaffold-output.sh" \
   "scripts/create-shoot-packet.py" \
   "scripts/validate-packet.py"; do
@@ -87,9 +99,11 @@ done
 check_help "./install.sh --help"
 check_help "./uninstall.sh --help"
 check_help "./scripts/scout-url.sh --help"
+check_help "./scripts/run-brand-shoot.py --help"
 check_help "./scripts/scaffold-output.sh --help"
 check_help "./scripts/create-shoot-packet.py --help"
 check_help "./scripts/validate-packet.py --help"
+check_help "./scripts/run-smoke.sh"
 
 # Basic dependency checks
 command -v bash >/dev/null 2>&1 && pass "binary available: bash" || fail "missing binary: bash"
