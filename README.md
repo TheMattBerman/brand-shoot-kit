@@ -41,6 +41,27 @@ Dry-run executable v0.2 flow (no paid API calls):
 ./scripts/export-packager.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
 ```
 
+Operator-safe live proof runner (default no-spend unless `--live-confirm`):
+
+```bash
+./scripts/run-live-proof.sh \
+  --dry-run \
+  --url "https://example.com/products/sample" \
+  --out ./output/live-proof-dry/sample \
+  --max-shots 3
+```
+
+Live proof (explicit spend gate + API key required):
+
+```bash
+./scripts/run-live-proof.sh \
+  --live-confirm \
+  --url "https://REAL_PRODUCT_URL" \
+  --out ./output/live-proof/real-product/$(date +%F) \
+  --max-shots 3 \
+  --reroll dry
+```
+
 Build deterministic golden run bundles (no-spend):
 
 ```bash
@@ -82,6 +103,7 @@ Without `OPENAI_API_KEY` (or other optional keys), the kit still produces:
 - deterministic/manual QA JSON + markdown report append
 - deterministic reroll simulation manifest + QA reroll history append
 - deterministic channel export package + export manifest
+- operator proof summary (`LIVE_PROOF_SUMMARY.md`) with run commands, artifact status, and go/no-go decisions
 
 ## Repo Layout
 

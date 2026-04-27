@@ -41,6 +41,7 @@ echo "Running Brand Shoot Kit doctor..."
 
 # Core structure
 check_file "README.md"
+check_file "LIVE-PROOF-PLAYBOOK.md"
 check_file "SKILL.md"
 check_file "SUITE.md"
 check_file "VERSION"
@@ -73,7 +74,8 @@ for f in \
   "references/module-contracts/prompt-factory.md" \
   "references/module-contracts/qa-reroll.md" \
   "references/module-contracts/export-packager.md" \
-  "references/module-contracts/memory-writer.md"; do
+  "references/module-contracts/memory-writer.md" \
+  "references/live-qa-calibration.md"; do
   check_file "$f"
 done
 
@@ -97,6 +99,7 @@ check_file "evals/execution-evals.md"
 check_file "evals/output-quality-rubric.md"
 check_file "evals/run.py"
 check_file "examples/scout-samples/skincare-serum-scout.json"
+check_file "examples/live-proof-review-template.json"
 check_dir "examples/golden-runs"
 
 # Script checks
@@ -114,6 +117,7 @@ for s in \
   "scripts/qa-images.py" \
   "scripts/reroll-failed.py" \
   "scripts/export-packager.py" \
+  "scripts/run-live-proof.sh" \
   "scripts/scout-structured.py" \
   "scripts/build-golden-runs.sh" \
   "scripts/modules/brand_scout.py" \
@@ -139,6 +143,7 @@ check_help "./scripts/generate-images.py --help"
 check_help "./scripts/qa-images.py --help"
 check_help "./scripts/reroll-failed.py --help"
 check_help "./scripts/export-packager.py --help"
+check_help "./scripts/run-live-proof.sh --help"
 check_help "./scripts/scout-structured.py --help"
 check_help "./scripts/build-golden-runs.sh --help"
 check_help "./scripts/modules/brand_scout.py --help"
@@ -153,6 +158,8 @@ check_help "./scripts/run-smoke.sh"
 check_help "./evals/run.py"
 check_help "./scripts/build-golden-runs.sh"
 check_help "./scripts/build-golden-runs.sh --check"
+rm -rf "./output/doctor-live-proof-dry"
+check_help "./scripts/run-live-proof.sh --dry-run --url https://example.com/products/sample --out ./output/doctor-live-proof-dry --max-shots 2"
 
 # Basic dependency checks
 command -v bash >/dev/null 2>&1 && pass "binary available: bash" || fail "missing binary: bash"

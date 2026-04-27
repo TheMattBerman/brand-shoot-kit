@@ -1,6 +1,6 @@
 {
-  "run_id": "gen-20260427T175934Z",
-  "timestamp_utc": "20260427T175934Z",
+  "run_id": "gen-20260427T180754Z",
+  "timestamp_utc": "20260427T180754Z",
   "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum",
   "prompts_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/04-generation-prompts.md",
   "output_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated",

@@ -197,6 +197,15 @@ def eval_golden_bundle_completeness(errors: List[str]) -> None:
             assert_true(path.exists(), f"golden bundle file exists: {path.relative_to(ROOT)}", errors)
 
 
+def eval_live_proof_tooling(errors: List[str]) -> None:
+    script = ROOT / "scripts" / "run-live-proof.sh"
+    assert_true(script.exists(), "live proof script exists", errors)
+    assert_true(script.stat().st_mode & 0o111 != 0, "live proof script is executable", errors)
+
+    proc = run(["scripts/run-live-proof.sh", "--help"])
+    assert_true(proc.returncode == 0, "live proof help command succeeds", errors)
+
+
 def main() -> int:
     errors: List[str] = []
     if TMP.exists():
@@ -209,6 +218,7 @@ def main() -> int:
         eval_module_entrypoints(errors)
         eval_dry_run_loop(errors)
         eval_golden_bundle_completeness(errors)
+        eval_live_proof_tooling(errors)
     except Exception as exc:
         print(f"FAIL harness runtime error: {exc}")
         errors.append(f"runtime error: {exc}")

@@ -1,0 +1,37 @@
+{
+  "review_meta": {
+    "review_date": "YYYY-MM-DD",
+    "reviewer": "Matt|Jean Luc",
+    "packet_dir": "output/live-proof/...",
+    "product_url": "https://...",
+    "run_mode": "live"
+  },
+  "human_judgment": {
+    "product_accuracy": "pass|mixed|fail",
+    "label_fidelity": "pass|mixed|fail",
+    "realism": "pass|mixed|fail",
+    "commerce_usefulness": "pass|mixed|fail"
+  },
+  "asset_reviews": [
+    {
+      "asset_id": "shot-01",
+      "decision": "approve|reroll|reject",
+      "reasons": [
+        "brief reason"
+      ],
+      "reroll_direction": "what to change"
+    }
+  ],
+  "qa_calibration": {
+    "qa_threshold_before": 80,
+    "qa_threshold_after": 80,
+    "threshold_change_reason": "none",
+    "rubric_tweaks": [
+      "example tweak"
+    ]
+  },
+  "go_no_go": {
+    "expand_to_12_shots": false,
+    "decision_reason": "Fill after review"
+  }
+}

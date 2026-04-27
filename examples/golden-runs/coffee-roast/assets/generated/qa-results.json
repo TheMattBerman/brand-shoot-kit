@@ -1,7 +1,7 @@
 {
   "run": {
-    "run_id": "qa-20260427T175934Z",
-    "timestamp_utc": "20260427T175934Z",
+    "run_id": "qa-20260427T180755Z",
+    "timestamp_utc": "20260427T180755Z",
     "mode": "deterministic-manual",
     "manifest_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/generation-manifest.json",
     "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast",

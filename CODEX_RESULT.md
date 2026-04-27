@@ -66,3 +66,23 @@ Also updated every `skills/*/SKILL.md` to declare executable path + artifact own
 - Structured extraction is still heuristic (text/regex confidence-gated), not OCR/DOM-semantic extraction.
 - Live generation + live QA quality remains unproven in this no-spend pass.
 - Export packaging remains deterministic copy packaging; channel-specific crop/resize rendering is still not implemented.
+
+## Live Proof Tooling (P2 prep pass)
+
+- Added operator-safe wrapper `scripts/run-live-proof.sh`:
+  - requires `--url` and `--out`
+  - defaults to no-spend dry mode unless explicit `--live-confirm`
+  - hard-gates live calls on `OPENAI_API_KEY`
+  - supports `--max-shots` (default `3`) to cap proof spend
+  - supports `--reroll off|dry|live` with live rerolls additionally gated
+  - runs full stage chain: packet -> generate -> QA -> reroll -> export -> summary
+  - writes `LIVE_PROOF_SUMMARY.md` with commands, artifacts, QA/reroll/export counts, and go/no-go prompts
+- Added first-run calibration and review artifacts:
+  - `references/live-qa-calibration.md`
+  - `examples/live-proof-review-template.json`
+- Added operator playbook:
+  - `LIVE-PROOF-PLAYBOOK.md` with dry-first, live-gated 3-shot flow, and 12-shot expansion decision criteria
+- Updated health/eval/docs:
+  - `doctor.sh` now checks live-proof script help and executes a cheap dry proof command
+  - `evals/run.py` now verifies live-proof script presence/executable/help
+  - `README.md` now documents dry and live proof commands
