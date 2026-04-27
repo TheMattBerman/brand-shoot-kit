@@ -37,7 +37,6 @@ class OpenAIImageProvider:
             "model": self.model,
             "prompt": prompt,
             "size": self.size,
-            "response_format": "b64_json",
         }
         data = json.dumps(payload).encode("utf-8")
         req = urllib.request.Request(
@@ -62,10 +61,20 @@ class OpenAIImageProvider:
         items = body.get("data") or []
         if not items:
             raise RuntimeError(f"OpenAI response missing data: {body}")
-        b64 = items[0].get("b64_json")
-        if not b64:
-            raise RuntimeError(f"OpenAI response missing b64_json: {body}")
-        return base64.b64decode(b64)
+        first = items[0]
+        b64 = first.get("b64_json")
+        if b64:
+            return base64.b64decode(b64)
+
+        image_url = first.get("url")
+        if image_url:
+            try:
+                with urllib.request.urlopen(image_url, timeout=120) as image_resp:
+                    return image_resp.read()
+            except urllib.error.URLError as exc:
+                raise RuntimeError(f"OpenAI image URL download failed: {exc}") from exc
+
+        raise RuntimeError(f"OpenAI response missing b64_json/url: {body}")
 
 
 def parse_args() -> argparse.Namespace:

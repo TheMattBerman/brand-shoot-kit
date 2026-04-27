@@ -89,11 +89,29 @@ class OpenAIVisionProvider:
             raise RuntimeError(f"OpenAI response missing output text: {body}")
 
         try:
-            parsed = json.loads(text)
+            parsed = parse_json_object(text)
         except json.JSONDecodeError as exc:
             raise RuntimeError(f"Could not parse OpenAI vision JSON: {text}") from exc
 
         return parsed
+
+
+def parse_json_object(text: str) -> Dict[str, Any]:
+    cleaned = text.strip()
+    if cleaned.startswith("```"):
+        cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned, flags=re.IGNORECASE)
+        cleaned = re.sub(r"\s*```$", "", cleaned).strip()
+    try:
+        payload = json.loads(cleaned)
+    except json.JSONDecodeError:
+        start = cleaned.find("{")
+        end = cleaned.rfind("}")
+        if start == -1 or end == -1 or end <= start:
+            raise
+        payload = json.loads(cleaned[start : end + 1])
+    if not isinstance(payload, dict):
+        raise json.JSONDecodeError("expected JSON object", cleaned, 0)
+    return payload
 
 
 def _extract_output_text(body: Dict[str, Any]) -> str:
