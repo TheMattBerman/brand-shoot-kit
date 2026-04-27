@@ -1,0 +1,91 @@
+{
+  "recommended_direction": "Category-aware commerce with contextual lifestyle",
+  "strategy_rationale": "Use source evidence to tune scenes by category while preserving strict product fidelity.",
+  "category": "coffee",
+  "shots": [
+    {
+      "name": "Front pack hero",
+      "category": "PDP",
+      "ratio": "1:1",
+      "channel": "PDP",
+      "priority": "High"
+    },
+    {
+      "name": "Roast label angle",
+      "category": "PDP",
+      "ratio": "4:5",
+      "channel": "PDP",
+      "priority": "High"
+    },
+    {
+      "name": "Beans + bag texture",
+      "category": "Lifestyle",
+      "ratio": "1:1",
+      "channel": "PDP/Social",
+      "priority": "High"
+    },
+    {
+      "name": "Pour-over counter scene",
+      "category": "Lifestyle",
+      "ratio": "4:5",
+      "channel": "PDP/Email",
+      "priority": "High"
+    },
+    {
+      "name": "Hand scoop scale",
+      "category": "Model",
+      "ratio": "4:5",
+      "channel": "PDP/Social",
+      "priority": "High"
+    },
+    {
+      "name": "Pantry shelf context",
+      "category": "Lifestyle",
+      "ratio": "4:5",
+      "channel": "Social",
+      "priority": "Medium"
+    },
+    {
+      "name": "Steam mug body crop",
+      "category": "Model",
+      "ratio": "9:16",
+      "channel": "Social",
+      "priority": "Medium"
+    },
+    {
+      "name": "Email morning hero",
+      "category": "Email",
+      "ratio": "16:9",
+      "channel": "Email",
+      "priority": "High"
+    },
+    {
+      "name": "Holiday gifting stack",
+      "category": "Seasonal",
+      "ratio": "4:5",
+      "channel": "Email/Social",
+      "priority": "Low"
+    },
+    {
+      "name": "Marketplace white-ground",
+      "category": "Marketplace",
+      "ratio": "1:1",
+      "channel": "Amazon",
+      "priority": "High"
+    },
+    {
+      "name": "Social brew square",
+      "category": "Social",
+      "ratio": "1:1",
+      "channel": "Instagram",
+      "priority": "Medium"
+    },
+    {
+      "name": "Story brew vertical",
+      "category": "Social",
+      "ratio": "9:16",
+      "channel": "Instagram Story",
+      "priority": "Medium"
+    }
+  ]
+}

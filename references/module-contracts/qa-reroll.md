@@ -12,3 +12,6 @@ Required fields:
 - scores by criterion
 - reject reasons
 - reroll queue with corrective instructions
+
+Executable owner:
+- `scripts/modules/qa_reroll.py`

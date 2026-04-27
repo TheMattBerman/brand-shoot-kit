@@ -33,3 +33,6 @@ Do not pass pretty failures.
 - wrong variant/flavor/material
 
 Use `scripts/qa-images.py --packet <packet>` to write structured QA results. Failed shots should produce concrete reroll instructions, not vague criticism.
+
+Executable module owner path:
+- `scripts/modules/qa_reroll.py --packet <packet-dir> --run-qa` -> updates `qa-results.json` and writes `reroll-manifest.json`

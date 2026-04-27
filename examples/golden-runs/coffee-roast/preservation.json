@@ -1,0 +1,26 @@
+{
+  "product_type": "sealed coffee bag",
+  "must_preserve": [
+    "bag silhouette",
+    "origin/roast callouts",
+    "brand lockup"
+  ],
+  "can_vary": [
+    "camera angle (safe)",
+    "background depth (minimal)",
+    "neutral scene context"
+  ],
+  "never_change": [
+    "origin text",
+    "net weight",
+    "brand name"
+  ],
+  "distortion_risks": [
+    "bag fold distortion",
+    "small text drift",
+    "scale mismatch"
+  ],
+  "accuracy_confidence": "low",
+  "audience": "ecommerce shoppers",
+  "tone": "warm craft premium"
+}

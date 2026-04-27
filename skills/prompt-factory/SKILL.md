@@ -32,3 +32,6 @@ Turn a shot list into operational image prompts that preserve the product.
 - too-small product in commerce shots
 
 Use `scripts/generate-images.py --packet <packet>` for dry-run/live generation manifests.
+
+Executable module owner path:
+- `scripts/modules/prompt_factory.py --packet <packet-dir>` -> `prompts.json`

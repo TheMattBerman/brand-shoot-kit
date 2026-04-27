@@ -1,0 +1,23 @@
+{
+  "rows": [
+    {
+      "asset": "PDP hero",
+      "status": "Unknown",
+      "notes": "Review current hero quality from source page",
+      "priority": "High"
+    },
+    {
+      "asset": "Human scale/in-use",
+      "status": "Unknown",
+      "notes": "Confirm if human context exists",
+      "priority": "High"
+    },
+    {
+      "asset": "Brew process detail",
+      "status": "Unknown",
+      "notes": "Need brew ritual and bean texture proof",
+      "priority": "Medium"
+    }
+  ],
+  "category": "coffee"
+}

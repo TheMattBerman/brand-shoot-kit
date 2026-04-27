@@ -1,0 +1,4 @@
+dry_run_placeholder=true
+asset_id=shot-03
+shot_name=Ingredient texture smear
+ratio=1:1

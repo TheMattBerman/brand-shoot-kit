@@ -31,6 +31,7 @@ from pipeline_stages import (
     stage_shoot_plan,
     stage_visual_gaps,
 )
+from scout_structured import enrich_scout
 
 ROOT = Path(__file__).resolve().parent.parent
 SCOUT_URL = ROOT / "scripts" / "scout-url.sh"
@@ -105,10 +106,10 @@ def derive_identity(args: argparse.Namespace, scout: Dict[str, Any], out_dir: Pa
 
 def scout_from_args(args: argparse.Namespace) -> Dict[str, Any]:
     if args.scout_json:
-        return load_json(Path(args.scout_json).resolve())
+        return enrich_scout(load_json(Path(args.scout_json).resolve()))
     if args.url:
         scout_output = run_cmd([str(SCOUT_URL), "--url", args.url], capture=True)
-        return json.loads(scout_output)
+        return enrich_scout(json.loads(scout_output))
     raise SystemExit("error: provide --url or --scout-json")
 
 

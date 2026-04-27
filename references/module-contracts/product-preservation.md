@@ -17,3 +17,6 @@ Required fields:
 
 Failure mode:
 - if confidence low, force conservative commerce-first shots.
+
+Executable owner:
+- `scripts/modules/product_preservation.py`

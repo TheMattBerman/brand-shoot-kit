@@ -13,3 +13,6 @@ Required fields:
 Rules:
 - avoid marking everything high priority
 - prioritize conversion-trust shots before novelty.
+
+Executable owner:
+- `scripts/modules/visual_gap_audit.py`

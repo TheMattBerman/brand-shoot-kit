@@ -1,0 +1,26 @@
+{
+  "product_type": "skincare bottle",
+  "must_preserve": [
+    "bottle silhouette",
+    "cap geometry",
+    "front label hierarchy"
+  ],
+  "can_vary": [
+    "camera angle (safe)",
+    "background depth (minimal)",
+    "neutral scene context"
+  ],
+  "never_change": [
+    "brand name",
+    "ingredient claims",
+    "product count"
+  ],
+  "distortion_risks": [
+    "small label text drift",
+    "cap deformation",
+    "glass glare"
+  ],
+  "accuracy_confidence": "low",
+  "audience": "daily routine shoppers",
+  "tone": "brand-consistent ecommerce"
+}

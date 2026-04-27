@@ -1,0 +1,267 @@
+{
+  "run_id": "gen-20260427T175934Z",
+  "timestamp_utc": "20260427T175934Z",
+  "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum",
+  "prompts_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/04-generation-prompts.md",
+  "output_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated",
+  "provider": "dry-run",
+  "model": "none",
+  "size": "1024x1024",
+  "brand": "Example Skin",
+  "product": "Hydrating Face Serum",
+  "total_shots": 12,
+  "entries": [
+    {
+      "shot_index": 1,
+      "asset_id": "shot-01",
+      "shot_name": "Front label hero",
+      "use_case": "PDP",
+      "ratio": "1:1",
+      "prompt": "Create a 1:1 ecommerce image for Hydrating Face Serum (Example Skin) optimized for PDP. Shot intent: Front label hero. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: brand-consistent ecommerce. Scene direction: Use clean vanity, stone, glass, folded towels, and subtle botanical accents. Avoid heavy makeup mood. Evidence anchors from source: hyaluronic, niacinamide, glass, label. Must preserve exactly: bottle silhouette, cap geometry, front label hierarchy. Never change: brand name, ingredient claims, product count. Watch distortion risks: small label text drift, cap deformation, glass glare. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.",
+      "status": "generated",
+      "provider": "dry-run",
+      "dry_run": true,
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-01--front-label-hero--1x1.png",
+      "image_sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+    },
+    {
+      "shot_index": 2,
+      "asset_id": "shot-02",
+      "shot_name": "Dropper angle detail",
+      "use_case": "PDP",
+      "ratio": "4:5",
+      "prompt": "Create a 4:5 ecommerce image for Hydrating Face Serum (Example Skin) optimized for PDP. Shot intent: Dropper angle detail. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: brand-consistent ecommerce. Scene direction: Use clean vanity, stone, glass, folded towels, and subtle botanical accents. Avoid heavy makeup mood. Evidence anchors from source: hyaluronic, niacinamide, glass, label. Must preserve exactly: bottle silhouette, cap geometry, front label hierarchy. Never change: brand name, ingredient claims, product count. Watch distortion risks: small label text drift, cap deformation, glass glare. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.",
+      "status": "generated",
+      "provider": "dry-run",
+      "dry_run": true,
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-02--dropper-angle-detail--4x5.png",
+      "image_sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+    },
+    {
+      "shot_index": 3,
+      "asset_id": "shot-03",
+      "shot_name": "Ingredient texture smear",
+      "use_case": "Lifestyle",
+      "ratio": "1:1",
+      "prompt": "Create a 1:1 ecommerce image for Hydrating Face Serum (Example Skin) optimized for PDP/Social. Shot intent: Ingredient texture smear. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: brand-consistent ecommerce. Scene direction: Use clean vanity, stone, glass, folded towels, and subtle botanical accents. Avoid heavy makeup mood. Evidence anchors from source: hyaluronic, niacinamide, glass, label. Must preserve exactly: bottle silhouette, cap geometry, front label hierarchy. Never change: brand name, ingredient claims, product count. Watch distortion risks: small label text drift, cap deformation, glass glare. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.",
+      "status": "generated",
+      "provider": "dry-run",
+      "dry_run": true,
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-03--ingredient-texture-smear--1x1.png",
+      "image_sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+    },
+    {
+      "shot_index": 4,
+      "asset_id": "shot-04",
+      "shot_name": "Sink routine placement",
+      "use_case": "Lifestyle",
+      "ratio": "4:5",
+      "prompt": "Create a 4:5 ecommerce image for Hydrating Face Serum (Example Skin) optimized for PDP/Email. Shot intent: Sink routine placement. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: brand-consistent ecommerce. Scene direction: Use clean vanity, stone, glass, folded towels, and subtle botanical accents. Avoid heavy makeup mood. Evidence anchors from source: hyaluronic, niacinamide, glass, label. Must preserve exactly: bottle silhouette, cap geometry, front label hierarchy. Never change: brand name, ingredient claims, product count. Watch distortion risks: small label text drift, cap deformation, glass glare. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.",
+      "status": "generated",
+      "provider": "dry-run",
+      "dry_run": true,
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-04--sink-routine-placement--4x5.png",
+      "image_sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+    },
+    {
+      "shot_index": 5,
+      "asset_id": "shot-05",
+      "shot_name": "Morning hand-held scale",
+      "use_case": "Model",
+      "ratio": "4:5",
+      "prompt": "Create a 4:5 ecommerce image for Hydrating Face Serum (Example Skin) optimized for PDP/Social. Shot intent: Morning hand-held scale. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: brand-consistent ecommerce. Scene direction: Use clean vanity, stone, glass, folded towels, and subtle botanical accents. Avoid heavy makeup mood. Evidence anchors from source: hyaluronic, niacinamide, glass, label. Must preserve exactly: bottle silhouette, cap geometry, front label hierarchy. Never change: brand name, ingredient claims, product count. Watch distortion risks: small label text drift, cap deformation, glass glare. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.",
+      "status": "generated",
+      "provider": "dry-run",
+      "dry_run": true,
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-05--morning-hand-held-scale--4x5.png",
+      "image_sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+    },
+    {
+      "shot_index": 6,
+      "asset_id": "shot-06",
+      "shot_name": "Shelf trio context",
+      "use_case": "Lifestyle",
+      "ratio": "4:5",
+      "prompt": "Create a 4:5 ecommerce image for Hydrating Face Serum (Example Skin) optimized for Social. Shot intent: Shelf trio context. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: brand-consistent ecommerce. Scene direction: Use clean vanity, stone, glass, folded towels, and subtle botanical accents. Avoid heavy makeup mood. Evidence anchors from source: hyaluronic, niacinamide, glass, label. Must preserve exactly: bottle silhouette, cap geometry, front label hierarchy. Never change: brand name, ingredient claims, product count. Watch distortion risks: small label text drift, cap deformation, glass glare. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.",
+      "status": "generated",
+      "provider": "dry-run",
+      "dry_run": true,
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-06--shelf-trio-context--4x5.png",
+      "image_sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+    },
+    {
+      "shot_index": 7,
+      "asset_id": "shot-07",
+      "shot_name": "Body crop application",
+      "use_case": "Model",
+      "ratio": "9:16",
+      "prompt": "Create a 9:16 ecommerce image for Hydrating Face Serum (Example Skin) optimized for Social. Shot intent: Body crop application. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: brand-consistent ecommerce. Scene direction: Use clean vanity, stone, glass, folded towels, and subtle botanical accents. Avoid heavy makeup mood. Evidence anchors from source: hyaluronic, niacinamide, glass, label. Must preserve exactly: bottle silhouette, cap geometry, front label hierarchy. Never change: brand name, ingredient claims, product count. Watch distortion risks: small label text drift, cap deformation, glass glare. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.",
+      "status": "generated",
+      "provider": "dry-run",
+      "dry_run": true,
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-07--body-crop-application--9x16.png",
+      "image_sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+    },
+    {
+      "shot_index": 8,
+      "asset_id": "shot-08",
+      "shot_name": "Email routine hero",
+      "use_case": "Email",
+      "ratio": "16:9",
+      "prompt": "Create a 16:9 ecommerce image for Hydrating Face Serum (Example Skin) optimized for Email. Shot intent: Email routine hero. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: brand-consistent ecommerce. Scene direction: Use clean vanity, stone, glass, folded towels, and subtle botanical accents. Avoid heavy makeup mood. Evidence anchors from source: hyaluronic, niacinamide, glass, label. Must preserve exactly: bottle silhouette, cap geometry, front label hierarchy. Never change: brand name, ingredient claims, product count. Watch distortion risks: small label text drift, cap deformation, glass glare. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.",
+      "status": "generated",
+      "provider": "dry-run",
+      "dry_run": true,
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-08--email-routine-hero--16x9.png",
+      "image_sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+    },
+    {
+      "shot_index": 9,
+      "asset_id": "shot-09",
+      "shot_name": "Seasonal gift bundle",
+      "use_case": "Seasonal",
+      "ratio": "4:5",
+      "prompt": "Create a 4:5 ecommerce image for Hydrating Face Serum (Example Skin) optimized for Email/Social. Shot intent: Seasonal gift bundle. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: brand-consistent ecommerce. Scene direction: Use clean vanity, stone, glass, folded towels, and subtle botanical accents. Avoid heavy makeup mood. Evidence anchors from source: hyaluronic, niacinamide, glass, label. Must preserve exactly: bottle silhouette, cap geometry, front label hierarchy. Never change: brand name, ingredient claims, product count. Watch distortion risks: small label text drift, cap deformation, glass glare. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.",
+      "status": "generated",
+      "provider": "dry-run",
+      "dry_run": true,
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-09--seasonal-gift-bundle--4x5.png",
+      "image_sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+    },
+    {
+      "shot_index": 10,
+      "asset_id": "shot-10",
+      "shot_name": "Marketplace white-ground",
+      "use_case": "Marketplace",
+      "ratio": "1:1",
+      "prompt": "Create a 1:1 ecommerce image for Hydrating Face Serum (Example Skin) optimized for Amazon. Shot intent: Marketplace white-ground. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: brand-consistent ecommerce. Scene direction: Use clean vanity, stone, glass, folded towels, and subtle botanical accents. Avoid heavy makeup mood. Evidence anchors from source: hyaluronic, niacinamide, glass, label. Must preserve exactly: bottle silhouette, cap geometry, front label hierarchy. Never change: brand name, ingredient claims, product count. Watch distortion risks: small label text drift, cap deformation, glass glare. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.",
+      "status": "generated",
+      "provider": "dry-run",
+      "dry_run": true,
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-10--marketplace-white-ground--1x1.png",
+      "image_sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+    },
+    {
+      "shot_index": 11,
+      "asset_id": "shot-11",
+      "shot_name": "Social benefit square",
+      "use_case": "Social",
+      "ratio": "1:1",
+      "prompt": "Create a 1:1 ecommerce image for Hydrating Face Serum (Example Skin) optimized for Instagram. Shot intent: Social benefit square. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: brand-consistent ecommerce. Scene direction: Use clean vanity, stone, glass, folded towels, and subtle botanical accents. Avoid heavy makeup mood. Evidence anchors from source: hyaluronic, niacinamide, glass, label. Must preserve exactly: bottle silhouette, cap geometry, front label hierarchy. Never change: brand name, ingredient claims, product count. Watch distortion risks: small label text drift, cap deformation, glass glare. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.",
+      "status": "generated",
+      "provider": "dry-run",
+      "dry_run": true,
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-11--social-benefit-square--1x1.png",
+      "image_sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+    },
+    {
+      "shot_index": 12,
+      "asset_id": "shot-12",
+      "shot_name": "Story routine vertical",
+      "use_case": "Social",
+      "ratio": "9:16",
+      "prompt": "Create a 9:16 ecommerce image for Hydrating Face Serum (Example Skin) optimized for Instagram Story. Shot intent: Story routine vertical. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: brand-consistent ecommerce. Scene direction: Use clean vanity, stone, glass, folded towels, and subtle botanical accents. Avoid heavy makeup mood. Evidence anchors from source: hyaluronic, niacinamide, glass, label. Must preserve exactly: bottle silhouette, cap geometry, front label hierarchy. Never change: brand name, ingredient claims, product count. Watch distortion risks: small label text drift, cap deformation, glass glare. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing. ## Manual Generation Runbook 1. Generate priority High shots first and keep all manifests. 2. Run ./scripts/qa-images.py after each generation batch. 3. Run ./scripts/reroll-failed.py to simulate or execute rerolls for failed shots. 4. Only package assets that pass QA or are manually approved.",
+      "status": "generated",
+      "provider": "dry-run",
+      "dry_run": true,
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-12--story-routine-vertical--9x16.png",
+      "image_sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+    }
+  ]
+}

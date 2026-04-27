@@ -1,0 +1,4 @@
+dry_run_placeholder=true
+asset_id=shot-06
+shot_name=Pantry shelf context
+ratio=4:5

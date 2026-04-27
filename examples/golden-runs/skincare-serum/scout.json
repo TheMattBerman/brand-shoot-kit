@@ -1,0 +1,71 @@
+{
+  "url": "https://example.com/products/hydrating-face-serum",
+  "title": "Hydrating Face Serum | Example Skin",
+  "meta_description": "Hydrating serum with niacinamide and hyaluronic acid for daily barrier support.",
+  "og_title": "Hydrating Face Serum | Example Skin",
+  "og_description": "Clinical-grade hydration with a lightweight non-sticky finish.",
+  "h1": [
+    "Hydrating Face Serum"
+  ],
+  "image_urls": [
+    "https://example.com/cdn/serum-front.jpg",
+    "https://example.com/cdn/serum-angle.jpg",
+    "https://example.com/cdn/serum-in-use.jpg"
+  ],
+  "degraded_mode": true,
+  "note": "Fixture scout output for offline smoke tests.",
+  "product_name": "Hydrating Face Serum Example Skin",
+  "brand_name": "Example",
+  "product_category": "skincare",
+  "product_type": "skincare bottle",
+  "price": "unknown",
+  "variants": [],
+  "claims_benefits": [
+    "Hydrating Face Serum Example Skin Clinical-grade hydration with a lightweight non-sticky finish"
+  ],
+  "ingredients_materials_specs": [
+    "Hydrating Face Serum Example Skin Hydrating serum with niacinamide and hyaluronic acid for daily barrier support"
+  ],
+  "visible_packaging_text_candidates": [
+    "Hydrating Face Serum Example Skin",
+    "Example",
+    "Hydrating Face Serum"
+  ],
+  "image_evidence": [
+    {
+      "url": "https://example.com/cdn/serum-front.jpg",
+      "source": "scout.image_urls",
+      "confidence": 0.8,
+      "rank": 1
+    },
+    {
+      "url": "https://example.com/cdn/serum-angle.jpg",
+      "source": "scout.image_urls",
+      "confidence": 0.72,
+      "rank": 2
+    },
+    {
+      "url": "https://example.com/cdn/serum-in-use.jpg",
+      "source": "scout.image_urls",
+      "confidence": 0.55,
+      "rank": 3
+    }
+  ],
+  "field_confidence": {
+    "product_name": 0.86,
+    "brand_name": 0.64,
+    "product_category": 0.64,
+    "product_type": 0.64,
+    "price": 0.2,
+    "variants": 0.25,
+    "claims_benefits": 0.62,
+    "ingredients_materials_specs": 0.62,
+    "visible_packaging_text_candidates": 0.82,
+    "image_evidence": 0.82
+  },
+  "extraction_warnings": [
+    "low_confidence:price",
+    "low_confidence:variants",
+    "degraded_mode_source:html_heuristics_only"
+  ]
+}

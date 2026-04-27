@@ -11,3 +11,6 @@ Required fields:
 - `recommended_direction`
 - `strategy_rationale`
 - `shots[]` (default size 12)
+
+Executable owner:
+- `scripts/modules/shoot_director.py`

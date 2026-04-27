@@ -1,0 +1,411 @@
+{
+  "run": {
+    "run_id": "qa-20260427T175934Z",
+    "timestamp_utc": "20260427T175934Z",
+    "mode": "deterministic-manual",
+    "manifest_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/generation-manifest.json",
+    "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum",
+    "threshold": 80.0,
+    "model": "none"
+  },
+  "summary": {
+    "total": 12,
+    "pass": 0,
+    "fail": 0,
+    "manual_review": 12
+  },
+  "reroll_queue": [
+    {
+      "asset_id": "shot-01",
+      "shot_name": "Front label hero",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-02",
+      "shot_name": "Dropper angle detail",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-03",
+      "shot_name": "Ingredient texture smear",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-04",
+      "shot_name": "Sink routine placement",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-05",
+      "shot_name": "Morning hand-held scale",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-06",
+      "shot_name": "Shelf trio context",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-07",
+      "shot_name": "Body crop application",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-08",
+      "shot_name": "Email routine hero",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-09",
+      "shot_name": "Seasonal gift bundle",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-10",
+      "shot_name": "Marketplace white-ground",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-11",
+      "shot_name": "Social benefit square",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-12",
+      "shot_name": "Story routine vertical",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing. ## Manual Generation Runbook 1. Generate priority High shots first and keep all manifests. 2. Run ./scripts/qa-images.py after each generation batch. 3. Run ./scripts/reroll-failed.py to simulate or execute rerolls for failed shots. 4. Only package assets that pass QA or are manually approved."
+    }
+  ],
+  "results": [
+    {
+      "asset_id": "shot-01",
+      "shot_name": "Front label hero",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-01--front-label-hero--1x1.png",
+      "scores": {
+        "product_accuracy": 76,
+        "commerce_usefulness": 66,
+        "brand_fit": 66,
+        "scene_realism": 56,
+        "visual_clarity": 81,
+        "artifact_risk": 83
+      },
+      "weighted_score": 70.7,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-02",
+      "shot_name": "Dropper angle detail",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-02--dropper-angle-detail--4x5.png",
+      "scores": {
+        "product_accuracy": 62,
+        "commerce_usefulness": 78,
+        "brand_fit": 77,
+        "scene_realism": 82,
+        "visual_clarity": 78,
+        "artifact_risk": 83
+      },
+      "weighted_score": 74.15,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-03",
+      "shot_name": "Ingredient texture smear",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-03--ingredient-texture-smear--1x1.png",
+      "scores": {
+        "product_accuracy": 70,
+        "commerce_usefulness": 57,
+        "brand_fit": 82,
+        "scene_realism": 57,
+        "visual_clarity": 79,
+        "artifact_risk": 59
+      },
+      "weighted_score": 67.05,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-04",
+      "shot_name": "Sink routine placement",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-04--sink-routine-placement--4x5.png",
+      "scores": {
+        "product_accuracy": 65,
+        "commerce_usefulness": 78,
+        "brand_fit": 82,
+        "scene_realism": 86,
+        "visual_clarity": 61,
+        "artifact_risk": 70
+      },
+      "weighted_score": 73.4,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-05",
+      "shot_name": "Morning hand-held scale",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-05--morning-hand-held-scale--4x5.png",
+      "scores": {
+        "product_accuracy": 74,
+        "commerce_usefulness": 69,
+        "brand_fit": 82,
+        "scene_realism": 63,
+        "visual_clarity": 61,
+        "artifact_risk": 73
+      },
+      "weighted_score": 71.15,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-06",
+      "shot_name": "Shelf trio context",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-06--shelf-trio-context--4x5.png",
+      "scores": {
+        "product_accuracy": 61,
+        "commerce_usefulness": 76,
+        "brand_fit": 80,
+        "scene_realism": 71,
+        "visual_clarity": 74,
+        "artifact_risk": 74
+      },
+      "weighted_score": 70.95,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-07",
+      "shot_name": "Body crop application",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-07--body-crop-application--9x16.png",
+      "scores": {
+        "product_accuracy": 71,
+        "commerce_usefulness": 78,
+        "brand_fit": 68,
+        "scene_realism": 65,
+        "visual_clarity": 61,
+        "artifact_risk": 56
+      },
+      "weighted_score": 68.55,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-08",
+      "shot_name": "Email routine hero",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-08--email-routine-hero--16x9.png",
+      "scores": {
+        "product_accuracy": 62,
+        "commerce_usefulness": 66,
+        "brand_fit": 68,
+        "scene_realism": 65,
+        "visual_clarity": 71,
+        "artifact_risk": 81
+      },
+      "weighted_score": 66.95,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-09",
+      "shot_name": "Seasonal gift bundle",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-09--seasonal-gift-bundle--4x5.png",
+      "scores": {
+        "product_accuracy": 59,
+        "commerce_usefulness": 61,
+        "brand_fit": 81,
+        "scene_realism": 60,
+        "visual_clarity": 72,
+        "artifact_risk": 58
+      },
+      "weighted_score": 64.05,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-10",
+      "shot_name": "Marketplace white-ground",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-10--marketplace-white-ground--1x1.png",
+      "scores": {
+        "product_accuracy": 56,
+        "commerce_usefulness": 72,
+        "brand_fit": 77,
+        "scene_realism": 82,
+        "visual_clarity": 68,
+        "artifact_risk": 86
+      },
+      "weighted_score": 70.45,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-11",
+      "shot_name": "Social benefit square",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-11--social-benefit-square--1x1.png",
+      "scores": {
+        "product_accuracy": 87,
+        "commerce_usefulness": 70,
+        "brand_fit": 62,
+        "scene_realism": 78,
+        "visual_clarity": 68,
+        "artifact_risk": 82
+      },
+      "weighted_score": 76.1,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-12",
+      "shot_name": "Story routine vertical",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-12--story-routine-vertical--9x16.png",
+      "scores": {
+        "product_accuracy": 57,
+        "commerce_usefulness": 64,
+        "brand_fit": 75,
+        "scene_realism": 63,
+        "visual_clarity": 71,
+        "artifact_risk": 88
+      },
+      "weighted_score": 66.5,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing. ## Manual Generation Runbook 1. Generate priority High shots first and keep all manifests. 2. Run ./scripts/qa-images.py after each generation batch. 3. Run ./scripts/reroll-failed.py to simulate or execute rerolls for failed shots. 4. Only package assets that pass QA or are manually approved."
+    }
+  ]
+}

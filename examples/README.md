@@ -2,6 +2,7 @@
 
 Each folder contains a `config.json` input for `scripts/create-shoot-packet.py`.
 `scout-samples/` contains offline scout fixtures for deterministic smoke tests.
+`golden-runs/` contains deterministic dry-run bundle outputs built by `scripts/build-golden-runs.sh`.
 
 Generate a sample packet:
 

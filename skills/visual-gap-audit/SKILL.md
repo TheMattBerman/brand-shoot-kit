@@ -36,3 +36,6 @@ Find the missing shots that would make the product easier to understand, trust, 
 - `not relevant`
 
 Prioritize high-conversion missing shots. Do not recommend a giant shoot just because you can.
+
+Executable module owner path:
+- `scripts/modules/visual_gap_audit.py --packet <packet-dir>` -> `visual-gaps.json`

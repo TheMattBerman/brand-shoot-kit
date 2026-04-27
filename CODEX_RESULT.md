@@ -1,80 +1,68 @@
 # CODEX_RESULT
 
-## Implementation Summary (P0 executable depth)
+## Implementation Summary (P1 depth pass)
 
-This pass implemented the requested P0 improvements as executable code, not review notes.
+This pass implemented the requested P1 upgrades as executable code with no-spend defaults.
 
-### 1) Real module artifact pipeline
+### 1) Structured scout extraction depth
 
-Implemented first-class stage artifacts in packet root:
-- `scout.json`
-- `preservation.json`
-- `visual-gaps.json`
-- `shoot-plan.json`
-- `prompts.json`
+- Added `scripts/scout_structured.py` (+ executable wrapper `scripts/scout-structured.py`).
+- `scripts/run-brand-shoot.py` now enriches all scout inputs (URL fetch or fixture JSON) before writing `scout.json`.
+- `scout.json` now includes:
+  - `product_name`, `brand_name`
+  - `product_type`, `product_category`
+  - `price`
+  - `variants`
+  - `claims_benefits`
+  - `ingredients_materials_specs`
+  - `visible_packaging_text_candidates`
+  - `image_evidence` with source/confidence
+  - `field_confidence` per structured field
+  - `extraction_warnings`
+- Preservation stage now reacts to low-confidence extraction by forcing more conservative variation rules and lower accuracy confidence.
 
-Key changes:
-- `scripts/run-brand-shoot.py`
-  - now orchestrates explicit stage pipeline and writes artifacts
-  - supports independent stage regeneration via `--stage`:
-    - `scout`, `preservation`, `visual-gaps`, `shoot-plan`, `prompts`, `render`, `all`
-- `scripts/pipeline_stages.py` (new)
-  - shared stage logic and packet markdown rendering
-- `scripts/create-shoot-packet.py`
-  - now renders docs from artifacts (`--artifacts-dir`) and keeps `--config` compatibility
-- `scripts/validate-packet.py`
-  - now validates required artifact JSON files too
+### 2) Subskills as module owners
 
-### 2) Automatic reroll executor
+Added executable module owner entrypoints:
 
-Added `scripts/reroll-failed.py`:
-- reads:
-  - `assets/generated/qa-results.json`
-  - `assets/generated/generation-manifest.json`
-  - `prompts.json` (fallback `04-generation-prompts.md`)
-- dry-run mode (default):
-  - deterministic reroll simulation
-  - tracks per-attempt revised prompt, reasons, status
-  - writes `assets/generated/reroll-manifest.json`
-  - appends reroll history to `05-qa-report.md`
-- live mode (`--live`):
-  - explicitly gated
-  - can call `generate-images.py --live` for selected asset IDs
+- `scripts/modules/brand_scout.py` -> `scout.json`
+- `scripts/modules/product_preservation.py` -> `preservation.json`
+- `scripts/modules/visual_gap_audit.py` -> `visual-gaps.json`
+- `scripts/modules/shoot_director.py` -> `shoot-plan.json`
+- `scripts/modules/prompt_factory.py` -> `prompts.json`
+- `scripts/modules/qa_reroll.py` -> QA/reroll updates (`reroll-manifest.json`)
+- `scripts/modules/export_packager.py` -> export manifest
+- `scripts/modules/memory_writer.py` -> `memory/*.md`
 
-Related updates:
-- `scripts/generate-images.py`
-  - added `--asset-ids` filter
-  - added `--prompt-overrides` for reroll prompt rewrites
-- `scripts/qa-images.py`
-  - now includes `reroll_queue` in `qa-results.json`
+Also updated every `skills/*/SKILL.md` to declare executable path + artifact ownership.
 
-### 3) Executable eval harness
+### 3) Golden run bundles (deterministic dry-run structure)
 
-Added `evals/run.py` + fixture `evals/fixtures/scout-coffee.json`.
+- Added `scripts/build-golden-runs.sh` with:
+  - build mode (default)
+  - `--check` completeness mode
+- Added `examples/golden-runs/` structure with two bundle targets:
+  - `skincare-serum`
+  - `coffee-roast`
+- Each bundle includes fixture input, stage artifacts, packet markdown, generation/QA/reroll manifests, export manifest, and memory files.
+- Bundle READMEs explicitly label these as dry-run structural proofs, not live-quality proof.
 
-Coverage includes:
-- module artifacts produced and valid JSON
-- cross-category prompt differentiation (non-clone behavior)
-- dry-run generation -> QA -> reroll -> export end-to-end
-- required suite skill files present
+### 4) Evals, doctor, docs
 
-Harness exits non-zero on failure.
-
-### 4) Quality/docs/ops updates
-
-- `scripts/run-smoke.sh`
-  - now includes reroll step and verifies reroll manifest
-- `doctor.sh`
-  - now checks `evals/run.py`, `scripts/reroll-failed.py`
-  - now executes `./evals/run.py`
-- updated docs:
+- Replaced `evals/run.py` with expanded executable checks for:
+  - richer structured scout fields
+  - module entrypoint execution and artifact ownership
+  - dry-run end-to-end loop
+  - golden bundle build + completeness
+- Updated `doctor.sh` to validate module entrypoints and golden bundle build/check commands.
+- Updated docs:
   - `README.md`
   - `SUITE.md`
-- `.gitignore`
-  - keeps eval temp junk and pycache out (`evals/.tmp/`, `__pycache__`, `*.pyc`, `output/`)
+  - `examples/README.md`
+  - `references/module-contracts/*.md` (module owner paths + scout field contract expansion)
 
 ## Honest Remaining Gaps
 
-- Live generation/vision/reroll quality is still unproven by default; this pass stayed no-spend.
-- Structured high-fidelity extraction for variants/claims/spec text is still basic.
-- Export stage is still deterministic copy packaging (no crop/resize rendering variants yet).
+- Structured extraction is still heuristic (text/regex confidence-gated), not OCR/DOM-semantic extraction.
+- Live generation + live QA quality remains unproven in this no-spend pass.
+- Export packaging remains deterministic copy packaging; channel-specific crop/resize rendering is still not implemented.

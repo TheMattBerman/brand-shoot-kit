@@ -20,9 +20,16 @@ Produce `scout.json` with:
 - `url`, `title`, `meta_description`, `og_title`, `og_description`
 - `h1[]`, `image_urls[]`
 - visible product/category/tone clues
+- structured extraction fields:
+  `product_name`, `brand_name`, `product_type`, `product_category`, `price`,
+  `variants`, `claims_benefits`, `ingredients_materials_specs`,
+  `visible_packaging_text_candidates`, `image_evidence`, `field_confidence`,
+  `extraction_warnings`
 - `degraded_mode` and `note`
 
-Use `scripts/scout-url.sh` for lightweight extraction and `scripts/run-brand-shoot.py --url` when creating a packet.
+Executable module owner path:
+- `scripts/modules/brand_scout.py --url <product-url> --packet <packet-dir>` -> `scout.json`
+- `scripts/scout-structured.py --in <scout.json> --out <scout.json>` for structured enrichment only.
 
 ## Rules
 

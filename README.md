@@ -15,6 +15,7 @@ This kit is for product photography and ecommerce asset libraries. It is explici
 - Install/doctor/uninstall lifecycle
 - Executable eval harness in `evals/run.py` plus trigger/execution docs
 - Example shoot packets for multiple product types
+- Golden dry-run bundles in `examples/golden-runs/`
 
 ## Quick Start
 
@@ -38,6 +39,13 @@ Dry-run executable v0.2 flow (no paid API calls):
 ./scripts/qa-images.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
 ./scripts/reroll-failed.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
 ./scripts/export-packager.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
+```
+
+Build deterministic golden run bundles (no-spend):
+
+```bash
+./scripts/build-golden-runs.sh
+./scripts/build-golden-runs.sh --check
 ```
 
 Regenerate only one stage artifact:
@@ -83,7 +91,21 @@ Without `OPENAI_API_KEY` (or other optional keys), the kit still produces:
 - `SUITE.md`: moduleized architecture for productized system evolution
 - `evals/`: trigger and execution benchmarks
 - `examples/`: practical configs and packet samples
+- `examples/golden-runs/`: deterministic dry-run golden structure bundles
 - `output/`: generated artifacts
+
+## Module Entrypoints
+
+Each suite module has an independent executable owner path:
+
+- `scripts/modules/brand_scout.py` -> `scout.json`
+- `scripts/modules/product_preservation.py` -> `preservation.json`
+- `scripts/modules/visual_gap_audit.py` -> `visual-gaps.json`
+- `scripts/modules/shoot_director.py` -> `shoot-plan.json`
+- `scripts/modules/prompt_factory.py` -> `prompts.json`
+- `scripts/modules/qa_reroll.py` -> `assets/generated/reroll-manifest.json` (and optional QA refresh)
+- `scripts/modules/export_packager.py` -> export manifest
+- `scripts/modules/memory_writer.py` -> `memory/*.md`
 
 ## Install
 

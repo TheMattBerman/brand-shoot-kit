@@ -31,3 +31,6 @@ Use `scripts/export-packager.py --packet <packet>` for deterministic packaging.
 ## Rule
 
 Do not bury the user in a pile of files. Name and map assets so a marketer knows exactly where each one goes.
+
+Executable module owner path:
+- `scripts/modules/export_packager.py --packet <packet-dir>` -> `assets/exports/*/export-manifest.json`

@@ -50,19 +50,21 @@ Current first-class stage artifacts in packet root:
 ## Implementation Status (April 27, 2026)
 
 - Implemented now:
-  - `brand-scout` (degraded HTML scout via `scripts/scout-url.sh`)
+  - `brand-scout` with deterministic structured enrichment (`scripts/scout-structured.py`, `scripts/modules/brand_scout.py`)
   - `suite-orchestrator` (`scripts/run-brand-shoot.py`) that writes stage artifacts and renders docs
+  - module-owner entrypoints for all 8 modules under `scripts/modules/`
   - packet generation + structure validation (`create-shoot-packet.py`, `validate-packet.py`)
   - generation stage with dry-run + optional OpenAI live mode (`scripts/generate-images.py`)
   - QA stage with deterministic/manual scoring + optional OpenAI vision mode (`scripts/qa-images.py`)
   - reroll stage with deterministic dry-run simulation + optional live execution (`scripts/reroll-failed.py`)
   - deterministic export packaging and manifests (`scripts/export-packager.py`)
+  - deterministic golden run bundles + builder/check script (`scripts/build-golden-runs.sh`, `examples/golden-runs/`)
 - Partial:
   - preservation/gap/strategy remain heuristic/template-driven
   - prompt generation is now category-aware but still rule-based, not model-directed
   - live reroll loop is only partially implemented (gated and unproven by default)
+  - structured extraction is heuristic and confidence-gated, not OCR/DOM-semantic grade
 - Missing:
-  - robust structured extraction (variants/claims/spec-level parsing)
   - crop/resize variant rendering per channel (current export is deterministic copy packaging)
 
 ## Contract Files

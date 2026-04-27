@@ -97,6 +97,7 @@ check_file "evals/execution-evals.md"
 check_file "evals/output-quality-rubric.md"
 check_file "evals/run.py"
 check_file "examples/scout-samples/skincare-serum-scout.json"
+check_dir "examples/golden-runs"
 
 # Script checks
 for s in \
@@ -112,7 +113,17 @@ for s in \
   "scripts/generate-images.py" \
   "scripts/qa-images.py" \
   "scripts/reroll-failed.py" \
-  "scripts/export-packager.py"; do
+  "scripts/export-packager.py" \
+  "scripts/scout-structured.py" \
+  "scripts/build-golden-runs.sh" \
+  "scripts/modules/brand_scout.py" \
+  "scripts/modules/product_preservation.py" \
+  "scripts/modules/visual_gap_audit.py" \
+  "scripts/modules/shoot_director.py" \
+  "scripts/modules/prompt_factory.py" \
+  "scripts/modules/qa_reroll.py" \
+  "scripts/modules/export_packager.py" \
+  "scripts/modules/memory_writer.py"; do
   check_exec "$s"
 done
 check_exec "evals/run.py"
@@ -128,8 +139,20 @@ check_help "./scripts/generate-images.py --help"
 check_help "./scripts/qa-images.py --help"
 check_help "./scripts/reroll-failed.py --help"
 check_help "./scripts/export-packager.py --help"
+check_help "./scripts/scout-structured.py --help"
+check_help "./scripts/build-golden-runs.sh --help"
+check_help "./scripts/modules/brand_scout.py --help"
+check_help "./scripts/modules/product_preservation.py --help"
+check_help "./scripts/modules/visual_gap_audit.py --help"
+check_help "./scripts/modules/shoot_director.py --help"
+check_help "./scripts/modules/prompt_factory.py --help"
+check_help "./scripts/modules/qa_reroll.py --help"
+check_help "./scripts/modules/export_packager.py --help"
+check_help "./scripts/modules/memory_writer.py --help"
 check_help "./scripts/run-smoke.sh"
 check_help "./evals/run.py"
+check_help "./scripts/build-golden-runs.sh"
+check_help "./scripts/build-golden-runs.sh --check"
 
 # Basic dependency checks
 command -v bash >/dev/null 2>&1 && pass "binary available: bash" || fail "missing binary: bash"

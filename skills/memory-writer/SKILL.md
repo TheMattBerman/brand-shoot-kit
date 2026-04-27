@@ -31,3 +31,6 @@ Update packet memory files:
 - `memory/assets.md`
 
 Keep it short, specific, and reusable. No diary prose.
+
+Executable module owner path:
+- `scripts/modules/memory_writer.py --packet <packet-dir>` -> updates all `memory/*.md` files

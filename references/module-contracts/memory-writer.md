@@ -11,3 +11,6 @@ Output artifacts:
 
 Required behavior:
 - persist pass/fail prompt fragments and distortion patterns for next run.
+
+Executable owner:
+- `scripts/modules/memory_writer.py`

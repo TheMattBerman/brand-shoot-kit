@@ -1,0 +1,4 @@
+dry_run_placeholder=true
+asset_id=shot-08
+shot_name=Email morning hero
+ratio=16:9

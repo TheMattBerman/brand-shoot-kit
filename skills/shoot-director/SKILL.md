@@ -30,3 +30,6 @@ Make taste decisions. Do not dump options.
 ## Output
 
 `02-shoot-strategy.md` and `03-shot-list.md` ready for prompt generation.
+
+Executable module owner path:
+- `scripts/modules/shoot_director.py --packet <packet-dir>` -> `shoot-plan.json`

@@ -1,0 +1,4 @@
+dry_run_placeholder=true
+asset_id=shot-07
+shot_name=Steam mug body crop
+ratio=9:16

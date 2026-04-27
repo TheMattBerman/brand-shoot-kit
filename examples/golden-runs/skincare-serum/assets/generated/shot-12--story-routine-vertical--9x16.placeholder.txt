@@ -1,0 +1,4 @@
+dry_run_placeholder=true
+asset_id=shot-12
+shot_name=Story routine vertical
+ratio=9:16

@@ -1,0 +1,91 @@
+{
+  "recommended_direction": "Category-aware commerce with contextual lifestyle",
+  "strategy_rationale": "Use source evidence to tune scenes by category while preserving strict product fidelity.",
+  "category": "skincare",
+  "shots": [
+    {
+      "name": "Front label hero",
+      "category": "PDP",
+      "ratio": "1:1",
+      "channel": "PDP",
+      "priority": "High"
+    },
+    {
+      "name": "Dropper angle detail",
+      "category": "PDP",
+      "ratio": "4:5",
+      "channel": "PDP",
+      "priority": "High"
+    },
+    {
+      "name": "Ingredient texture smear",
+      "category": "Lifestyle",
+      "ratio": "1:1",
+      "channel": "PDP/Social",
+      "priority": "High"
+    },
+    {
+      "name": "Sink routine placement",
+      "category": "Lifestyle",
+      "ratio": "4:5",
+      "channel": "PDP/Email",
+      "priority": "High"
+    },
+    {
+      "name": "Morning hand-held scale",
+      "category": "Model",
+      "ratio": "4:5",
+      "channel": "PDP/Social",
+      "priority": "High"
+    },
+    {
+      "name": "Shelf trio context",
+      "category": "Lifestyle",
+      "ratio": "4:5",
+      "channel": "Social",
+      "priority": "Medium"
+    },
+    {
+      "name": "Body crop application",
+      "category": "Model",
+      "ratio": "9:16",
+      "channel": "Social",
+      "priority": "Medium"
+    },
+    {
+      "name": "Email routine hero",
+      "category": "Email",
+      "ratio": "16:9",
+      "channel": "Email",
+      "priority": "High"
+    },
+    {
+      "name": "Seasonal gift bundle",
+      "category": "Seasonal",
+      "ratio": "4:5",
+      "channel": "Email/Social",
+      "priority": "Low"
+    },
+    {
+      "name": "Marketplace white-ground",
+      "category": "Marketplace",
+      "ratio": "1:1",
+      "channel": "Amazon",
+      "priority": "High"
+    },
+    {
+      "name": "Social benefit square",
+      "category": "Social",
+      "ratio": "1:1",
+      "channel": "Instagram",
+      "priority": "Medium"
+    },
+    {
+      "name": "Story routine vertical",
+      "category": "Social",
+      "ratio": "9:16",
+      "channel": "Instagram Story",
+      "priority": "Medium"
+    }
+  ]
+}

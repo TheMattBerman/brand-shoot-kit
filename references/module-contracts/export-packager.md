@@ -9,3 +9,6 @@ Output artifact:
 
 Required fields:
 - `asset_id`, `channel`, `ratio`, `filename`, `notes`
+
+Executable owner:
+- `scripts/modules/export_packager.py`

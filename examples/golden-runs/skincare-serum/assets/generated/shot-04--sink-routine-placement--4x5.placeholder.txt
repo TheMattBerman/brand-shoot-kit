@@ -1,0 +1,4 @@
+dry_run_placeholder=true
+asset_id=shot-04
+shot_name=Sink routine placement
+ratio=4:5

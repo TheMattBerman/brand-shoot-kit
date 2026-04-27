@@ -12,3 +12,6 @@ Required fields per shot:
 
 Quality gate:
 - each prompt must mention preservation rules and a concrete reroll instruction.
+
+Executable owner:
+- `scripts/modules/prompt_factory.py`

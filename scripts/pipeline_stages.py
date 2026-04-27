@@ -98,6 +98,11 @@ def clean_text(value: str) -> str:
 
 
 def infer_brand_and_product(scout: Dict[str, Any], fallback_url: str) -> Tuple[str, str]:
+    structured_brand = clean_text(str(scout.get("brand_name", "")))
+    structured_product = clean_text(str(scout.get("product_name", "")))
+    if structured_brand and structured_product:
+        return structured_brand, structured_product
+
     title = clean_text(str(scout.get("og_title") or scout.get("title") or ""))
     h1 = ""
     h1_list = scout.get("h1") or []
@@ -290,15 +295,25 @@ def stage_preservation(
     explicit_tone: str | None = None,
     explicit_audience: str | None = None,
 ) -> Dict[str, Any]:
-    product_type = explicit_product_type or infer_product_type(scout, product)
+    product_type = explicit_product_type or str(scout.get("product_type") or infer_product_type(scout, product))
     description = clean_text(str(scout.get("meta_description") or scout.get("og_description") or ""))
+    field_conf = scout.get("field_confidence") or {}
     confidence = "medium-high" if description and len(description) > 120 else "medium"
+    if isinstance(field_conf, dict):
+        low_fields = [k for k in ["claims_benefits", "ingredients_materials_specs", "price"] if float(field_conf.get(k, 0.0)) < 0.5]
+        if low_fields:
+            confidence = "low"
+        elif float(field_conf.get("visible_packaging_text_candidates", 0.0)) < 0.6:
+            confidence = "medium-low"
     rules = infer_preservation_rules(product_type)
+    can_vary = rules["can_vary"]
+    if confidence in {"low", "medium-low"}:
+        can_vary = ["camera angle (safe)", "background depth (minimal)", "neutral scene context"]
 
     return {
         "product_type": product_type,
         "must_preserve": rules["must_preserve"],
-        "can_vary": rules["can_vary"],
+        "can_vary": can_vary,
         "never_change": rules["never_change"],
         "distortion_risks": rules["distortion_risks"],
         "accuracy_confidence": confidence,
@@ -526,6 +541,16 @@ def render_packet_docs(
         f"- Tone: {preservation.get('tone', 'unknown')}\n"
         "- Palette: unknown\n"
         f"- Inferred product category: {category}\n\n"
+        "## Structured Scout Extraction\n"
+        f"- Product name: {scout.get('product_name', product)}\n"
+        f"- Brand name: {scout.get('brand_name', brand)}\n"
+        f"- Product type/category: {scout.get('product_type', 'unknown')} / {scout.get('product_category', category)}\n"
+        f"- Price (detected): {scout.get('price', 'unknown')}\n"
+        f"- Variants/options: {', '.join(scout.get('variants', [])) or 'none detected'}\n"
+        f"- Claims/benefits: {', '.join(scout.get('claims_benefits', [])) or 'none detected'}\n"
+        f"- Ingredients/materials/specs: {', '.join(scout.get('ingredients_materials_specs', [])) or 'none detected'}\n"
+        f"- Packaging text candidates: {', '.join(scout.get('visible_packaging_text_candidates', [])) or 'none detected'}\n"
+        f"- Extraction warnings: {', '.join(scout.get('extraction_warnings', [])) or 'none'}\n\n"
         "## Product Preservation Brief\n"
         f"- Product type: {preservation.get('product_type', 'unknown')}\n"
         f"- Must preserve: {', '.join(preservation.get('must_preserve', [])) or 'exact pack shape, label position, logo'}\n"

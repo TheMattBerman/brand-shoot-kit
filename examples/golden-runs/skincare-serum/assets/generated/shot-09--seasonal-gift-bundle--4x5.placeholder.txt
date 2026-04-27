@@ -1,0 +1,4 @@
+dry_run_placeholder=true
+asset_id=shot-09
+shot_name=Seasonal gift bundle
+ratio=4:5

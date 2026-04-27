@@ -36,3 +36,6 @@ Pretty-but-wrong images fail. Protect the product before prompts get creative.
 ## Output
 
 A preservation brief that `prompt-factory` can paste into every generation prompt and `qa-reroll` can score against.
+
+Executable module owner path:
+- `scripts/modules/product_preservation.py --packet <packet-dir>` -> `preservation.json`

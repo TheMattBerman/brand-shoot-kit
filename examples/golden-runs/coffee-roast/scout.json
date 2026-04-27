@@ -1,0 +1,66 @@
+{
+  "url": "https://example.com/products/summit-roast-coffee",
+  "title": "Summit Roast Whole Bean Coffee | Alpine Goods",
+  "meta_description": "Single origin whole bean coffee with cocoa and citrus notes. Freshly roasted for pour-over and espresso.",
+  "og_title": "Summit Roast Coffee",
+  "og_description": "Specialty whole bean coffee from high altitude farms.",
+  "h1": [
+    "Summit Roast Whole Bean Coffee"
+  ],
+  "image_urls": [
+    "https://example.com/images/coffee-front.jpg",
+    "https://example.com/images/coffee-angle.jpg"
+  ],
+  "degraded_mode": true,
+  "note": "Fixture scout for deterministic eval coverage",
+  "product_name": "Summit Roast Whole Bean Coffee",
+  "brand_name": "Example",
+  "product_category": "coffee",
+  "product_type": "sealed coffee bag",
+  "price": "unknown",
+  "variants": [],
+  "claims_benefits": [
+    "Summit Roast Whole Bean Coffee Alpine Goods Single origin whole bean coffee with cocoa and citrus notes",
+    "Freshly roasted for pour-over and espresso"
+  ],
+  "ingredients_materials_specs": [
+    "Summit Roast Coffee Specialty whole bean coffee from high altitude farms"
+  ],
+  "visible_packaging_text_candidates": [
+    "Summit Roast Whole Bean Coffee",
+    "Example",
+    "Summit Roast Whole Bean Coffee Alpine Goods",
+    "Summit Roast Coffee"
+  ],
+  "image_evidence": [
+    {
+      "url": "https://example.com/images/coffee-front.jpg",
+      "source": "scout.image_urls",
+      "confidence": 0.8,
+      "rank": 1
+    },
+    {
+      "url": "https://example.com/images/coffee-angle.jpg",
+      "source": "scout.image_urls",
+      "confidence": 0.72,
+      "rank": 2
+    }
+  ],
+  "field_confidence": {
+    "product_name": 0.86,
+    "brand_name": 0.64,
+    "product_category": 0.64,
+    "product_type": 0.86,
+    "price": 0.2,
+    "variants": 0.25,
+    "claims_benefits": 0.62,
+    "ingredients_materials_specs": 0.62,
+    "visible_packaging_text_candidates": 0.82,
+    "image_evidence": 0.62
+  },
+  "extraction_warnings": [
+    "low_confidence:price",
+    "low_confidence:variants",
+    "degraded_mode_source:html_heuristics_only"
+  ]
+}
