@@ -1,6 +1,8 @@
 # AGENTS.md — Brand Shoot Kit
 
-Brand Shoot Kit is a production system for ecommerce visuals, not a prompt generator.
+Brand Shoot Kit is a production system for ecommerce brand photo shoots, not a prompt generator.
+
+**Scope:** website, PDP, lifestyle, email, organic social, marketplace, and catalog imagery. **Out of scope:** paid ad creative, ad-spy, competitive ad intelligence. Those belong to StealAds. Keep the lanes clean.
 
 ## Mission
 

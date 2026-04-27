@@ -1,6 +1,8 @@
 # Brand Shoot Kit
 
-**An end-to-end AI product photography operator that turns a product URL into a channel-ready shoot, with QA, reroll, exports, and a magic-moment review frontend.**
+**An end-to-end AI brand photo shoot operator for ecommerce. Turn a product URL into a full website / PDP / lifestyle / email / social / marketplace image library, with QA, reroll, channel exports, and a magic-moment review frontend.**
+
+For ecommerce brands that need a real catalog of website and organic visuals. Not for ads. (Ads is [StealAds](https://stealads.com) territory.)
 
 Built for [OpenClaw](https://openclaw.ai) and [Claude Cowork](https://claude.com/product/cowork) style agent workflows.
 
@@ -28,9 +30,9 @@ Give it a product URL. The agent does the rest:
 8. **Exports** channel-ready assets with manifest metadata
 9. **Renders** a static `index.html` review frontend so you can ship the run, not the JSON
 
-Not a prompt dump. Not an ad-spy workflow. Not "make a pretty product image."
+Not a prompt dump. Not an ad creative tool. Not an ad-spy workflow. Not "make a pretty product image."
 
-**A controlled visual production system for ecommerce assets.**
+**A controlled brand photo shoot system for ecommerce website, catalog, lifestyle, and organic channel assets.**
 
 > 👀 **See the output first:** every run produces `<packet>/index.html` — a premium gallery with images, QA scores, exports, reference, and provenance. Open it in a browser to see what a finished shoot looks like.
 
@@ -38,13 +40,15 @@ Not a prompt dump. Not an ad-spy workflow. Not "make a pretty product image."
 
 ## Why This Exists
 
-Ecommerce teams need more product visuals than traditional shoots can reasonably produce. PDP heroes, label detail, hand-held scale proof, lifestyle, email heroes, social crops, marketplace-safe assets, seasonal variants, bundle layouts. A single studio day cannot keep up with the visual surface area of a modern brand.
+Ecommerce brands need a much bigger visual library than traditional shoots can produce. PDP heroes, label detail, hand-held scale proof, lifestyle, email heroes, social crops, marketplace-safe assets, seasonal variants, bundle layouts, blog and content imagery, app store screenshots. A single studio day cannot keep up with the visual surface area of a modern ecommerce brand's website and organic channels.
 
 Generic AI is fast, but it breaks the things brands actually care about: package geometry, label text, claims, product count, and brand cues. One round of "make me a hero image" produces a pretty render of a product that does not legally exist.
 
 I built Brand Shoot Kit to put product truth first. Every run starts from source-page evidence and a real product reference image, then wraps generation in QA, reroll, export, and human review. It is the part of the workflow most AI image tools skip: the part that decides what to shoot, what must be preserved, and what counts as good enough to ship.
 
-I'm open-sourcing it because every brand running a real catalog deserves a production loop, not a prompt.
+This is the brand photo shoot for your website, your catalog, your email, your organic social, and your marketplace listings. It is *not* an ad creative tool. If you want competitive ad intelligence and ad creative production, that is what [StealAds](https://stealads.com) is for. Clean lanes, on purpose.
+
+I'm open-sourcing it because every ecommerce brand running a real catalog deserves a production loop, not a prompt.
 
 ---
 
@@ -265,7 +269,7 @@ The point is not to pretend every AI output is good. The point is to catch failu
 | Time to deliver: 2-4 weeks | Time to deliver: 30 minutes |
 | **One shoot: ~$11,000** | **One full 12-shot packet: ~$1.50** |
 
-A real photo day still wins for hero campaigns. Brand Shoot Kit wins for the other 90% of the visuals a brand actually needs every month.
+A real photo day still wins for hero brand campaigns and the once-a-quarter centerpiece shoot. Brand Shoot Kit wins for the other 90% of the visuals an ecommerce brand actually needs every month: PDP secondary images, lifestyle variants, label detail, email heroes, marketplace listings, blog and content imagery, seasonal variants, and bundle layouts.
 
 ---
 
@@ -384,13 +388,14 @@ Brand Shoot Kit is that loop in repo form.
 
 ## More OpenClaw Kits
 
-Run this alongside the rest of the kit set for a full brand and growth loop:
+Run this alongside the rest of the kit set for a full brand and growth loop. Each kit owns its lane:
 
 - **[Creator Breakout Kit](https://github.com/TheMattBerman/creator-breakout-kit)** — Strategy layer that finds breakout creator angles, hooks, and concepts before you pay to source or produce
 - **[SEO Kit](https://github.com/TheMattBerman/seo-kit)** — AI agent that finds keywords, writes content, builds backlinks, monitors rankings, and self-improves
 - **[Outcome Kit](https://github.com/TheMattBerman/outcome-kit)** — Finds fake winners, real winners, and conversion leaks across ads, pages, and outcomes
+- **[StealAds](https://stealads.com)** — Competitive ad intelligence and ad creative. The ads lane. Brand Shoot Kit deliberately does not overlap.
 
-Brand Shoot Kit feeds the others. The shoot becomes the ad creative, the article hero, the landing page asset, the email, the social post.
+Brand Shoot Kit feeds the website and the organic channels. The shoot becomes the PDP hero, the article image, the landing page asset, the email hero, the marketplace listing, and the organic social post. Not the paid ad.
 
 ---
 

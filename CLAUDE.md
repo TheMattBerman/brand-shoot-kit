@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-Brand Shoot Kit is an end-to-end AI product photography operator for ecommerce brands. Give it a product URL. The pipeline scouts the page, builds a preservation brief, plans a 12-shot pack, generates ratio-aware images, QA-scores every frame, rerolls failures, exports channel-ready assets, and renders a static `index.html` review frontend at the packet root.
+Brand Shoot Kit is an end-to-end AI brand photo shoot operator for ecommerce brands. Give it a product URL. The pipeline scouts the page, builds a preservation brief, plans a 12-shot pack, generates ratio-aware images, QA-scores every frame, rerolls failures, exports channel-ready assets, and renders a static `index.html` review frontend at the packet root.
+
+**Scope:** ecommerce website, PDP, lifestyle, email, organic social, marketplace, and catalog imagery. **Not for paid ads.** Ads are out of scope by design — that lane belongs to StealAds. If a feature request reads as "ad creative" or "ad-spy," push back and route it.
 
 The shareable artifact is **the packet**, specifically `<packet>/index.html` — a premium gallery with images, QA scores, exports, reference image, and provenance. Not the JSON. Not the terminal output. The frontend.
 
