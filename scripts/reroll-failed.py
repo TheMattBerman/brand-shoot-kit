@@ -25,7 +25,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--out", help="Reroll manifest path (default: <packet>/assets/generated/reroll-manifest.json)")
     p.add_argument("--max-attempts", type=int, default=2, help="Maximum reroll attempts per failed shot")
     p.add_argument("--live", action="store_true", help="Execute live rerolls via generate-images.py --live")
-    p.add_argument("--live-model", default="gpt-image-1", help="Model passed to generate-images.py in live mode")
+    p.add_argument("--live-model", default="gpt-image-2", help="Model passed to generate-images.py in live mode")
     p.add_argument("--reroll-status", default="fail,manual_review", help="Comma-separated QA statuses eligible for reroll")
     return p.parse_args()
 

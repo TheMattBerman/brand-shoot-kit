@@ -84,7 +84,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--out", help="Generated assets directory (default: <packet>/assets/generated)")
     p.add_argument("--manifest", help="Generation manifest path (default: <out>/generation-manifest.json)")
     p.add_argument("--live", action="store_true", help="Call OpenAI Images API (requires OPENAI_API_KEY)")
-    p.add_argument("--model", default="gpt-image-1", help="OpenAI image model (live mode)")
+    p.add_argument("--model", default="gpt-image-2", help="OpenAI image model (live mode)")
     p.add_argument("--size", default="1024x1024", help="Image size sent to provider in live mode")
     p.add_argument("--limit", type=int, default=0, help="Optional shot limit for quick runs")
     p.add_argument("--overwrite", action="store_true", help="Overwrite existing image files")
