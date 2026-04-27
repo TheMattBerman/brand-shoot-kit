@@ -1,7 +1,10 @@
 .env
 .env.*
+!.env.example
 node_modules/
 .DS_Store
+.codex
 outputs/
+output/
 brand-shoot-output/
 *.log

@@ -1,0 +1,15 @@
+{
+  "brand": "North Roast",
+  "product": "Single Origin Coffee",
+  "product_url": "https://example.com/products/single-origin-coffee",
+  "price_tier": "premium",
+  "audience": "home brewers",
+  "tone": "warm craft premium",
+  "palette": ["charcoal", "cream", "copper"],
+  "product_type": "sealed coffee bag",
+  "must_preserve": ["bag dimensions", "origin text", "roast level indicator"],
+  "never_change": ["origin label", "net weight"],
+  "distortion_risks": ["bag fold distortion", "small label text"],
+  "recommended_direction": "Warm editorial counter-top realism",
+  "strategy_rationale": "Need richer lifestyle context while keeping pack details trustworthy."
+}

@@ -1,0 +1,15 @@
+{
+  "brand": "Daily Harvest Labs",
+  "product": "Daily Greens Powder",
+  "product_url": "https://example.com/products/daily-greens",
+  "price_tier": "mid",
+  "audience": "health-conscious professionals",
+  "tone": "credible and energetic",
+  "palette": ["deep green", "white", "light wood"],
+  "product_type": "powder tub",
+  "must_preserve": ["tub silhouette", "supplement facts panel", "front claim language"],
+  "never_change": ["nutrition claims", "servings text"],
+  "distortion_risks": ["claim text drift", "scoop scale"],
+  "recommended_direction": "Clean routine realism",
+  "strategy_rationale": "Focus on morning-use utility and trust instead of hype visuals."
+}

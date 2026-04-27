@@ -1,0 +1,22 @@
+{
+  "brand": "Example Skin",
+  "product": "Hydrating Face Serum",
+  "product_url": "https://example.com/products/hydrating-face-serum",
+  "price_tier": "premium-accessible",
+  "audience": "ingredient-aware adults 25-45",
+  "tone": "quiet clinical luxury",
+  "palette": ["cream", "sage", "soft gray"],
+  "product_type": "30ml dropper serum",
+  "must_preserve": ["frosted bottle shape", "matte white cap", "front label hierarchy"],
+  "can_vary": ["scene background", "camera angle", "prop styling"],
+  "never_change": ["product name text", "ingredient claims", "brand logo"],
+  "distortion_risks": ["small text legibility", "dropper cap geometry"],
+  "accuracy_confidence": "medium-high",
+  "recommended_direction": "Editorial lifestyle with clean commerce fallback",
+  "strategy_rationale": "Need stronger emotional use context while preserving trust and legibility.",
+  "visual_gaps": [
+    {"asset": "PDP hero", "status": "Present but weak", "notes": "Lighting flat", "priority": "High"},
+    {"asset": "Model in-use", "status": "Missing", "notes": "No human scale", "priority": "High"},
+    {"asset": "Texture detail", "status": "Missing", "notes": "Formula quality unclear", "priority": "Medium"}
+  ]
+}

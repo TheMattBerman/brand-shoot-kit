@@ -1,0 +1,15 @@
+{
+  "brand": "Quiet Home Co",
+  "product": "Amber Glass Soy Candle",
+  "product_url": "https://example.com/products/amber-glass-candle",
+  "price_tier": "premium",
+  "audience": "home decor and gifting shoppers",
+  "tone": "calm editorial",
+  "palette": ["amber", "oat", "walnut"],
+  "product_type": "glass jar candle",
+  "must_preserve": ["amber glass color", "label typography", "jar proportions"],
+  "never_change": ["scent name", "burn-time claim"],
+  "distortion_risks": ["glass reflections", "label warp"],
+  "recommended_direction": "Minimal interior lifestyle",
+  "strategy_rationale": "Position product as giftable and premium with believable home context."
+}
