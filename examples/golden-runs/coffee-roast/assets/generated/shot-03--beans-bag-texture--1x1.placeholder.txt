@@ -1,4 +1,0 @@
-dry_run_placeholder=true
-asset_id=shot-03
-shot_name=Beans + bag texture
-ratio=1:1

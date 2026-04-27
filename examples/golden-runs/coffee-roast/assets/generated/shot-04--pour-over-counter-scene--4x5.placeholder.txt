@@ -1,4 +1,0 @@
-dry_run_placeholder=true
-asset_id=shot-04
-shot_name=Pour-over counter scene
-ratio=4:5

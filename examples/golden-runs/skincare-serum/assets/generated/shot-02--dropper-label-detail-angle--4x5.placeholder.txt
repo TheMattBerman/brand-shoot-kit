@@ -1,5 +1,5 @@
 dry_run_placeholder=true
-asset_id=shot-09
-shot_name=Holiday gifting stack
+asset_id=shot-02
+shot_name=Dropper label/detail angle
 ratio=4:5
 dimensions=1024x1280

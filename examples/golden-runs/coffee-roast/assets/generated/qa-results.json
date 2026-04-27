@@ -1,7 +1,7 @@
 {
   "run": {
-    "run_id": "qa-20260427T180755Z",
-    "timestamp_utc": "20260427T180755Z",
+    "run_id": "qa-20260427T212057Z",
+    "timestamp_utc": "20260427T212057Z",
     "mode": "deterministic-manual",
     "manifest_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/generation-manifest.json",
     "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast",
@@ -17,17 +17,7 @@
   "reroll_queue": [
     {
       "asset_id": "shot-01",
-      "shot_name": "Front pack hero",
-      "reasons": [
-        "dry-run placeholder asset requires manual visual review",
-        "possible label/geometry mismatch risk",
-        "weighted score below threshold"
-      ],
-      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
-    },
-    {
-      "asset_id": "shot-02",
-      "shot_name": "Roast label angle",
+      "shot_name": "Clean front pack hero",
       "reasons": [
         "dry-run placeholder asset requires manual visual review",
         "possible label/geometry mismatch risk",
@@ -38,27 +28,45 @@
       "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
     },
     {
-      "asset_id": "shot-03",
-      "shot_name": "Beans + bag texture",
+      "asset_id": "shot-02",
+      "shot_name": "Roast label/detail angle",
       "reasons": [
-        "dry-run placeholder asset requires manual visual review"
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-03",
+      "shot_name": "Beans texture + supporting props",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
       ],
       "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
     },
     {
       "asset_id": "shot-04",
-      "shot_name": "Pour-over counter scene",
+      "shot_name": "Pour-over product-in-use counter scene",
       "reasons": [
-        "dry-run placeholder asset requires manual visual review"
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
       ],
       "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
     },
     {
       "asset_id": "shot-05",
-      "shot_name": "Hand scoop scale",
+      "shot_name": "Hand scoop scale proof",
       "reasons": [
         "dry-run placeholder asset requires manual visual review",
         "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
         "possible soft-focus or legibility issue",
         "weighted score below threshold"
       ],
@@ -66,7 +74,7 @@
     },
     {
       "asset_id": "shot-06",
-      "shot_name": "Pantry shelf context",
+      "shot_name": "Bundle + contents pantry spread",
       "reasons": [
         "dry-run placeholder asset requires manual visual review",
         "weighted score below threshold"
@@ -75,9 +83,10 @@
     },
     {
       "asset_id": "shot-07",
-      "shot_name": "Steam mug body crop",
+      "shot_name": "Human brew body-crop in-use",
       "reasons": [
         "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
         "possible soft-focus or legibility issue",
         "weighted score below threshold"
       ],
@@ -88,7 +97,6 @@
       "shot_name": "Email morning hero",
       "reasons": [
         "dry-run placeholder asset requires manual visual review",
-        "possible label/geometry mismatch risk",
         "product framing may be too weak for commerce",
         "possible soft-focus or legibility issue",
         "weighted score below threshold"
@@ -100,8 +108,6 @@
       "shot_name": "Holiday gifting stack",
       "reasons": [
         "dry-run placeholder asset requires manual visual review",
-        "possible label/geometry mismatch risk",
-        "product framing may be too weak for commerce",
         "possible soft-focus or legibility issue",
         "weighted score below threshold"
       ],
@@ -112,8 +118,7 @@
       "shot_name": "Marketplace white-ground",
       "reasons": [
         "dry-run placeholder asset requires manual visual review",
-        "possible label/geometry mismatch risk",
-        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
         "weighted score below threshold"
       ],
       "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
@@ -123,6 +128,7 @@
       "shot_name": "Social brew square",
       "reasons": [
         "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
         "weighted score below threshold"
       ],
       "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
@@ -132,9 +138,7 @@
       "shot_name": "Story brew vertical",
       "reasons": [
         "dry-run placeholder asset requires manual visual review",
-        "possible label/geometry mismatch risk",
         "product framing may be too weak for commerce",
-        "possible soft-focus or legibility issue",
         "weighted score below threshold"
       ],
       "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing. ## Manual Generation Runbook 1. Generate priority High shots first and keep all manifests. 2. Run ./scripts/qa-images.py after each generation batch. 3. Run ./scripts/reroll-failed.py to simulate or execute rerolls for failed shots. 4. Only package assets that pass QA or are manually approved."
@@ -143,206 +147,38 @@
   "results": [
     {
       "asset_id": "shot-01",
-      "shot_name": "Front pack hero",
-      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-01--front-pack-hero--1x1.png",
+      "shot_name": "Clean front pack hero",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-01--clean-front-pack-hero--1x1.png",
       "scores": {
-        "product_accuracy": 69,
-        "commerce_usefulness": 83,
-        "brand_fit": 69,
-        "scene_realism": 71,
-        "visual_clarity": 86,
-        "artifact_risk": 67
+        "product_accuracy": 60,
+        "commerce_usefulness": 65,
+        "brand_fit": 63,
+        "scene_realism": 61,
+        "visual_clarity": 67,
+        "artifact_risk": 72
       },
-      "weighted_score": 73.6,
+      "weighted_score": 63.5,
       "status": "manual_review",
       "reject_reasons": [
         "dry-run placeholder asset requires manual visual review",
         "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
         "weighted score below threshold"
       ],
       "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
     },
     {
       "asset_id": "shot-02",
-      "shot_name": "Roast label angle",
-      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-02--roast-label-angle--4x5.png",
+      "shot_name": "Roast label/detail angle",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-02--roast-label-detail-angle--4x5.png",
       "scores": {
-        "product_accuracy": 65,
-        "commerce_usefulness": 67,
-        "brand_fit": 73,
-        "scene_realism": 62,
-        "visual_clarity": 62,
-        "artifact_risk": 65
-      },
-      "weighted_score": 65.85,
-      "status": "manual_review",
-      "reject_reasons": [
-        "dry-run placeholder asset requires manual visual review",
-        "possible label/geometry mismatch risk",
-        "product framing may be too weak for commerce",
-        "possible soft-focus or legibility issue",
-        "weighted score below threshold"
-      ],
-      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
-    },
-    {
-      "asset_id": "shot-03",
-      "shot_name": "Beans + bag texture",
-      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-03--beans-bag-texture--1x1.png",
-      "scores": {
-        "product_accuracy": 84,
-        "commerce_usefulness": 83,
-        "brand_fit": 82,
-        "scene_realism": 87,
-        "visual_clarity": 84,
-        "artifact_risk": 62
-      },
-      "weighted_score": 81.75,
-      "status": "manual_review",
-      "reject_reasons": [
-        "dry-run placeholder asset requires manual visual review"
-      ],
-      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
-    },
-    {
-      "asset_id": "shot-04",
-      "shot_name": "Pour-over counter scene",
-      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-04--pour-over-counter-scene--4x5.png",
-      "scores": {
-        "product_accuracy": 88,
-        "commerce_usefulness": 82,
-        "brand_fit": 80,
-        "scene_realism": 85,
-        "visual_clarity": 79,
-        "artifact_risk": 69
-      },
-      "weighted_score": 82.35,
-      "status": "manual_review",
-      "reject_reasons": [
-        "dry-run placeholder asset requires manual visual review"
-      ],
-      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
-    },
-    {
-      "asset_id": "shot-05",
-      "shot_name": "Hand scoop scale",
-      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-05--hand-scoop-scale--4x5.png",
-      "scores": {
-        "product_accuracy": 69,
-        "commerce_usefulness": 75,
-        "brand_fit": 72,
-        "scene_realism": 60,
-        "visual_clarity": 69,
-        "artifact_risk": 59
-      },
-      "weighted_score": 68.3,
-      "status": "manual_review",
-      "reject_reasons": [
-        "dry-run placeholder asset requires manual visual review",
-        "possible label/geometry mismatch risk",
-        "possible soft-focus or legibility issue",
-        "weighted score below threshold"
-      ],
-      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
-    },
-    {
-      "asset_id": "shot-06",
-      "shot_name": "Pantry shelf context",
-      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-06--pantry-shelf-context--4x5.png",
-      "scores": {
-        "product_accuracy": 85,
-        "commerce_usefulness": 86,
-        "brand_fit": 58,
-        "scene_realism": 58,
-        "visual_clarity": 87,
-        "artifact_risk": 59
-      },
-      "weighted_score": 74.7,
-      "status": "manual_review",
-      "reject_reasons": [
-        "dry-run placeholder asset requires manual visual review",
-        "weighted score below threshold"
-      ],
-      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
-    },
-    {
-      "asset_id": "shot-07",
-      "shot_name": "Steam mug body crop",
-      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-07--steam-mug-body-crop--9x16.png",
-      "scores": {
-        "product_accuracy": 76,
-        "commerce_usefulness": 86,
-        "brand_fit": 73,
-        "scene_realism": 72,
-        "visual_clarity": 67,
-        "artifact_risk": 64
-      },
-      "weighted_score": 74.85,
-      "status": "manual_review",
-      "reject_reasons": [
-        "dry-run placeholder asset requires manual visual review",
-        "possible soft-focus or legibility issue",
-        "weighted score below threshold"
-      ],
-      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
-    },
-    {
-      "asset_id": "shot-08",
-      "shot_name": "Email morning hero",
-      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-08--email-morning-hero--16x9.png",
-      "scores": {
-        "product_accuracy": 65,
-        "commerce_usefulness": 60,
-        "brand_fit": 68,
+        "product_accuracy": 61,
+        "commerce_usefulness": 56,
+        "brand_fit": 57,
         "scene_realism": 69,
-        "visual_clarity": 65,
-        "artifact_risk": 56
-      },
-      "weighted_score": 64.15,
-      "status": "manual_review",
-      "reject_reasons": [
-        "dry-run placeholder asset requires manual visual review",
-        "possible label/geometry mismatch risk",
-        "product framing may be too weak for commerce",
-        "possible soft-focus or legibility issue",
-        "weighted score below threshold"
-      ],
-      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
-    },
-    {
-      "asset_id": "shot-09",
-      "shot_name": "Holiday gifting stack",
-      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-09--holiday-gifting-stack--4x5.png",
-      "scores": {
-        "product_accuracy": 58,
-        "commerce_usefulness": 59,
-        "brand_fit": 77,
-        "scene_realism": 76,
-        "visual_clarity": 61,
-        "artifact_risk": 69
-      },
-      "weighted_score": 65.15,
-      "status": "manual_review",
-      "reject_reasons": [
-        "dry-run placeholder asset requires manual visual review",
-        "possible label/geometry mismatch risk",
-        "product framing may be too weak for commerce",
-        "possible soft-focus or legibility issue",
-        "weighted score below threshold"
-      ],
-      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
-    },
-    {
-      "asset_id": "shot-10",
-      "shot_name": "Marketplace white-ground",
-      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-10--marketplace-white-ground--1x1.png",
-      "scores": {
-        "product_accuracy": 60,
-        "commerce_usefulness": 57,
-        "brand_fit": 58,
-        "scene_realism": 62,
-        "visual_clarity": 76,
-        "artifact_risk": 77
+        "visual_clarity": 71,
+        "artifact_risk": 72
       },
       "weighted_score": 62.7,
       "status": "manual_review",
@@ -355,21 +191,195 @@
       "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
     },
     {
+      "asset_id": "shot-03",
+      "shot_name": "Beans texture + supporting props",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-03--beans-texture-supporting-props--1x1.png",
+      "scores": {
+        "product_accuracy": 76,
+        "commerce_usefulness": 65,
+        "brand_fit": 62,
+        "scene_realism": 60,
+        "visual_clarity": 59,
+        "artifact_risk": 65
+      },
+      "weighted_score": 66.5,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-04",
+      "shot_name": "Pour-over product-in-use counter scene",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-04--pour-over-product-in-use-counter-scene--4x5.png",
+      "scores": {
+        "product_accuracy": 84,
+        "commerce_usefulness": 61,
+        "brand_fit": 63,
+        "scene_realism": 77,
+        "visual_clarity": 62,
+        "artifact_risk": 58
+      },
+      "weighted_score": 70.4,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-05",
+      "shot_name": "Hand scoop scale proof",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-05--hand-scoop-scale-proof--4x5.png",
+      "scores": {
+        "product_accuracy": 64,
+        "commerce_usefulness": 65,
+        "brand_fit": 56,
+        "scene_realism": 79,
+        "visual_clarity": 56,
+        "artifact_risk": 64
+      },
+      "weighted_score": 64.45,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-06",
+      "shot_name": "Bundle + contents pantry spread",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-06--bundle-contents-pantry-spread--4x5.png",
+      "scores": {
+        "product_accuracy": 82,
+        "commerce_usefulness": 80,
+        "brand_fit": 74,
+        "scene_realism": 67,
+        "visual_clarity": 88,
+        "artifact_risk": 56
+      },
+      "weighted_score": 76.15,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-07",
+      "shot_name": "Human brew body-crop in-use",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-07--human-brew-body-crop-in-use--9x16.png",
+      "scores": {
+        "product_accuracy": 73,
+        "commerce_usefulness": 77,
+        "brand_fit": 66,
+        "scene_realism": 67,
+        "visual_clarity": 68,
+        "artifact_risk": 60
+      },
+      "weighted_score": 70.05,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-08",
+      "shot_name": "Email morning hero",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-08--email-morning-hero--16x9.png",
+      "scores": {
+        "product_accuracy": 76,
+        "commerce_usefulness": 70,
+        "brand_fit": 85,
+        "scene_realism": 67,
+        "visual_clarity": 61,
+        "artifact_risk": 74
+      },
+      "weighted_score": 73.1,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-09",
+      "shot_name": "Holiday gifting stack",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-09--holiday-gifting-stack--4x5.png",
+      "scores": {
+        "product_accuracy": 86,
+        "commerce_usefulness": 72,
+        "brand_fit": 83,
+        "scene_realism": 69,
+        "visual_clarity": 64,
+        "artifact_risk": 59
+      },
+      "weighted_score": 75.3,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-10",
+      "shot_name": "Marketplace white-ground",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-10--marketplace-white-ground--1x1.png",
+      "scores": {
+        "product_accuracy": 88,
+        "commerce_usefulness": 83,
+        "brand_fit": 79,
+        "scene_realism": 59,
+        "visual_clarity": 61,
+        "artifact_risk": 85
+      },
+      "weighted_score": 78.3,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
       "asset_id": "shot-11",
       "shot_name": "Social brew square",
       "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-11--social-brew-square--1x1.png",
       "scores": {
-        "product_accuracy": 82,
-        "commerce_usefulness": 78,
+        "product_accuracy": 81,
+        "commerce_usefulness": 61,
         "brand_fit": 70,
-        "scene_realism": 83,
-        "visual_clarity": 80,
-        "artifact_risk": 57
+        "scene_realism": 69,
+        "visual_clarity": 78,
+        "artifact_risk": 77
       },
-      "weighted_score": 76.85,
+      "weighted_score": 72.85,
       "status": "manual_review",
       "reject_reasons": [
         "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
         "weighted score below threshold"
       ],
       "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
@@ -379,20 +389,18 @@
       "shot_name": "Story brew vertical",
       "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-12--story-brew-vertical--9x16.png",
       "scores": {
-        "product_accuracy": 57,
-        "commerce_usefulness": 62,
-        "brand_fit": 57,
-        "scene_realism": 74,
-        "visual_clarity": 64,
-        "artifact_risk": 84
+        "product_accuracy": 83,
+        "commerce_usefulness": 66,
+        "brand_fit": 62,
+        "scene_realism": 57,
+        "visual_clarity": 77,
+        "artifact_risk": 82
       },
-      "weighted_score": 63.95,
+      "weighted_score": 71.85,
       "status": "manual_review",
       "reject_reasons": [
         "dry-run placeholder asset requires manual visual review",
-        "possible label/geometry mismatch risk",
         "product framing may be too weak for commerce",
-        "possible soft-focus or legibility issue",
         "weighted score below threshold"
       ],
       "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing. ## Manual Generation Runbook 1. Generate priority High shots first and keep all manifests. 2. Run ./scripts/qa-images.py after each generation batch. 3. Run ./scripts/reroll-failed.py to simulate or execute rerolls for failed shots. 4. Only package assets that pass QA or are manually approved."

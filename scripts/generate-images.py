@@ -10,13 +10,16 @@ from __future__ import annotations
 import argparse
 import base64
 import hashlib
+import io
 import json
 import mimetypes
 import os
 import shutil
+import struct
 import sys
 import urllib.error
 import urllib.request
+import zlib
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -26,27 +29,119 @@ import uuid
 from packet_utils import dump_json, ensure_packet_dir, parse_generation_prompts, read_brand_product, slug
 from reference_selector import is_safe_reference_url, pick_auto_reference_url
 
-TINY_PLACEHOLDER_PNG = base64.b64decode(
-    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAJq4QW0AAAAASUVORK5CYII="
-)
+try:  # pragma: no cover - optional dependency
+    from PIL import Image
+except Exception:  # pragma: no cover - optional dependency
+    Image = None  # type: ignore
+
+RATIO_SIZE_MAP: Dict[str, Dict[str, Tuple[int, int] | str]] = {
+    "1:1": {"provider_size": "1024x1024", "final_dimensions": (1024, 1024)},
+    "4:5": {"provider_size": "1024x1536", "final_dimensions": (1024, 1280)},
+    "9:16": {"provider_size": "1024x1536", "final_dimensions": (1080, 1920)},
+    "16:9": {"provider_size": "1536x1024", "final_dimensions": (1920, 1080)},
+}
+
+
+def normalize_ratio(value: str | None) -> str:
+    raw = str(value or "1:1").strip().lower().replace("x", ":")
+    return raw if raw in RATIO_SIZE_MAP else "1:1"
+
+
+def parse_size(size: str) -> Tuple[int, int]:
+    try:
+        left, right = size.lower().split("x", 1)
+        width, height = int(left), int(right)
+        if width <= 0 or height <= 0:
+            raise ValueError
+        return width, height
+    except Exception as exc:
+        raise ValueError(f"invalid size: {size}") from exc
+
+
+def resolve_render_spec(*, ratio: str, requested_size: str) -> Dict[str, Any]:
+    normalized_ratio = normalize_ratio(ratio)
+    mapped = RATIO_SIZE_MAP[normalized_ratio]
+    provider_size = str(mapped["provider_size"]) if requested_size == "auto" else requested_size
+    final_dimensions = tuple(mapped["final_dimensions"])  # type: ignore[arg-type]
+    return {
+        "requested_ratio": normalized_ratio,
+        "provider_size": provider_size,
+        "provider_dimensions": parse_size(provider_size),
+        "final_dimensions": final_dimensions,
+    }
+
+
+def make_solid_png(width: int, height: int, rgb: Tuple[int, int, int] = (242, 242, 242)) -> bytes:
+    row = bytes([0]) + bytes([rgb[0], rgb[1], rgb[2]]) * width
+    raw = row * height
+    compressed = zlib.compress(raw, level=9)
+
+    def chunk(tag: bytes, payload: bytes) -> bytes:
+        crc = zlib.crc32(tag + payload) & 0xFFFFFFFF
+        return struct.pack(">I", len(payload)) + tag + payload + struct.pack(">I", crc)
+
+    ihdr = struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0)
+    return (
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", ihdr)
+        + chunk(b"IDAT", compressed)
+        + chunk(b"IEND", b"")
+    )
+
+
+def parse_png_dimensions(data: bytes) -> Optional[Tuple[int, int]]:
+    if len(data) < 24 or data[:8] != b"\x89PNG\r\n\x1a\n":
+        return None
+    return struct.unpack(">II", data[16:24])
+
+
+def image_dimensions_from_path(path: Path) -> Optional[Tuple[int, int]]:
+    try:
+        return parse_png_dimensions(path.read_bytes())
+    except Exception:
+        return None
+
+
+def postprocess_to_ratio(image_bytes: bytes, target_dims: Tuple[int, int]) -> Tuple[bytes, Tuple[int, int], str]:
+    if Image is None:  # pragma: no cover - optional dependency
+        parsed = parse_png_dimensions(image_bytes)
+        return image_bytes, parsed or target_dims, "none:pillow_unavailable"
+
+    with Image.open(io.BytesIO(image_bytes)) as img:  # pragma: no cover - exercised only in live mode
+        src_w, src_h = img.size
+        target_w, target_h = target_dims
+        src_ratio = src_w / src_h
+        target_ratio = target_w / target_h
+        if src_ratio > target_ratio:
+            crop_w = int(src_h * target_ratio)
+            left = max(0, (src_w - crop_w) // 2)
+            box = (left, 0, left + crop_w, src_h)
+        else:
+            crop_h = int(src_w / target_ratio)
+            top = max(0, (src_h - crop_h) // 2)
+            box = (0, top, src_w, top + crop_h)
+        cropped = img.convert("RGB").crop(box)
+        final = cropped.resize((target_w, target_h), Image.Resampling.LANCZOS)
+        out = io.BytesIO()
+        final.save(out, format="PNG")
+        return out.getvalue(), (target_w, target_h), "center-crop+resize:pillow"
 
 
 class OpenAIImageProvider:
-    def __init__(self, api_key: str, model: str, size: str) -> None:
+    def __init__(self, api_key: str, model: str) -> None:
         self.api_key = api_key
         self.model = model
-        self.size = size
 
-    def generate(self, prompt: str, reference_image_path: Optional[Path] = None) -> Tuple[bytes, str]:
+    def generate(self, prompt: str, size: str, reference_image_path: Optional[Path] = None) -> Tuple[bytes, str]:
         if reference_image_path:
-            return self._generate_with_reference(prompt, reference_image_path)
-        return self._generate_text_only(prompt)
+            return self._generate_with_reference(prompt, size, reference_image_path)
+        return self._generate_text_only(prompt, size)
 
-    def _generate_text_only(self, prompt: str) -> Tuple[bytes, str]:
+    def _generate_text_only(self, prompt: str, size: str) -> Tuple[bytes, str]:
         payload = {
             "model": self.model,
             "prompt": prompt,
-            "size": self.size,
+            "size": size,
         }
         data = json.dumps(payload).encode("utf-8")
         req = urllib.request.Request(
@@ -70,7 +165,7 @@ class OpenAIImageProvider:
 
         return extract_openai_image_bytes(body), "images/generations"
 
-    def _generate_with_reference(self, prompt: str, reference_image_path: Path) -> Tuple[bytes, str]:
+    def _generate_with_reference(self, prompt: str, size: str, reference_image_path: Path) -> Tuple[bytes, str]:
         image_bytes = reference_image_path.read_bytes()
         mime_type = mimetypes.guess_type(reference_image_path.name)[0] or "image/png"
         filename = reference_image_path.name
@@ -86,7 +181,7 @@ class OpenAIImageProvider:
                 fields={
                     "model": self.model,
                     "prompt": prompt,
-                    "size": self.size,
+                    "size": size,
                 },
                 files=[(field_name, filename, mime_type, image_bytes)],
             )
@@ -172,7 +267,11 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--manifest", help="Generation manifest path (default: <out>/generation-manifest.json)")
     p.add_argument("--live", action="store_true", help="Call OpenAI Images API (requires OPENAI_API_KEY)")
     p.add_argument("--model", default="gpt-image-2", help="OpenAI image model (live mode)")
-    p.add_argument("--size", default="1024x1024", help="Image size sent to provider in live mode")
+    p.add_argument(
+        "--size",
+        default="auto",
+        help="Provider size override in live mode (default: auto ratio-aware mapping)",
+    )
     p.add_argument("--limit", type=int, default=0, help="Optional shot limit for quick runs")
     p.add_argument("--overwrite", action="store_true", help="Overwrite existing image files")
     p.add_argument("--asset-ids", default="", help="Comma-separated asset IDs to generate (default: all)")
@@ -220,8 +319,9 @@ def resolve_paths(args: argparse.Namespace) -> Dict[str, Path]:
     }
 
 
-def write_placeholder(path: Path, shot: Dict[str, Any]) -> None:
-    path.write_bytes(TINY_PLACEHOLDER_PNG)
+def write_placeholder(path: Path, shot: Dict[str, Any], final_dimensions: Tuple[int, int]) -> None:
+    width, height = final_dimensions
+    path.write_bytes(make_solid_png(width, height))
     sidecar = path.with_suffix(".placeholder.txt")
     sidecar.write_text(
         "\n".join(
@@ -230,6 +330,7 @@ def write_placeholder(path: Path, shot: Dict[str, Any]) -> None:
                 f"asset_id={shot['asset_id']}",
                 f"shot_name={shot['shot_name']}",
                 f"ratio={shot['ratio']}",
+                f"dimensions={width}x{height}",
             ]
         )
         + "\n",
@@ -363,6 +464,12 @@ def resolve_reference_image(
 
 def main() -> int:
     args = parse_args()
+    if args.size != "auto":
+        try:
+            parse_size(args.size)
+        except ValueError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 2
     paths = resolve_paths(args)
 
     packet_dir = paths["packet_dir"]
@@ -403,7 +510,7 @@ def main() -> int:
         if not os.environ.get("OPENAI_API_KEY"):
             print("error: --live set but OPENAI_API_KEY is not available", file=sys.stderr)
             return 2
-        provider = OpenAIImageProvider(os.environ["OPENAI_API_KEY"], args.model, args.size)
+        provider = OpenAIImageProvider(os.environ["OPENAI_API_KEY"], args.model)
         mode = "live"
 
     reference_image_path, reference_image_url, reference_notes, reference_mode = resolve_reference_image(
@@ -416,10 +523,15 @@ def main() -> int:
     entries: List[Dict[str, Any]] = []
 
     for shot in shots:
+        render_spec = resolve_render_spec(ratio=str(shot.get("ratio", "1:1")), requested_size=args.size)
+        requested_ratio = render_spec["requested_ratio"]
+        provider_size = render_spec["provider_size"]
+        final_dimensions = tuple(render_spec["final_dimensions"])
         filename = deterministic_file_name(shot)
         image_path = out_dir / filename
 
         if image_path.exists() and not args.overwrite:
+            existing_dimensions = image_dimensions_from_path(image_path)
             entries.append(
                 {
                     **shot,
@@ -427,6 +539,9 @@ def main() -> int:
                     "provider": mode,
                     "dry_run": mode != "live",
                     "image_path": str(image_path),
+                    "requested_ratio": requested_ratio,
+                    "provider_size": provider_size,
+                    "final_dimensions": list(existing_dimensions or final_dimensions),
                     "reference_image_path": str(reference_image_path) if reference_image_path else None,
                     "reference_image_url": reference_image_url,
                 }
@@ -439,22 +554,34 @@ def main() -> int:
             "provider": mode,
             "dry_run": mode != "live",
             "image_path": str(image_path),
+            "requested_ratio": requested_ratio,
+            "provider_size": provider_size,
+            "final_dimensions": list(final_dimensions),
             "reference_image_path": str(reference_image_path) if reference_image_path else None,
             "reference_image_url": reference_image_url,
         }
 
         if mode == "live" and provider is not None:
             try:
-                png_bytes, endpoint_used = provider.generate(shot["prompt"], reference_image_path=reference_image_path)
-                image_path.write_bytes(png_bytes)
-                entry["image_sha256"] = hashlib.sha256(png_bytes).hexdigest()
+                provider_bytes, endpoint_used = provider.generate(
+                    shot["prompt"],
+                    provider_size,
+                    reference_image_path=reference_image_path,
+                )
+                output_bytes, actual_dims, postprocess_mode = postprocess_to_ratio(provider_bytes, final_dimensions)
+                image_path.write_bytes(output_bytes)
+                entry["image_sha256"] = hashlib.sha256(output_bytes).hexdigest()
                 entry["openai_image_endpoint"] = endpoint_used
+                entry["postprocess_mode"] = postprocess_mode
+                entry["final_dimensions"] = list(actual_dims)
             except Exception as exc:  # pragma: no cover
                 entry["status"] = "error"
                 entry["error"] = str(exc)
         else:
-            write_placeholder(image_path, shot)
-            entry["image_sha256"] = hashlib.sha256(TINY_PLACEHOLDER_PNG).hexdigest()
+            write_placeholder(image_path, shot, final_dimensions)
+            placeholder_bytes = image_path.read_bytes()
+            entry["image_sha256"] = hashlib.sha256(placeholder_bytes).hexdigest()
+            entry["postprocess_mode"] = "dry-run:rendered-at-target-size"
 
         entries.append(entry)
 

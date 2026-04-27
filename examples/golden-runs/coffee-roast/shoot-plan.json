@@ -4,49 +4,49 @@
   "category": "coffee",
   "shots": [
     {
-      "name": "Front pack hero",
+      "name": "Clean front pack hero",
       "category": "PDP",
       "ratio": "1:1",
       "channel": "PDP",
       "priority": "High"
     },
     {
-      "name": "Roast label angle",
+      "name": "Roast label/detail angle",
       "category": "PDP",
       "ratio": "4:5",
       "channel": "PDP",
       "priority": "High"
     },
     {
-      "name": "Beans + bag texture",
+      "name": "Beans texture + supporting props",
       "category": "Lifestyle",
       "ratio": "1:1",
       "channel": "PDP/Social",
       "priority": "High"
     },
     {
-      "name": "Pour-over counter scene",
+      "name": "Pour-over product-in-use counter scene",
       "category": "Lifestyle",
       "ratio": "4:5",
       "channel": "PDP/Email",
       "priority": "High"
     },
     {
-      "name": "Hand scoop scale",
+      "name": "Hand scoop scale proof",
       "category": "Model",
       "ratio": "4:5",
       "channel": "PDP/Social",
       "priority": "High"
     },
     {
-      "name": "Pantry shelf context",
+      "name": "Bundle + contents pantry spread",
       "category": "Lifestyle",
       "ratio": "4:5",
       "channel": "Social",
       "priority": "Medium"
     },
     {
-      "name": "Steam mug body crop",
+      "name": "Human brew body-crop in-use",
       "category": "Model",
       "ratio": "9:16",
       "channel": "Social",

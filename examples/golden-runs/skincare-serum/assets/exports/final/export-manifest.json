@@ -1,10 +1,11 @@
 {
   "run": {
-    "run_id": "export-20260427T180754Z",
-    "timestamp_utc": "20260427T180754Z",
+    "run_id": "export-20260427T212056Z",
+    "timestamp_utc": "20260427T212056Z",
     "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum",
     "generation_manifest": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/generation-manifest.json",
     "qa_results": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/qa-results.json",
+    "reroll_manifest": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/reroll-manifest.json",
     "include_status": [
       "manual_review",
       "pass"
@@ -15,132 +16,157 @@
     "total_assets": 12,
     "copied_files": 16,
     "packaged_assets": 12,
-    "skipped_assets": 0
+    "skipped_assets": 0,
+    "qa_status_counts": {
+      "manual_review": 12
+    },
+    "reroll_status_counts": {
+      "pass_after_reroll": 12
+    },
+    "decision_summary": {
+      "approve": 12,
+      "reroll": 0,
+      "reject": 0
+    }
   },
   "records": [
     {
       "asset_id": "shot-01",
-      "shot_name": "Front label hero",
+      "shot_name": "Clean front label hero",
       "status": "packaged",
       "qa_status": "manual_review",
-      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-01--front-label-hero--1x1.png",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-01--clean-front-label-hero--1x1.png",
       "ratio": "1:1",
       "outputs": [
         {
           "channel": "PDP",
-          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/pdp/pdp__shot-01__front-label-hero__1x1.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/pdp/pdp__shot-01__clean-front-label-hero__1x1.png",
+          "sha256": "1f607a58e45fd182668f90816a512732d941f88e867e37058f457356ccc9690f"
         }
       ],
       "notes": "deterministic copy packaging"
     },
     {
       "asset_id": "shot-02",
-      "shot_name": "Dropper angle detail",
+      "shot_name": "Dropper label/detail angle",
       "status": "packaged",
       "qa_status": "manual_review",
-      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-02--dropper-angle-detail--4x5.png",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-02--dropper-label-detail-angle--4x5.png",
       "ratio": "4:5",
       "outputs": [
         {
           "channel": "PDP",
-          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/pdp/pdp__shot-02__dropper-angle-detail__4x5.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/pdp/pdp__shot-02__dropper-label-detail-angle__4x5.png",
+          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
         }
       ],
       "notes": "deterministic copy packaging"
     },
     {
       "asset_id": "shot-03",
-      "shot_name": "Ingredient texture smear",
+      "shot_name": "Ingredient texture + supporting props",
       "status": "packaged",
       "qa_status": "manual_review",
-      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-03--ingredient-texture-smear--1x1.png",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-03--ingredient-texture-supporting-props--1x1.png",
       "ratio": "1:1",
       "outputs": [
         {
           "channel": "PDP",
-          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/pdp/pdp__shot-03__ingredient-texture-smear__1x1.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/pdp/pdp__shot-03__ingredient-texture-supporting-props__1x1.png",
+          "sha256": "1f607a58e45fd182668f90816a512732d941f88e867e37058f457356ccc9690f"
         },
         {
           "channel": "Social",
-          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/social/social__shot-03__ingredient-texture-smear__1x1.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/social/social__shot-03__ingredient-texture-supporting-props__1x1.png",
+          "sha256": "1f607a58e45fd182668f90816a512732d941f88e867e37058f457356ccc9690f"
         }
       ],
       "notes": "deterministic copy packaging"
     },
     {
       "asset_id": "shot-04",
-      "shot_name": "Sink routine placement",
+      "shot_name": "Sink routine product-in-use scene",
       "status": "packaged",
       "qa_status": "manual_review",
-      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-04--sink-routine-placement--4x5.png",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-04--sink-routine-product-in-use-scene--4x5.png",
       "ratio": "4:5",
       "outputs": [
         {
           "channel": "PDP",
-          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/pdp/pdp__shot-04__sink-routine-placement__4x5.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/pdp/pdp__shot-04__sink-routine-product-in-use-scene__4x5.png",
+          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
         },
         {
           "channel": "Email",
-          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/email/email__shot-04__sink-routine-placement__4x5.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/email/email__shot-04__sink-routine-product-in-use-scene__4x5.png",
+          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
         }
       ],
       "notes": "deterministic copy packaging"
     },
     {
       "asset_id": "shot-05",
-      "shot_name": "Morning hand-held scale",
+      "shot_name": "Morning hand-held scale proof",
       "status": "packaged",
       "qa_status": "manual_review",
-      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-05--morning-hand-held-scale--4x5.png",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-05--morning-hand-held-scale-proof--4x5.png",
       "ratio": "4:5",
       "outputs": [
         {
           "channel": "PDP",
-          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/pdp/pdp__shot-05__morning-hand-held-scale__4x5.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/pdp/pdp__shot-05__morning-hand-held-scale-proof__4x5.png",
+          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
         },
         {
           "channel": "Social",
-          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/social/social__shot-05__morning-hand-held-scale__4x5.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/social/social__shot-05__morning-hand-held-scale-proof__4x5.png",
+          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
         }
       ],
       "notes": "deterministic copy packaging"
     },
     {
       "asset_id": "shot-06",
-      "shot_name": "Shelf trio context",
+      "shot_name": "Bundle + contents layout",
       "status": "packaged",
       "qa_status": "manual_review",
-      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-06--shelf-trio-context--4x5.png",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-06--bundle-contents-layout--4x5.png",
       "ratio": "4:5",
       "outputs": [
         {
           "channel": "Social",
-          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/social/social__shot-06__shelf-trio-context__4x5.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/social/social__shot-06__bundle-contents-layout__4x5.png",
+          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
         }
       ],
       "notes": "deterministic copy packaging"
     },
     {
       "asset_id": "shot-07",
-      "shot_name": "Body crop application",
+      "shot_name": "Human body-crop application in-use",
       "status": "packaged",
       "qa_status": "manual_review",
-      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-07--body-crop-application--9x16.png",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-07--human-body-crop-application-in-use--9x16.png",
       "ratio": "9:16",
       "outputs": [
         {
           "channel": "Social",
-          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/social/social__shot-07__body-crop-application__9x16.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/social/social__shot-07__human-body-crop-application-in-use__9x16.png",
+          "sha256": "d077028be48166bc0a61aef1280d41f352f097b47888d94b274368eb39151057"
         }
       ],
       "notes": "deterministic copy packaging"
@@ -150,13 +176,15 @@
       "shot_name": "Email routine hero",
       "status": "packaged",
       "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
       "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-08--email-routine-hero--16x9.png",
       "ratio": "16:9",
       "outputs": [
         {
           "channel": "Email",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/email/email__shot-08__email-routine-hero__16x9.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "sha256": "4bb0692f40fce072a7351edc4ed7da5db4449789eec331d0fa5499aa851c6956"
         }
       ],
       "notes": "deterministic copy packaging"
@@ -166,18 +194,20 @@
       "shot_name": "Seasonal gift bundle",
       "status": "packaged",
       "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
       "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-09--seasonal-gift-bundle--4x5.png",
       "ratio": "4:5",
       "outputs": [
         {
           "channel": "Email",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/email/email__shot-09__seasonal-gift-bundle__4x5.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
         },
         {
           "channel": "Social",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/social/social__shot-09__seasonal-gift-bundle__4x5.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
         }
       ],
       "notes": "deterministic copy packaging"
@@ -187,13 +217,15 @@
       "shot_name": "Marketplace white-ground",
       "status": "packaged",
       "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
       "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-10--marketplace-white-ground--1x1.png",
       "ratio": "1:1",
       "outputs": [
         {
           "channel": "Amazon",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/amazon/amazon__shot-10__marketplace-white-ground__1x1.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "sha256": "1f607a58e45fd182668f90816a512732d941f88e867e37058f457356ccc9690f"
         }
       ],
       "notes": "deterministic copy packaging"
@@ -203,13 +235,15 @@
       "shot_name": "Social benefit square",
       "status": "packaged",
       "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
       "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-11--social-benefit-square--1x1.png",
       "ratio": "1:1",
       "outputs": [
         {
           "channel": "Instagram",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/instagram/instagram__shot-11__social-benefit-square__1x1.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "sha256": "1f607a58e45fd182668f90816a512732d941f88e867e37058f457356ccc9690f"
         }
       ],
       "notes": "deterministic copy packaging"
@@ -219,13 +253,15 @@
       "shot_name": "Story routine vertical",
       "status": "packaged",
       "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
       "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/shot-12--story-routine-vertical--9x16.png",
       "ratio": "9:16",
       "outputs": [
         {
           "channel": "Instagram Story",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/exports/final/instagram-story/instagram-story__shot-12__story-routine-vertical__9x16.png",
-          "sha256": "2736989ebe83f2e96da84987d1ece3d6e080e6fb96ec17cb5a3eaa88be7ee71b"
+          "sha256": "d077028be48166bc0a61aef1280d41f352f097b47888d94b274368eb39151057"
         }
       ],
       "notes": "deterministic copy packaging"

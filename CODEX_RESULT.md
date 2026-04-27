@@ -1,5 +1,23 @@
 # CODEX_RESULT
 
+## Matt Update Pass (ratio + taxonomy + no-spend proofs)
+
+Implemented the requested update set without running paid APIs:
+
+- Ratio-aware generation now honors shot aspect ratios instead of writing square-only outputs.
+  - `scripts/generate-images.py` maps `1:1`, `4:5`, `9:16`, `16:9` to provider sizes and deterministic final dimensions.
+  - Dry-run placeholders are now rendered at per-shot dimensions (real PNG sizes, not 1x1).
+  - Generation manifest entries now include `requested_ratio`, `provider_size`, and `final_dimensions`.
+- Ecommerce shot taxonomy/prompting upgraded for intentional scale variation and realistic sequence coverage.
+  - `scripts/pipeline_stages.py` shot templates now explicitly include clean hero, label/detail, texture/supporting props, hand-held scale, product-in-use, bundle/contents, and social/story/email crops.
+  - Prompt composition now uses shot-specific `scale_guidance`, `human_guidance`, and `context_guidance` (removed fixed `32-48%` framing rule).
+  - `references/ecommerce-shot-taxonomy.md` updated to reflect the expanded sequencing and scale rules.
+- No-spend proof coverage added in eval/doctor.
+  - `evals/run.py` now asserts ratio metadata presence, ratio correctness, and dry-run PNG dimensions matching manifest dimensions.
+  - `evals/run.py` now asserts prompts contain variable scale/human/context guidance and no fixed `32-48%` rule.
+  - `doctor.sh` now validates manifest ratio fields/dimensions and prompt guidance content in dry-run mode.
+- `README.md` updated with ratio-aware generation behavior and new generation-manifest metadata fields.
+
 ## Implementation Summary (P1 depth pass)
 
 This pass implemented the requested P1 upgrades as executable code with no-spend defaults.

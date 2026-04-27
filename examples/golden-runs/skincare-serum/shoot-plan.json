@@ -4,49 +4,49 @@
   "category": "skincare",
   "shots": [
     {
-      "name": "Front label hero",
+      "name": "Clean front label hero",
       "category": "PDP",
       "ratio": "1:1",
       "channel": "PDP",
       "priority": "High"
     },
     {
-      "name": "Dropper angle detail",
+      "name": "Dropper label/detail angle",
       "category": "PDP",
       "ratio": "4:5",
       "channel": "PDP",
       "priority": "High"
     },
     {
-      "name": "Ingredient texture smear",
+      "name": "Ingredient texture + supporting props",
       "category": "Lifestyle",
       "ratio": "1:1",
       "channel": "PDP/Social",
       "priority": "High"
     },
     {
-      "name": "Sink routine placement",
+      "name": "Sink routine product-in-use scene",
       "category": "Lifestyle",
       "ratio": "4:5",
       "channel": "PDP/Email",
       "priority": "High"
     },
     {
-      "name": "Morning hand-held scale",
+      "name": "Morning hand-held scale proof",
       "category": "Model",
       "ratio": "4:5",
       "channel": "PDP/Social",
       "priority": "High"
     },
     {
-      "name": "Shelf trio context",
+      "name": "Bundle + contents layout",
       "category": "Lifestyle",
       "ratio": "4:5",
       "channel": "Social",
       "priority": "Medium"
     },
     {
-      "name": "Body crop application",
+      "name": "Human body-crop application in-use",
       "category": "Model",
       "ratio": "9:16",
       "channel": "Social",

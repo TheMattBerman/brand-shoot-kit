@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import shutil
+import struct
 import subprocess
 import sys
 from pathlib import Path
@@ -59,6 +60,28 @@ def assert_true(condition: bool, message: str, errors: List[str]) -> None:
 
 def load_json(path: Path) -> Dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def parse_png_dimensions(path: Path) -> tuple[int, int] | None:
+    data = path.read_bytes()
+    if len(data) < 24 or data[:8] != b"\x89PNG\r\n\x1a\n":
+        return None
+    return struct.unpack(">II", data[16:24])
+
+
+def ratio_matches(dimensions: tuple[int, int], ratio: str) -> bool:
+    normalized = ratio.strip().lower().replace("x", ":")
+    expected = {
+        "1:1": (1, 1),
+        "4:5": (4, 5),
+        "9:16": (9, 16),
+        "16:9": (16, 9),
+    }
+    if normalized not in expected:
+        return False
+    left, right = expected[normalized]
+    width, height = dimensions
+    return width * right == height * left
 
 
 def run_packet_from_fixture(name: str, fixture: Path) -> Path:
@@ -167,6 +190,72 @@ def eval_dry_run_loop(errors: List[str]) -> None:
     assert_true((packet / "assets" / "generated" / "qa-results.json").exists(), "qa results produced", errors)
     assert_true((packet / "assets" / "generated" / "reroll-manifest.json").exists(), "reroll manifest produced", errors)
     assert_true((packet / "assets" / "exports" / "final" / "export-manifest.json").exists(), "export manifest produced", errors)
+
+
+def eval_ratio_aware_generation_manifest(errors: List[str]) -> None:
+    packet = run_packet_from_fixture("ratio-aware-dry-run", FIXTURES / "scout-coffee.json")
+    proc = run(["scripts/generate-images.py", "--packet", str(packet)])
+    assert_true(proc.returncode == 0, "ratio-aware dry-run generation succeeds", errors)
+    if proc.returncode != 0:
+        return
+
+    manifest_path = packet / "assets" / "generated" / "generation-manifest.json"
+    assert_true(manifest_path.exists(), "ratio-aware generation manifest exists", errors)
+    if not manifest_path.exists():
+        return
+
+    payload = load_json(manifest_path)
+    entries = payload.get("entries") or []
+    assert_true(len(entries) >= 4, "ratio-aware eval has multiple generated entries", errors)
+    for entry in entries:
+        ratio = str(entry.get("requested_ratio", ""))
+        provider_size = entry.get("provider_size")
+        final_dimensions = entry.get("final_dimensions")
+        image_path = Path(str(entry.get("image_path", "")))
+
+        assert_true(ratio in {"1:1", "4:5", "9:16", "16:9"}, f"entry has normalized requested_ratio: {ratio}", errors)
+        assert_true(isinstance(provider_size, str) and "x" in provider_size, "entry has provider_size", errors)
+        assert_true(
+            isinstance(final_dimensions, list)
+            and len(final_dimensions) == 2
+            and all(isinstance(v, int) and v > 0 for v in final_dimensions),
+            "entry has final_dimensions",
+            errors,
+        )
+        if isinstance(final_dimensions, list) and len(final_dimensions) == 2 and all(isinstance(v, int) for v in final_dimensions):
+            expected_dims = (int(final_dimensions[0]), int(final_dimensions[1]))
+            assert_true(ratio_matches(expected_dims, ratio), f"manifest final_dimensions match requested ratio: {ratio}", errors)
+            assert_true(image_path.exists(), f"generated file exists: {image_path.name}", errors)
+            if image_path.exists():
+                actual_dims = parse_png_dimensions(image_path)
+                assert_true(actual_dims is not None, f"generated file parseable as PNG: {image_path.name}", errors)
+                if actual_dims is not None:
+                    assert_true(actual_dims == expected_dims, f"dry-run PNG dimensions match manifest: {image_path.name}", errors)
+
+
+def eval_prompt_scale_human_context_guidance(errors: List[str]) -> None:
+    packet = run_packet_from_fixture("prompt-guidance-check", FIXTURES / "scout-coffee.json")
+    prompts = load_json(packet / "prompts.json")
+    shots = prompts.get("shots") or []
+    assert_true(len(shots) >= 8, "prompt-guidance eval has generated shots", errors)
+    if not shots:
+        return
+
+    scale_values = {str(s.get("scale_guidance", "")) for s in shots}
+    human_values = {str(s.get("human_guidance", "")) for s in shots}
+    context_values = {str(s.get("context_guidance", "")) for s in shots}
+    prompt_texts = [str(s.get("prompt", "")).lower() for s in shots]
+    joined_prompts = "\n".join(prompt_texts)
+
+    assert_true(len(scale_values) >= 4, "scale guidance varies across shots", errors)
+    assert_true(len(human_values) >= 2, "human guidance varies across shots", errors)
+    assert_true(len(context_values) >= 3, "context guidance varies across shots", errors)
+    assert_true("human guidance:" in joined_prompts, "prompts include explicit human guidance text", errors)
+    assert_true("scale guidance:" in joined_prompts, "prompts include explicit shot-specific scale guidance text", errors)
+    assert_true("context guidance:" in joined_prompts, "prompts include explicit context guidance text", errors)
+    assert_true("32-48%" not in joined_prompts, "prompts no longer force fixed 32-48% occupancy", errors)
+    assert_true(any("in-use" in p for p in prompt_texts), "prompts include product-in-use guidance", errors)
+    assert_true(any("bundle" in p or "contents" in p for p in prompt_texts), "prompts include bundle/contents guidance", errors)
 
 
 def eval_reference_image_manifest(errors: List[str]) -> None:
@@ -352,8 +441,10 @@ def main() -> int:
     try:
         eval_artifacts_and_structured_extraction(errors)
         eval_prompt_differentiation(errors)
+        eval_prompt_scale_human_context_guidance(errors)
         eval_module_entrypoints(errors)
         eval_dry_run_loop(errors)
+        eval_ratio_aware_generation_manifest(errors)
         eval_reference_image_manifest(errors)
         eval_reference_selection_ranking(errors)
         eval_review_artifact_packager(errors)

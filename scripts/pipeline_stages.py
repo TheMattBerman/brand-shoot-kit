@@ -13,13 +13,13 @@ ASSET_DIRS = ["pdp", "lifestyle", "model", "seasonal", "social", "email", "marke
 
 CATEGORY_SHOT_TEMPLATES = {
     "skincare": [
-        ("Front label hero", "PDP", "1:1", "PDP", "High"),
-        ("Dropper angle detail", "PDP", "4:5", "PDP", "High"),
-        ("Ingredient texture smear", "Lifestyle", "1:1", "PDP/Social", "High"),
-        ("Sink routine placement", "Lifestyle", "4:5", "PDP/Email", "High"),
-        ("Morning hand-held scale", "Model", "4:5", "PDP/Social", "High"),
-        ("Shelf trio context", "Lifestyle", "4:5", "Social", "Medium"),
-        ("Body crop application", "Model", "9:16", "Social", "Medium"),
+        ("Clean front label hero", "PDP", "1:1", "PDP", "High"),
+        ("Dropper label/detail angle", "PDP", "4:5", "PDP", "High"),
+        ("Ingredient texture + supporting props", "Lifestyle", "1:1", "PDP/Social", "High"),
+        ("Sink routine product-in-use scene", "Lifestyle", "4:5", "PDP/Email", "High"),
+        ("Morning hand-held scale proof", "Model", "4:5", "PDP/Social", "High"),
+        ("Bundle + contents layout", "Lifestyle", "4:5", "Social", "Medium"),
+        ("Human body-crop application in-use", "Model", "9:16", "Social", "Medium"),
         ("Email routine hero", "Email", "16:9", "Email", "High"),
         ("Seasonal gift bundle", "Seasonal", "4:5", "Email/Social", "Low"),
         ("Marketplace white-ground", "Marketplace", "1:1", "Amazon", "High"),
@@ -27,13 +27,13 @@ CATEGORY_SHOT_TEMPLATES = {
         ("Story routine vertical", "Social", "9:16", "Instagram Story", "Medium"),
     ],
     "coffee": [
-        ("Front pack hero", "PDP", "1:1", "PDP", "High"),
-        ("Roast label angle", "PDP", "4:5", "PDP", "High"),
-        ("Beans + bag texture", "Lifestyle", "1:1", "PDP/Social", "High"),
-        ("Pour-over counter scene", "Lifestyle", "4:5", "PDP/Email", "High"),
-        ("Hand scoop scale", "Model", "4:5", "PDP/Social", "High"),
-        ("Pantry shelf context", "Lifestyle", "4:5", "Social", "Medium"),
-        ("Steam mug body crop", "Model", "9:16", "Social", "Medium"),
+        ("Clean front pack hero", "PDP", "1:1", "PDP", "High"),
+        ("Roast label/detail angle", "PDP", "4:5", "PDP", "High"),
+        ("Beans texture + supporting props", "Lifestyle", "1:1", "PDP/Social", "High"),
+        ("Pour-over product-in-use counter scene", "Lifestyle", "4:5", "PDP/Email", "High"),
+        ("Hand scoop scale proof", "Model", "4:5", "PDP/Social", "High"),
+        ("Bundle + contents pantry spread", "Lifestyle", "4:5", "Social", "Medium"),
+        ("Human brew body-crop in-use", "Model", "9:16", "Social", "Medium"),
         ("Email morning hero", "Email", "16:9", "Email", "High"),
         ("Holiday gifting stack", "Seasonal", "4:5", "Email/Social", "Low"),
         ("Marketplace white-ground", "Marketplace", "1:1", "Amazon", "High"),
@@ -41,13 +41,13 @@ CATEGORY_SHOT_TEMPLATES = {
         ("Story brew vertical", "Social", "9:16", "Instagram Story", "Medium"),
     ],
     "supplement": [
-        ("Front tub hero", "PDP", "1:1", "PDP", "High"),
-        ("Supplement-facts angle", "PDP", "4:5", "PDP", "High"),
-        ("Powder + scoop texture", "Lifestyle", "1:1", "PDP/Social", "High"),
-        ("Morning counter routine", "Lifestyle", "4:5", "PDP/Email", "High"),
-        ("Hand-held shake prep", "Model", "4:5", "PDP/Social", "High"),
-        ("Kitchen shelf context", "Lifestyle", "4:5", "Social", "Medium"),
-        ("Body crop mixing action", "Model", "9:16", "Social", "Medium"),
+        ("Clean front tub hero", "PDP", "1:1", "PDP", "High"),
+        ("Supplement-facts label/detail angle", "PDP", "4:5", "PDP", "High"),
+        ("Powder texture + supporting props", "Lifestyle", "1:1", "PDP/Social", "High"),
+        ("Morning counter product-in-use routine", "Lifestyle", "4:5", "PDP/Email", "High"),
+        ("Hand-held shake scale proof", "Model", "4:5", "PDP/Social", "High"),
+        ("Bundle + contents kitchen layout", "Lifestyle", "4:5", "Social", "Medium"),
+        ("Human body-crop mixing in-use", "Model", "9:16", "Social", "Medium"),
         ("Email routine hero", "Email", "16:9", "Email", "High"),
         ("Seasonal wellness gifting", "Seasonal", "4:5", "Email/Social", "Low"),
         ("Marketplace white-ground", "Marketplace", "1:1", "Amazon", "High"),
@@ -55,13 +55,13 @@ CATEGORY_SHOT_TEMPLATES = {
         ("Story prep vertical", "Social", "9:16", "Instagram Story", "Medium"),
     ],
     "home-goods": [
-        ("Front jar hero", "PDP", "1:1", "PDP", "High"),
-        ("Label + wax angle", "PDP", "4:5", "PDP", "High"),
-        ("Surface texture detail", "Lifestyle", "1:1", "PDP/Social", "High"),
-        ("Styled shelf vignette", "Lifestyle", "4:5", "PDP/Email", "High"),
-        ("Hand-lit scale context", "Model", "4:5", "PDP/Social", "Medium"),
-        ("Bedside table context", "Lifestyle", "4:5", "Social", "Medium"),
-        ("Body crop ambiance", "Model", "9:16", "Social", "Low"),
+        ("Clean front jar hero", "PDP", "1:1", "PDP", "High"),
+        ("Label + wax detail angle", "PDP", "4:5", "PDP", "High"),
+        ("Surface texture + supporting props", "Lifestyle", "1:1", "PDP/Social", "High"),
+        ("Styled product-in-use shelf vignette", "Lifestyle", "4:5", "PDP/Email", "High"),
+        ("Hand-lit scale proof", "Model", "4:5", "PDP/Social", "Medium"),
+        ("Bundle + contents bedside layout", "Lifestyle", "4:5", "Social", "Medium"),
+        ("Human ambiance body-crop in-use", "Model", "9:16", "Social", "Low"),
         ("Email mood hero", "Email", "16:9", "Email", "High"),
         ("Seasonal gifting pair", "Seasonal", "4:5", "Email/Social", "Medium"),
         ("Marketplace white-ground", "Marketplace", "1:1", "Amazon", "High"),
@@ -69,13 +69,13 @@ CATEGORY_SHOT_TEMPLATES = {
         ("Story ambiance vertical", "Social", "9:16", "Instagram Story", "Medium"),
     ],
     "generic": [
-        ("Front hero clean", "PDP", "1:1", "PDP", "High"),
-        ("Angle detail", "PDP", "4:5", "PDP", "High"),
-        ("Scale-in-hand", "Model", "4:5", "PDP/Social", "High"),
-        ("Lifestyle context", "Lifestyle", "4:5", "PDP/Email", "High"),
-        ("Texture close-up", "Lifestyle", "1:1", "PDP", "Medium"),
-        ("Shelf context", "Lifestyle", "4:5", "Social", "Medium"),
-        ("Body crop application", "Model", "9:16", "Social", "Medium"),
+        ("Clean front hero", "PDP", "1:1", "PDP", "High"),
+        ("Label/detail angle", "PDP", "4:5", "PDP", "High"),
+        ("Scale-in-hand proof", "Model", "4:5", "PDP/Social", "High"),
+        ("Lifestyle product-in-use context", "Lifestyle", "4:5", "PDP/Email", "High"),
+        ("Texture + supporting props", "Lifestyle", "1:1", "PDP", "Medium"),
+        ("Bundle + contents layout", "Lifestyle", "4:5", "Social", "Medium"),
+        ("Human body-crop in-use", "Model", "9:16", "Social", "Medium"),
         ("Email hero", "Email", "16:9", "Email", "High"),
         ("Seasonal gifting", "Seasonal", "4:5", "Email/Social", "Low"),
         ("Marketplace white", "Marketplace", "1:1", "Amazon", "High"),
@@ -415,14 +415,72 @@ def compose_prompt(
     never_text = ", ".join(never_change[:3]) if never_change else "brand name spelling and required claims"
     risk_text = ", ".join(distortion_risks[:3]) if distortion_risks else "label drift and geometry distortion"
 
+    scale_guidance = shot_scale_guidance(shot)
+    human_guidance = shot_human_guidance(shot)
+    context_guidance = shot_context_guidance(shot)
+
     return (
         f"Create a {shot.get('ratio')} ecommerce image for {product} ({brand}) optimized for {shot.get('channel')}. "
-        f"Shot intent: {shot.get('name')}. Product should occupy 32-48% of frame with label-facing readability priority. "
+        f"Shot intent: {shot.get('name')}. Scale guidance: {scale_guidance}. "
+        f"Human guidance: {human_guidance}. Context guidance: {context_guidance}. "
         f"Brand tone: {tone}. Scene direction: {scene_hint} "
         f"Evidence anchors from source: {evidence_text}. "
         f"Must preserve exactly: {preserve_text}. Never change: {never_text}. "
         f"Watch distortion risks: {risk_text}. Keep props supportive, never dominant."
     )
+
+
+def shot_scale_guidance(shot: Dict[str, str]) -> str:
+    name = str(shot.get("name", "")).lower()
+    channel = str(shot.get("channel", "")).lower()
+    use_case = str(shot.get("category", "")).lower()
+    ratio = str(shot.get("ratio", "1:1"))
+
+    if "marketplace" in name:
+        return "dominant commerce framing; product fills 82-92% with full pack clarity"
+    if any(k in name for k in ["hero", "front"]):
+        return "clean hero framing; product fills 62-75% with immediate label readability"
+    if any(k in name for k in ["detail", "label", "texture", "ingredient", "facts"]):
+        return "detail-forward framing; product or key label zone fills 55-80%"
+    if any(k in name for k in ["hand", "held", "in-hand", "scoop", "scale"]):
+        return "hand-held scale proof; product occupies 30-45% while hand gives believable size reference"
+    if any(k in name for k in ["bundle", "contents", "gift", "stack", "trio", "pair", "spread"]):
+        return "bundle composition; primary product at 30-45%, secondary items readable but subordinate"
+    if ratio == "9:16" or "story" in channel:
+        return "story/social vertical composition; product occupies 22-38% with top and bottom safe zones"
+    if ratio == "16:9":
+        return "email banner composition; product occupies 18-35% with clear negative space for copy"
+    if use_case == "lifestyle" or any(k in name for k in ["in-use", "routine", "context", "scene"]):
+        return "environment-led lifestyle framing; product occupies 24-40% within a believable moment"
+    return "balanced ecommerce framing; product occupies 35-55% with clear label hierarchy"
+
+
+def shot_human_guidance(shot: Dict[str, str]) -> str:
+    name = str(shot.get("name", "")).lower()
+    use_case = str(shot.get("category", "")).lower()
+    if use_case == "model" or any(k in name for k in ["human", "hand", "held", "body", "application", "in-use"]):
+        return "include realistic human interaction (hands or body crop) with anatomically correct pose"
+    if use_case == "lifestyle":
+        return "human presence optional; subtle traces are acceptable when they support realism"
+    return "no human subject required; keep focus on pack fidelity and commerce clarity"
+
+
+def shot_context_guidance(shot: Dict[str, str]) -> str:
+    name = str(shot.get("name", "")).lower()
+    use_case = str(shot.get("category", "")).lower()
+    channel = str(shot.get("channel", "")).lower()
+    ratio = str(shot.get("ratio", ""))
+    if "marketplace" in name:
+        return "pure white or near-white seamless background with no distracting props"
+    if use_case == "pdp":
+        return "controlled ecommerce set with minimal props and clean background separation"
+    if ratio == "9:16" or "story" in channel:
+        return "vertical social scene with depth layers and clear focal separation"
+    if ratio == "16:9":
+        return "wide, editorial scene with structured negative space for email/header placements"
+    if use_case in {"model", "lifestyle", "seasonal"} or any(k in name for k in ["bundle", "context", "scene", "routine", "gift"]):
+        return "real-world contextual set anchored to usage moment with supportive props only"
+    return "neutral ecommerce context with believable materials and tidy composition"
 
 
 def stage_prompts(
@@ -441,6 +499,9 @@ def stage_prompts(
 
     prompt_rows = []
     for idx, s in enumerate(shots, 1):
+        scale_guidance = shot_scale_guidance(s)
+        human_guidance = shot_human_guidance(s)
+        context_guidance = shot_context_guidance(s)
         row = {
             "shot_index": idx,
             "asset_id": f"shot-{idx:02d}",
@@ -449,6 +510,9 @@ def stage_prompts(
             "ratio": str(s.get("ratio", "1:1")),
             "channel": str(s.get("channel", "PDP")),
             "priority": str(s.get("priority", "Medium")),
+            "scale_guidance": scale_guidance,
+            "human_guidance": human_guidance,
+            "context_guidance": context_guidance,
             "prompt": compose_prompt(
                 s,
                 product,

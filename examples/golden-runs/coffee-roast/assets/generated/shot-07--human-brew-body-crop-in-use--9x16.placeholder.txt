@@ -1,5 +1,5 @@
 dry_run_placeholder=true
-asset_id=shot-12
-shot_name=Story routine vertical
+asset_id=shot-07
+shot_name=Human brew body-crop in-use
 ratio=9:16
 dimensions=1080x1920

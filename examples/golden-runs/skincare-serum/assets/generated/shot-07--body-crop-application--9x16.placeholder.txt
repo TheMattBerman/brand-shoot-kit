@@ -1,4 +1,0 @@
-dry_run_placeholder=true
-asset_id=shot-07
-shot_name=Body crop application
-ratio=9:16

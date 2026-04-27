@@ -1,0 +1,5 @@
+dry_run_placeholder=true
+asset_id=shot-04
+shot_name=Pour-over product-in-use counter scene
+ratio=4:5
+dimensions=1024x1280

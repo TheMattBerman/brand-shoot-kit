@@ -1,4 +1,0 @@
-dry_run_placeholder=true
-asset_id=shot-02
-shot_name=Dropper angle detail
-ratio=4:5

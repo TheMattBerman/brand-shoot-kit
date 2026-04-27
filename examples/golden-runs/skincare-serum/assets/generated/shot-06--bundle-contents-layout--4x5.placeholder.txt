@@ -1,5 +1,5 @@
 dry_run_placeholder=true
-asset_id=shot-09
-shot_name=Holiday gifting stack
+asset_id=shot-06
+shot_name=Bundle + contents layout
 ratio=4:5
 dimensions=1024x1280

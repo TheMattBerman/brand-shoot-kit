@@ -26,7 +26,7 @@ Brand Shoot Kit turns one product URL into a full shoot packet:
 2. **Selects a real product reference image** — avoids logos, icons, nutrition panels, cross-sell images, and other bad inputs
 3. **Builds preservation constraints** — what must stay true: package shape, label, brand mark, count, required claims
 4. **Plans the shot library** — PDP, lifestyle, model, email, social, marketplace, seasonal
-5. **Generates images with `gpt-image-2`** — live generation uses OpenAI’s image edit endpoint with the product reference attached
+5. **Generates images with ratio-aware sizing** — each shot honors `1:1`, `4:5`, `9:16`, or `16:9` with provider-size mapping plus deterministic output dimensions
 6. **Scores the outputs with vision QA** — product accuracy, commerce usefulness, brand fit, realism, clarity, artifact risk
 7. **Rerolls failures** — failed QA can trigger prompt rewrite → regenerate with the same reference → re-score
 8. **Exports assets by channel** — deterministic package structure for PDP, social, email, marketplace, etc.
@@ -75,8 +75,8 @@ SCOUT → PRESERVE → AUDIT → DIRECT → PROMPT → GENERATE → QA → REROL
 | Preserve | `preservation.json` | Must-preserve product and label constraints |
 | Gap Audit | `visual-gaps.json` | What the brand is missing visually |
 | Shoot Direction | `shoot-plan.json` | Shot strategy by channel and use case |
-| Prompt Factory | `prompts.json` + `04-generation-prompts.md` | Generation prompts with negative constraints |
-| Generate | `assets/generated/generation-manifest.json` | Image outputs, model, reference path, endpoint |
+| Prompt Factory | `prompts.json` + `04-generation-prompts.md` | Generation prompts with shot-specific scale/human/context guidance + negative constraints |
+| Generate | `assets/generated/generation-manifest.json` | Image outputs, ratio metadata (`requested_ratio`, `provider_size`, `final_dimensions`), model, reference path, endpoint |
 | QA | `assets/generated/qa-results.json` | Vision/manual QA scores and failure reasons |
 | Reroll | `assets/generated/reroll-manifest.json` | Reroll attempts and convergence status |
 | Export | `assets/exports/**/export-manifest.json` | Channel-packaged final files |
@@ -159,6 +159,8 @@ Brand Shoot Kit calls OpenAI directly.
 
 Default live image model: **`gpt-image-2`**
 
+`scripts/generate-images.py` defaults to `--size auto` so shot ratios map to provider sizes and deterministic final dimensions.
+
 Live packet runs auto-select a reference image from `scout.json`, cache it into:
 
 ```text
@@ -172,6 +174,9 @@ Then each generated asset records:
 - `openai_image_endpoint`
 - `model`
 - `image_sha256`
+- `requested_ratio`
+- `provider_size`
+- `final_dimensions`
 
 So you can always see what the model saw and how the output was produced.
 

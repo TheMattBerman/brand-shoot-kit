@@ -1,12 +1,12 @@
 # Generation Prompts
 
-## Shot 01 - Front pack hero
+## Shot 01 - Clean front pack hero
 
 **Use case:** PDP
 **Aspect ratio:** 1:1
 
 **Prompt:**
-Create a 1:1 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for PDP. Shot intent: Front pack hero. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
+Create a 1:1 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for PDP. Shot intent: Clean front pack hero. Scale guidance: clean hero framing; product fills 62-75% with immediate label readability. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: controlled ecommerce set with minimal props and clean background separation. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
 
 **Negative constraints:**
 - no altered logo or label text
@@ -18,13 +18,13 @@ Create a 1:1 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) o
 **Reroll if failed:**
 If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.
 
-## Shot 02 - Roast label angle
+## Shot 02 - Roast label/detail angle
 
 **Use case:** PDP
 **Aspect ratio:** 4:5
 
 **Prompt:**
-Create a 4:5 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for PDP. Shot intent: Roast label angle. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
+Create a 4:5 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for PDP. Shot intent: Roast label/detail angle. Scale guidance: detail-forward framing; product or key label zone fills 55-80%. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: controlled ecommerce set with minimal props and clean background separation. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
 
 **Negative constraints:**
 - no altered logo or label text
@@ -36,13 +36,13 @@ Create a 4:5 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) o
 **Reroll if failed:**
 If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.
 
-## Shot 03 - Beans + bag texture
+## Shot 03 - Beans texture + supporting props
 
 **Use case:** Lifestyle
 **Aspect ratio:** 1:1
 
 **Prompt:**
-Create a 1:1 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for PDP/Social. Shot intent: Beans + bag texture. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
+Create a 1:1 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for PDP/Social. Shot intent: Beans texture + supporting props. Scale guidance: detail-forward framing; product or key label zone fills 55-80%. Human guidance: human presence optional; subtle traces are acceptable when they support realism. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
 
 **Negative constraints:**
 - no altered logo or label text
@@ -54,13 +54,13 @@ Create a 1:1 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) o
 **Reroll if failed:**
 If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.
 
-## Shot 04 - Pour-over counter scene
+## Shot 04 - Pour-over product-in-use counter scene
 
 **Use case:** Lifestyle
 **Aspect ratio:** 4:5
 
 **Prompt:**
-Create a 4:5 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for PDP/Email. Shot intent: Pour-over counter scene. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
+Create a 4:5 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for PDP/Email. Shot intent: Pour-over product-in-use counter scene. Scale guidance: environment-led lifestyle framing; product occupies 24-40% within a believable moment. Human guidance: include realistic human interaction (hands or body crop) with anatomically correct pose. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
 
 **Negative constraints:**
 - no altered logo or label text
@@ -72,13 +72,13 @@ Create a 4:5 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) o
 **Reroll if failed:**
 If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.
 
-## Shot 05 - Hand scoop scale
+## Shot 05 - Hand scoop scale proof
 
 **Use case:** Model
 **Aspect ratio:** 4:5
 
 **Prompt:**
-Create a 4:5 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for PDP/Social. Shot intent: Hand scoop scale. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
+Create a 4:5 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for PDP/Social. Shot intent: Hand scoop scale proof. Scale guidance: hand-held scale proof; product occupies 30-45% while hand gives believable size reference. Human guidance: include realistic human interaction (hands or body crop) with anatomically correct pose. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
 
 **Negative constraints:**
 - no altered logo or label text
@@ -90,13 +90,13 @@ Create a 4:5 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) o
 **Reroll if failed:**
 If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.
 
-## Shot 06 - Pantry shelf context
+## Shot 06 - Bundle + contents pantry spread
 
 **Use case:** Lifestyle
 **Aspect ratio:** 4:5
 
 **Prompt:**
-Create a 4:5 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for Social. Shot intent: Pantry shelf context. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
+Create a 4:5 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for Social. Shot intent: Bundle + contents pantry spread. Scale guidance: bundle composition; primary product at 30-45%, secondary items readable but subordinate. Human guidance: human presence optional; subtle traces are acceptable when they support realism. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
 
 **Negative constraints:**
 - no altered logo or label text
@@ -108,13 +108,13 @@ Create a 4:5 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) o
 **Reroll if failed:**
 If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing.
 
-## Shot 07 - Steam mug body crop
+## Shot 07 - Human brew body-crop in-use
 
 **Use case:** Model
 **Aspect ratio:** 9:16
 
 **Prompt:**
-Create a 9:16 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for Social. Shot intent: Steam mug body crop. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
+Create a 9:16 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for Social. Shot intent: Human brew body-crop in-use. Scale guidance: story/social vertical composition; product occupies 22-38% with top and bottom safe zones. Human guidance: include realistic human interaction (hands or body crop) with anatomically correct pose. Context guidance: vertical social scene with depth layers and clear focal separation. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
 
 **Negative constraints:**
 - no altered logo or label text
@@ -132,7 +132,7 @@ If label legibility, pack geometry, or product count fails, reroll with flatter 
 **Aspect ratio:** 16:9
 
 **Prompt:**
-Create a 16:9 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for Email. Shot intent: Email morning hero. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
+Create a 16:9 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for Email. Shot intent: Email morning hero. Scale guidance: clean hero framing; product fills 62-75% with immediate label readability. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: wide, editorial scene with structured negative space for email/header placements. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
 
 **Negative constraints:**
 - no altered logo or label text
@@ -150,7 +150,7 @@ If label legibility, pack geometry, or product count fails, reroll with flatter 
 **Aspect ratio:** 4:5
 
 **Prompt:**
-Create a 4:5 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for Email/Social. Shot intent: Holiday gifting stack. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
+Create a 4:5 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for Email/Social. Shot intent: Holiday gifting stack. Scale guidance: bundle composition; primary product at 30-45%, secondary items readable but subordinate. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
 
 **Negative constraints:**
 - no altered logo or label text
@@ -168,7 +168,7 @@ If label legibility, pack geometry, or product count fails, reroll with flatter 
 **Aspect ratio:** 1:1
 
 **Prompt:**
-Create a 1:1 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for Amazon. Shot intent: Marketplace white-ground. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
+Create a 1:1 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for Amazon. Shot intent: Marketplace white-ground. Scale guidance: dominant commerce framing; product fills 82-92% with full pack clarity. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: pure white or near-white seamless background with no distracting props. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
 
 **Negative constraints:**
 - no altered logo or label text
@@ -186,7 +186,7 @@ If label legibility, pack geometry, or product count fails, reroll with flatter 
 **Aspect ratio:** 1:1
 
 **Prompt:**
-Create a 1:1 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for Instagram. Shot intent: Social brew square. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
+Create a 1:1 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for Instagram. Shot intent: Social brew square. Scale guidance: balanced ecommerce framing; product occupies 35-55% with clear label hierarchy. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: neutral ecommerce context with believable materials and tidy composition. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
 
 **Negative constraints:**
 - no altered logo or label text
@@ -204,7 +204,7 @@ If label legibility, pack geometry, or product count fails, reroll with flatter 
 **Aspect ratio:** 9:16
 
 **Prompt:**
-Create a 9:16 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for Instagram Story. Shot intent: Story brew vertical. Product should occupy 32-48% of frame with label-facing readability priority. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
+Create a 9:16 ecommerce image for Summit Roast Whole Bean Coffee (Alpine Goods) optimized for Instagram Story. Shot intent: Story brew vertical. Scale guidance: story/social vertical composition; product occupies 22-38% with top and bottom safe zones. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: vertical social scene with depth layers and clear focal separation. Brand tone: warm craft premium. Scene direction: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise. Evidence anchors from source: roast, single origin. Must preserve exactly: bag silhouette, origin/roast callouts, brand lockup. Never change: origin text, net weight, brand name. Watch distortion risks: bag fold distortion, small text drift, scale mismatch. Keep props supportive, never dominant.
 
 **Negative constraints:**
 - no altered logo or label text
