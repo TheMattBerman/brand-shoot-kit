@@ -1,0 +1,7 @@
+.env
+.env.*
+node_modules/
+.DS_Store
+outputs/
+brand-shoot-output/
+*.log
