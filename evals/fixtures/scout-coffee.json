@@ -1,0 +1,16 @@
+{
+  "url": "https://example.com/products/summit-roast-coffee",
+  "title": "Summit Roast Whole Bean Coffee | Alpine Goods",
+  "meta_description": "Single origin whole bean coffee with cocoa and citrus notes. Freshly roasted for pour-over and espresso.",
+  "og_title": "Summit Roast Coffee",
+  "og_description": "Specialty whole bean coffee from high altitude farms.",
+  "h1": [
+    "Summit Roast Whole Bean Coffee"
+  ],
+  "image_urls": [
+    "https://example.com/images/coffee-front.jpg",
+    "https://example.com/images/coffee-angle.jpg"
+  ],
+  "degraded_mode": true,
+  "note": "Fixture scout for deterministic eval coverage"
+}

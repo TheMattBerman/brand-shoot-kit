@@ -14,6 +14,7 @@ DOCS = [
 ]
 ASSETS = ["pdp", "lifestyle", "model", "seasonal", "social", "email", "marketplace"]
 MEMORY = ["visual-profile.md", "product-shot-memory.md", "assets.md"]
+ARTIFACTS = ["scout.json", "preservation.json", "visual-gaps.json", "shoot-plan.json", "prompts.json"]
 
 
 def check(path: str, is_dir: bool = False) -> bool:
@@ -41,6 +42,11 @@ def main() -> int:
         mp = os.path.join(packet, "memory", m)
         if not check(mp):
             missing.append(mp)
+
+    for a in ARTIFACTS:
+        ap = os.path.join(packet, a)
+        if not check(ap):
+            missing.append(ap)
 
     if missing:
         print("Missing required packet paths:")

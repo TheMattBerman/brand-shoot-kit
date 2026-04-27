@@ -20,14 +20,19 @@ rm -rf "$SMOKE_OUT"
 "${ROOT_DIR}/scripts/qa-images.py" \
   --packet "$SMOKE_OUT"
 
+"${ROOT_DIR}/scripts/reroll-failed.py" \
+  --packet "$SMOKE_OUT"
+
 "${ROOT_DIR}/scripts/export-packager.py" \
   --packet "$SMOKE_OUT"
 
 GEN_MANIFEST="${SMOKE_OUT}/assets/generated/generation-manifest.json"
 QA_RESULTS="${SMOKE_OUT}/assets/generated/qa-results.json"
+REROLL_MANIFEST="${SMOKE_OUT}/assets/generated/reroll-manifest.json"
 
 [[ -f "$GEN_MANIFEST" ]] || { echo "Missing generation manifest: $GEN_MANIFEST"; exit 1; }
 [[ -f "$QA_RESULTS" ]] || { echo "Missing QA results: $QA_RESULTS"; exit 1; }
+[[ -f "$REROLL_MANIFEST" ]] || { echo "Missing reroll manifest: $REROLL_MANIFEST"; exit 1; }
 
 EXPORT_MANIFEST="$(find "${SMOKE_OUT}/assets/exports" -name 'export-manifest.json' | head -n 1)"
 [[ -n "$EXPORT_MANIFEST" && -f "$EXPORT_MANIFEST" ]] || { echo "Missing export manifest"; exit 1; }

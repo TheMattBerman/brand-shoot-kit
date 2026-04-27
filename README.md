@@ -1,7 +1,7 @@
 # Brand Shoot Kit
 
 Brand Shoot Kit turns a product URL into an ecommerce visual production workflow:
-`product URL -> brand analysis -> visual gap audit -> shoot strategy -> shot list -> prompts -> generation manifest -> QA results -> export package`.
+`product URL -> scout.json -> preservation.json -> visual-gaps.json -> shoot-plan.json -> prompts.json -> packet docs -> generation manifest -> QA results -> reroll manifest -> export package`.
 
 This kit is for product photography and ecommerce asset libraries. It is explicitly not an ad spy/ad intelligence workflow.
 
@@ -11,8 +11,9 @@ This kit is for product photography and ecommerce asset libraries. It is explici
 - Suite architecture and module contracts in [SUITE.md](SUITE.md) and `references/module-contracts/`
 - Strong reference guides in `references/`
 - Runnable scripts in `scripts/`
+- First-class module artifacts aligned to `references/module-contracts/*.md`
 - Install/doctor/uninstall lifecycle
-- Eval suites for trigger and execution quality
+- Executable eval harness in `evals/run.py` plus trigger/execution docs
 - Example shoot packets for multiple product types
 
 ## Quick Start
@@ -35,7 +36,14 @@ Dry-run executable v0.2 flow (no paid API calls):
 ```bash
 ./scripts/generate-images.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
 ./scripts/qa-images.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
+./scripts/reroll-failed.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
 ./scripts/export-packager.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
+```
+
+Regenerate only one stage artifact:
+
+```bash
+./scripts/run-brand-shoot.py --out <packet-dir> --stage prompts
 ```
 
 Opt-in live generation/vision (requires `OPENAI_API_KEY` and explicit `--live`):
@@ -64,6 +72,7 @@ Without `OPENAI_API_KEY` (or other optional keys), the kit still produces:
 - generation prompts
 - deterministic generation manifests + placeholder images
 - deterministic/manual QA JSON + markdown report append
+- deterministic reroll simulation manifest + QA reroll history append
 - deterministic channel export package + export manifest
 
 ## Repo Layout
@@ -90,6 +99,12 @@ Options:
 
 ```bash
 ./doctor.sh
+```
+
+Run executable evals directly:
+
+```bash
+./evals/run.py
 ```
 
 ## Uninstall

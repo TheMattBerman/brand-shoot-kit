@@ -1,220 +1,40 @@
 #!/usr/bin/env python3
 """Run Brand Shoot Kit from product URL or prebuilt scout JSON.
 
-This orchestrator keeps the current stack simple and deterministic:
-1) collect scout evidence (URL fetch or provided JSON)
-2) derive a packet config with conservative defaults
-3) generate the packet using create-shoot-packet.py
-4) optionally validate packet structure
+This orchestrator now writes first-class module artifacts:
+- scout.json
+- preservation.json
+- visual-gaps.json
+- shoot-plan.json
+- prompts.json
+
+You can run all stages or regenerate a single stage with --stage.
 """
+
+from __future__ import annotations
 
 import argparse
 import json
-import os
 import subprocess
 import sys
-from datetime import date
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List
+
+from packet_utils import load_json
+from pipeline_stages import (
+    default_output_dir,
+    infer_brand_and_product,
+    render_packet_docs,
+    save_stage_artifacts,
+    stage_preservation,
+    stage_prompts,
+    stage_shoot_plan,
+    stage_visual_gaps,
+)
 
 ROOT = Path(__file__).resolve().parent.parent
-CREATE_PACKET = ROOT / "scripts" / "create-shoot-packet.py"
 SCOUT_URL = ROOT / "scripts" / "scout-url.sh"
 VALIDATE_PACKET = ROOT / "scripts" / "validate-packet.py"
-
-
-def slug(value: str) -> str:
-    out = "".join(c.lower() if c.isalnum() else "-" for c in value)
-    while "--" in out:
-        out = out.replace("--", "-")
-    return out.strip("-") or "unknown"
-
-
-def clean_text(value: str) -> str:
-    return " ".join((value or "").replace("|", " ").split()).strip()
-
-
-def infer_brand_and_product(scout: Dict[str, Any], fallback_url: str) -> Tuple[str, str]:
-    title = clean_text(scout.get("og_title") or scout.get("title") or "")
-    h1 = ""
-    h1_list = scout.get("h1") or []
-    if isinstance(h1_list, list) and h1_list:
-        h1 = clean_text(str(h1_list[0]))
-
-    brand = ""
-    product = ""
-
-    if title:
-        for sep in ["|", "-", "::"]:
-            if sep in title:
-                parts = [p.strip() for p in title.split(sep) if p.strip()]
-                if len(parts) >= 2:
-                    product = parts[0]
-                    brand = parts[-1]
-                    break
-        if not product:
-            product = title
-
-    if h1 and len(h1) >= 3:
-        if not product:
-            product = h1
-        elif len(h1) > len(product):
-            product = h1
-
-    if not brand:
-        url = fallback_url or scout.get("url", "")
-        host = url.split("//")[-1].split("/")[0].split(":")[0]
-        brand = host.replace("www.", "").split(".")[0].replace("-", " ").title() if host else "Unknown Brand"
-
-    return brand or "Unknown Brand", product or "Unknown Product"
-
-
-def top_images(scout: Dict[str, Any], limit: int = 5) -> List[str]:
-    images = scout.get("image_urls") or []
-    if not isinstance(images, list):
-        return []
-    out: List[str] = []
-    seen = set()
-    for item in images:
-        url = str(item).strip()
-        if not url or url in seen:
-            continue
-        out.append(url)
-        seen.add(url)
-        if len(out) >= limit:
-            break
-    return out
-
-
-def infer_product_type(scout: Dict[str, Any], product: str) -> str:
-    corpus = " ".join(
-        [
-            clean_text(scout.get("title", "")),
-            clean_text(scout.get("meta_description", "")),
-            clean_text(product),
-            clean_text(scout.get("url", "")),
-        ]
-    ).lower()
-
-    if any(k in corpus for k in ["serum", "cleanser", "moistur", "dropper", "skincare"]):
-        return "skincare bottle"
-    if any(k in corpus for k in ["coffee", "beans", "brew", "roast"]):
-        return "sealed coffee bag"
-    if any(k in corpus for k in ["greens", "supplement", "powder", "vitamin"]):
-        return "supplement tub"
-    if any(k in corpus for k in ["candle", "jar", "wax", "home fragrance"]):
-        return "glass jar candle"
-    return "packaged consumer product"
-
-
-def infer_audience(description: str) -> str:
-    text = description.lower()
-    if any(k in text for k in ["daily", "routine", "everyday"]):
-        return "daily routine shoppers"
-    if any(k in text for k in ["gift", "gifting"]):
-        return "gift-oriented shoppers"
-    if any(k in text for k in ["professional", "athlete", "health"]):
-        return "performance and wellness buyers"
-    return "ecommerce shoppers"
-
-
-def infer_tone(description: str) -> str:
-    text = description.lower()
-    if any(k in text for k in ["clinical", "dermat", "ingredient"]):
-        return "quiet clinical"
-    if any(k in text for k in ["craft", "artisan", "single origin"]):
-        return "warm craft premium"
-    if any(k in text for k in ["minimal", "calm", "home"]):
-        return "calm editorial"
-    if any(k in text for k in ["energy", "active", "performance"]):
-        return "credible and energetic"
-    return "brand-consistent ecommerce"
-
-
-def infer_preservation_rules(product_type: str) -> Dict[str, List[str]]:
-    p = product_type.lower()
-    if "skincare" in p:
-        return {
-            "must_preserve": ["bottle silhouette", "cap geometry", "front label hierarchy"],
-            "can_vary": ["set styling", "camera angle", "background depth"],
-            "never_change": ["brand name", "ingredient claims", "product count"],
-            "distortion_risks": ["small label text drift", "cap deformation", "glass glare"],
-        }
-    if "coffee" in p:
-        return {
-            "must_preserve": ["bag silhouette", "origin/roast callouts", "brand lockup"],
-            "can_vary": ["brew props", "counter surface", "lighting warmth"],
-            "never_change": ["origin text", "net weight", "brand name"],
-            "distortion_risks": ["bag fold distortion", "small text drift", "scale mismatch"],
-        }
-    if "supplement" in p:
-        return {
-            "must_preserve": ["tub silhouette", "front claims", "supplement facts label"],
-            "can_vary": ["props", "camera angle", "scene context"],
-            "never_change": ["nutrition claims", "servings text", "brand name"],
-            "distortion_risks": ["claim text drift", "scoop scale mismatch", "label warp"],
-        }
-    if "candle" in p:
-        return {
-            "must_preserve": ["jar proportions", "glass tone", "label typography"],
-            "can_vary": ["room styling", "props", "angle"],
-            "never_change": ["scent name", "brand name", "burn-time claims"],
-            "distortion_risks": ["reflection artifacts", "label warp", "wick geometry errors"],
-        }
-    return {
-        "must_preserve": ["package geometry", "brand mark", "primary label text"],
-        "can_vary": ["camera angle", "lighting direction", "set and props"],
-        "never_change": ["brand name spelling", "required claims and warnings", "product count"],
-        "distortion_risks": ["label text drift", "shape distortion", "scale mismatch"],
-    }
-
-
-def build_config(scout: Dict[str, Any], explicit_brand: str, explicit_product: str, url: str) -> Dict[str, Any]:
-    brand, product = infer_brand_and_product(scout, url)
-    if explicit_brand:
-        brand = explicit_brand
-    if explicit_product:
-        product = explicit_product
-
-    description = clean_text(scout.get("meta_description") or scout.get("og_description") or "")
-    confidence = "medium"
-    if description and len(description) > 120:
-        confidence = "medium-high"
-
-    product_type = infer_product_type(scout, product)
-    rules = infer_preservation_rules(product_type)
-    tone = infer_tone(description)
-    audience = infer_audience(description)
-
-    return {
-        "brand": brand,
-        "product": product,
-        "product_url": url or scout.get("url", "not provided"),
-        "price_tier": "unknown",
-        "audience": audience,
-        "tone": tone,
-        "palette": [],
-        "product_type": product_type,
-        "must_preserve": rules["must_preserve"],
-        "can_vary": rules["can_vary"],
-        "never_change": rules["never_change"],
-        "distortion_risks": rules["distortion_risks"],
-        "accuracy_confidence": confidence,
-        "recommended_direction": "Category-aware commerce with contextual lifestyle",
-        "strategy_rationale": "Use source evidence to tune scenes by category while preserving strict product fidelity.",
-        "visual_gaps": [
-            {"asset": "PDP hero", "status": "Unknown", "notes": "Review current hero quality from source page", "priority": "High"},
-            {"asset": "Human scale/in-use", "status": "Unknown", "notes": "Confirm if human context exists", "priority": "High"},
-            {"asset": "Texture/detail proof", "status": "Unknown", "notes": "Need feature clarity asset", "priority": "Medium"},
-        ],
-        "source_snapshot": {
-            "title": clean_text(scout.get("title", "")),
-            "h1": scout.get("h1", []),
-            "meta_description": description,
-            "top_image_urls": top_images(scout),
-            "degraded_mode": bool(scout.get("degraded_mode", True)),
-        },
-    }
 
 
 def run_cmd(cmd: List[str], capture: bool = False) -> str:
@@ -222,53 +42,155 @@ def run_cmd(cmd: List[str], capture: bool = False) -> str:
     return result.stdout.strip() if capture else ""
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description="Run Brand Shoot Kit from URL/scout JSON to packet")
-    parser.add_argument("--url", help="Product URL to scout")
-    parser.add_argument("--scout-json", help="Path to pre-generated scout JSON (skip URL fetch)")
-    parser.add_argument("--brand", help="Override inferred brand name")
-    parser.add_argument("--product", help="Override inferred product name")
-    parser.add_argument("--out", help="Packet output directory (default: output/<brand>/<product>/<today>)")
-    parser.add_argument("--workdir", default="output", help="Base output dir when --out is not provided")
-    parser.add_argument("--save-config", help="Optional path to write derived config JSON")
-    parser.add_argument("--skip-validate", action="store_true", help="Skip packet structure validation")
-    args = parser.parse_args()
+def load_artifact(out_dir: Path, name: str) -> Dict[str, Any]:
+    path = out_dir / name
+    if not path.exists():
+        raise SystemExit(f"error: required artifact missing for this stage: {path}")
+    return load_json(path)
 
-    if not args.url and not args.scout_json:
-        print("error: provide --url or --scout-json", file=sys.stderr)
-        return 2
 
-    if args.scout_json:
-        with open(args.scout_json, "r", encoding="utf-8") as f:
-            scout = json.load(f)
+def parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser(description="Run Brand Shoot Kit stages and packet rendering")
+    p.add_argument("--url", help="Product URL to scout")
+    p.add_argument("--scout-json", help="Path to pre-generated scout JSON")
+    p.add_argument("--brand", help="Override inferred brand name")
+    p.add_argument("--product", help="Override inferred product name")
+    p.add_argument("--out", help="Packet output directory")
+    p.add_argument("--workdir", default="output", help="Base output dir when --out is not provided")
+    p.add_argument("--stage", choices=["all", "scout", "preservation", "visual-gaps", "shoot-plan", "prompts", "render"], default="all", help="Run full pipeline or a single stage")
+    p.add_argument("--save-config", help="Optional path to write derived config JSON")
+    p.add_argument("--skip-validate", action="store_true", help="Skip packet structure validation")
+    return p.parse_args()
+
+
+def resolve_output_dir(args: argparse.Namespace, scout: Dict[str, Any] | None) -> Path:
+    if args.out:
+        out_dir = Path(args.out).resolve()
+        out_dir.mkdir(parents=True, exist_ok=True)
+        return out_dir
+
+    if scout is None:
+        raise SystemExit("error: --out is required when running stage without scout input")
+
+    brand, product = infer_brand_and_product(scout, args.url or str(scout.get("url", "")))
+    if args.brand:
+        brand = args.brand
+    if args.product:
+        product = args.product
+    out_dir = default_output_dir(Path(args.workdir).resolve(), brand, product)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    return out_dir
+
+
+def derive_identity(args: argparse.Namespace, scout: Dict[str, Any], out_dir: Path) -> Dict[str, str]:
+    inferred_brand, inferred_product = infer_brand_and_product(scout, args.url or str(scout.get("url", "")))
+    brand = args.brand or inferred_brand
+    product = args.product or inferred_product
+    product_url = args.url or str(scout.get("url", "not provided"))
+
+    if args.save_config:
+        config_path = Path(args.save_config)
     else:
+        config_path = out_dir / "config.derived.json"
+
+    payload = {
+        "brand": brand,
+        "product": product,
+        "product_url": product_url,
+    }
+    config_path.parent.mkdir(parents=True, exist_ok=True)
+    config_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+    return payload
+
+
+def scout_from_args(args: argparse.Namespace) -> Dict[str, Any]:
+    if args.scout_json:
+        return load_json(Path(args.scout_json).resolve())
+    if args.url:
         scout_output = run_cmd([str(SCOUT_URL), "--url", args.url], capture=True)
-        scout = json.loads(scout_output)
+        return json.loads(scout_output)
+    raise SystemExit("error: provide --url or --scout-json")
 
-    config = build_config(scout, args.brand or "", args.product or "", args.url or scout.get("url", ""))
 
-    packet_out = args.out
-    if not packet_out:
-        today = date.today().isoformat()
-        packet_out = os.path.join(args.workdir, slug(config["brand"]), slug(config["product"]), today)
+def run_stage(args: argparse.Namespace) -> int:
+    stage = args.stage
 
-    os.makedirs(packet_out, exist_ok=True)
+    if stage in {"all", "scout"}:
+        scout = scout_from_args(args)
+        out_dir = resolve_output_dir(args, scout)
+        save_stage_artifacts(out_dir, scout=scout)
 
-    config_path = args.save_config
-    if not config_path:
-        config_path = os.path.join(packet_out, "config.derived.json")
+        if stage == "scout":
+            print(str(out_dir / "scout.json"))
+            return 0
+    else:
+        out_dir = resolve_output_dir(args, None)
+        scout = load_artifact(out_dir, "scout.json")
 
-    with open(config_path, "w", encoding="utf-8") as f:
-        json.dump(config, f, indent=2)
-        f.write("\n")
+    identity = derive_identity(args, scout, out_dir)
+    brand = identity["brand"]
+    product = identity["product"]
+    product_url = identity["product_url"]
 
-    run_cmd([str(CREATE_PACKET), "--config", config_path, "--out", packet_out])
+    if stage in {"all", "preservation"}:
+        preservation = stage_preservation(scout, product=product)
+        save_stage_artifacts(out_dir, preservation=preservation)
+        if stage == "preservation":
+            print(str(out_dir / "preservation.json"))
+            return 0
+    else:
+        preservation = load_artifact(out_dir, "preservation.json")
 
-    if not args.skip_validate:
-        run_cmd([str(VALIDATE_PACKET), "--packet", packet_out])
+    if stage in {"all", "visual-gaps"}:
+        visual_gaps = stage_visual_gaps(scout, preservation)
+        save_stage_artifacts(out_dir, visual_gaps=visual_gaps)
+        if stage == "visual-gaps":
+            print(str(out_dir / "visual-gaps.json"))
+            return 0
+    else:
+        visual_gaps = load_artifact(out_dir, "visual-gaps.json")
 
-    print(packet_out)
+    if stage in {"all", "shoot-plan"}:
+        shoot_plan = stage_shoot_plan(scout, preservation, visual_gaps)
+        save_stage_artifacts(out_dir, shoot_plan=shoot_plan)
+        if stage == "shoot-plan":
+            print(str(out_dir / "shoot-plan.json"))
+            return 0
+    else:
+        shoot_plan = load_artifact(out_dir, "shoot-plan.json")
+
+    if stage in {"all", "prompts"}:
+        prompts = stage_prompts(scout, preservation, shoot_plan, brand=brand, product=product)
+        save_stage_artifacts(out_dir, prompts=prompts)
+        if stage == "prompts":
+            print(str(out_dir / "prompts.json"))
+            return 0
+    else:
+        prompts = load_artifact(out_dir, "prompts.json")
+
+    if stage in {"all", "render"}:
+        render_packet_docs(
+            out_dir,
+            brand=brand,
+            product=product,
+            product_url=product_url,
+            scout=scout,
+            preservation=preservation,
+            visual_gaps=visual_gaps,
+            shoot_plan=shoot_plan,
+            prompts=prompts,
+        )
+
+    if not args.skip_validate and stage in {"all", "render"}:
+        run_cmd([str(VALIDATE_PACKET), "--packet", str(out_dir)])
+
+    print(str(out_dir))
     return 0
+
+
+def main() -> int:
+    args = parse_args()
+    return run_stage(args)
 
 
 if __name__ == "__main__":

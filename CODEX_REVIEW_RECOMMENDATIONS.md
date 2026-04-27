@@ -3,6 +3,12 @@
 Date: April 27, 2026
 Reviewer mode: product/agent-system audit (not code-style review)
 
+## Implementation status update (April 27, 2026)
+
+- P0.1 module artifact pipeline: implemented (`scout.json`, `preservation.json`, `visual-gaps.json`, `shoot-plan.json`, `prompts.json`) with stage regeneration in `scripts/run-brand-shoot.py --stage ...`.
+- P0.2 automatic reroll executor: implemented as `scripts/reroll-failed.py` with deterministic dry-run simulation, reroll manifest/history, and optional `--live` gating.
+- P0.3 executable eval harness: implemented as `evals/run.py` with deterministic fixture-driven checks and non-zero exit on failure.
+
 ## 1. Executive verdict
 
 ### Maturity score today

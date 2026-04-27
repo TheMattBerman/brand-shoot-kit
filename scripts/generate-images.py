@@ -21,7 +21,6 @@ from typing import Any, Dict, List
 
 from packet_utils import dump_json, ensure_packet_dir, parse_generation_prompts, read_brand_product, slug
 
-DEFAULT_MANIFEST_REL = Path("assets/generated/generation-manifest.json")
 TINY_PLACEHOLDER_PNG = base64.b64decode(
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAJq4QW0AAAAASUVORK5CYII="
 )
@@ -80,6 +79,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--size", default="1024x1024", help="Image size sent to provider in live mode")
     p.add_argument("--limit", type=int, default=0, help="Optional shot limit for quick runs")
     p.add_argument("--overwrite", action="store_true", help="Overwrite existing image files")
+    p.add_argument("--asset-ids", default="", help="Comma-separated asset IDs to generate (default: all)")
+    p.add_argument("--prompt-overrides", help="JSON map of asset_id -> prompt override")
     return p.parse_args()
 
 
@@ -134,6 +135,19 @@ def deterministic_file_name(shot: Dict[str, Any]) -> str:
     return f"{shot['asset_id']}--{slug(shot['shot_name'])}--{ratio_slug}.png"
 
 
+def parse_asset_filter(raw: str) -> set[str]:
+    return {x.strip() for x in raw.split(",") if x.strip()} if raw else set()
+
+
+def load_prompt_overrides(path: str | None) -> Dict[str, str]:
+    if not path:
+        return {}
+    payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise SystemExit("error: --prompt-overrides must be a JSON object")
+    return {str(k): str(v) for k, v in payload.items()}
+
+
 def main() -> int:
     args = parse_args()
     paths = resolve_paths(args)
@@ -150,16 +164,30 @@ def main() -> int:
         print(f"error: no shots parsed from {prompts_path}", file=sys.stderr)
         return 2
 
+    asset_filter = parse_asset_filter(args.asset_ids)
+    if asset_filter:
+        shots = [s for s in shots if str(s.get("asset_id")) in asset_filter]
+
     if args.limit and args.limit > 0:
         shots = shots[: args.limit]
+
+    if not shots:
+        print("error: no matching shots to generate", file=sys.stderr)
+        return 2
+
+    prompt_overrides = load_prompt_overrides(args.prompt_overrides)
+    for shot in shots:
+        asset_id = str(shot.get("asset_id"))
+        if asset_id in prompt_overrides:
+            shot["prompt"] = prompt_overrides[asset_id]
+            shot["prompt_override_applied"] = True
 
     brand_product = read_brand_product(packet_dir / "00-brand-analysis.md")
 
     provider = None
     mode = "dry-run"
-    key_present = bool(os.environ.get("OPENAI_API_KEY"))
     if args.live:
-        if not key_present:
+        if not os.environ.get("OPENAI_API_KEY"):
             print("error: --live set but OPENAI_API_KEY is not available", file=sys.stderr)
             return 2
         provider = OpenAIImageProvider(os.environ["OPENAI_API_KEY"], args.model, args.size)
@@ -173,11 +201,10 @@ def main() -> int:
         image_path = out_dir / filename
 
         if image_path.exists() and not args.overwrite:
-            status = "skipped-existing"
             entries.append(
                 {
                     **shot,
-                    "status": status,
+                    "status": "skipped-existing",
                     "provider": mode,
                     "dry_run": mode != "live",
                     "image_path": str(image_path),
@@ -198,7 +225,7 @@ def main() -> int:
                 png_bytes = provider.generate(shot["prompt"])
                 image_path.write_bytes(png_bytes)
                 entry["image_sha256"] = hashlib.sha256(png_bytes).hexdigest()
-            except Exception as exc:  # pragma: no cover - exercised in live mode
+            except Exception as exc:  # pragma: no cover
                 entry["status"] = "error"
                 entry["error"] = str(exc)
         else:

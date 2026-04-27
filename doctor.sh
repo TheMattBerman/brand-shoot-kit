@@ -95,6 +95,7 @@ done
 check_file "evals/trigger-evals.md"
 check_file "evals/execution-evals.md"
 check_file "evals/output-quality-rubric.md"
+check_file "evals/run.py"
 check_file "examples/scout-samples/skincare-serum-scout.json"
 
 # Script checks
@@ -110,9 +111,11 @@ for s in \
   "scripts/validate-packet.py" \
   "scripts/generate-images.py" \
   "scripts/qa-images.py" \
+  "scripts/reroll-failed.py" \
   "scripts/export-packager.py"; do
   check_exec "$s"
 done
+check_exec "evals/run.py"
 
 check_help "./install.sh --help"
 check_help "./uninstall.sh --help"
@@ -123,8 +126,10 @@ check_help "./scripts/create-shoot-packet.py --help"
 check_help "./scripts/validate-packet.py --help"
 check_help "./scripts/generate-images.py --help"
 check_help "./scripts/qa-images.py --help"
+check_help "./scripts/reroll-failed.py --help"
 check_help "./scripts/export-packager.py --help"
 check_help "./scripts/run-smoke.sh"
+check_help "./evals/run.py"
 
 # Basic dependency checks
 command -v bash >/dev/null 2>&1 && pass "binary available: bash" || fail "missing binary: bash"

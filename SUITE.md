@@ -40,22 +40,29 @@ Without module boundaries, output quality drifts and the system cannot be tested
    Input: final packet + QA outcomes
    Output: memory artifacts for next run
 
+Current first-class stage artifacts in packet root:
+- `scout.json`
+- `preservation.json`
+- `visual-gaps.json`
+- `shoot-plan.json`
+- `prompts.json`
+
 ## Implementation Status (April 27, 2026)
 
 - Implemented now:
   - `brand-scout` (degraded HTML scout via `scripts/scout-url.sh`)
-  - `suite-orchestrator` (`scripts/run-brand-shoot.py`) that turns URL/scout JSON into packet
+  - `suite-orchestrator` (`scripts/run-brand-shoot.py`) that writes stage artifacts and renders docs
   - packet generation + structure validation (`create-shoot-packet.py`, `validate-packet.py`)
   - generation stage with dry-run + optional OpenAI live mode (`scripts/generate-images.py`)
   - QA stage with deterministic/manual scoring + optional OpenAI vision mode (`scripts/qa-images.py`)
+  - reroll stage with deterministic dry-run simulation + optional live execution (`scripts/reroll-failed.py`)
   - deterministic export packaging and manifests (`scripts/export-packager.py`)
 - Partial:
   - preservation/gap/strategy remain heuristic/template-driven
   - prompt generation is now category-aware but still rule-based, not model-directed
-  - QA reroll automation is not yet implemented (only reject reasons + reroll instructions output)
+  - live reroll loop is only partially implemented (gated and unproven by default)
 - Missing:
   - robust structured extraction (variants/claims/spec-level parsing)
-  - automated reroll loop that regenerates failed shots
   - crop/resize variant rendering per channel (current export is deterministic copy packaging)
 
 ## Contract Files

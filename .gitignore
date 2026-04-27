@@ -6,6 +6,7 @@ node_modules/
 .codex
 outputs/
 output/
+evals/.tmp/
 brand-shoot-output/
 *.log
 

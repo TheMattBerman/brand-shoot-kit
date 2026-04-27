@@ -320,6 +320,16 @@ def main() -> int:
         "fail": sum(1 for r in results if r["status"] == "fail"),
         "manual_review": sum(1 for r in results if r["status"] == "manual_review"),
     }
+    reroll_queue = [
+        {
+            "asset_id": r["asset_id"],
+            "shot_name": r["shot_name"],
+            "reasons": r.get("reject_reasons", []),
+            "reroll_instruction": r.get("reroll_instruction", ""),
+        }
+        for r in results
+        if r["status"] in {"fail", "manual_review"}
+    ]
 
     run_stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     payload = {
@@ -333,6 +343,7 @@ def main() -> int:
             "model": args.model if vision is not None else "none",
         },
         "summary": summary,
+        "reroll_queue": reroll_queue,
         "results": results,
     }
 
