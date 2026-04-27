@@ -1,0 +1,411 @@
+{
+  "run": {
+    "run_id": "qa-20260427T215452Z",
+    "timestamp_utc": "20260427T215452Z",
+    "mode": "deterministic-manual",
+    "manifest_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/generation-manifest.json",
+    "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens",
+    "threshold": 80.0,
+    "model": "none"
+  },
+  "summary": {
+    "total": 12,
+    "pass": 0,
+    "fail": 0,
+    "manual_review": 12
+  },
+  "reroll_queue": [
+    {
+      "asset_id": "shot-01",
+      "shot_name": "Clean front tub hero",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-02",
+      "shot_name": "Supplement-facts label/detail angle",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-03",
+      "shot_name": "Powder texture + supporting props",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-04",
+      "shot_name": "Morning counter product-in-use routine",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold",
+        "simulated artifact risk trigger for smoke/eval coverage"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-05",
+      "shot_name": "Hand-held shake scale proof",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-06",
+      "shot_name": "Bundle + contents kitchen layout",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-07",
+      "shot_name": "Human body-crop mixing in-use",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-08",
+      "shot_name": "Email routine hero",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-09",
+      "shot_name": "Seasonal wellness gifting",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-10",
+      "shot_name": "Marketplace white-ground",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-11",
+      "shot_name": "Social trust square",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-12",
+      "shot_name": "Story prep vertical",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing. ## Manual Generation Runbook 1. Generate priority High shots first and keep all manifests. 2. Run ./scripts/qa-images.py after each generation batch. 3. Run ./scripts/reroll-failed.py to simulate or execute rerolls for failed shots. 4. Only package assets that pass QA or are manually approved."
+    }
+  ],
+  "results": [
+    {
+      "asset_id": "shot-01",
+      "shot_name": "Clean front tub hero",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-01--clean-front-tub-hero--1x1.png",
+      "scores": {
+        "product_accuracy": 73,
+        "commerce_usefulness": 68,
+        "brand_fit": 69,
+        "scene_realism": 87,
+        "visual_clarity": 77,
+        "artifact_risk": 70
+      },
+      "weighted_score": 73.6,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-02",
+      "shot_name": "Supplement-facts label/detail angle",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-02--supplement-facts-label-detail-angle--4x5.png",
+      "scores": {
+        "product_accuracy": 62,
+        "commerce_usefulness": 87,
+        "brand_fit": 63,
+        "scene_realism": 69,
+        "visual_clarity": 61,
+        "artifact_risk": 87
+      },
+      "weighted_score": 70.6,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-03",
+      "shot_name": "Powder texture + supporting props",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-03--powder-texture-supporting-props--1x1.png",
+      "scores": {
+        "product_accuracy": 77,
+        "commerce_usefulness": 67,
+        "brand_fit": 70,
+        "scene_realism": 75,
+        "visual_clarity": 67,
+        "artifact_risk": 58
+      },
+      "weighted_score": 70.75,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-04",
+      "shot_name": "Morning counter product-in-use routine",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-04--morning-counter-product-in-use-routine--4x5.png",
+      "scores": {
+        "product_accuracy": 68,
+        "commerce_usefulness": 77,
+        "brand_fit": 58,
+        "scene_realism": 63,
+        "visual_clarity": 66,
+        "artifact_risk": 82
+      },
+      "weighted_score": 68.75,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold",
+        "simulated artifact risk trigger for smoke/eval coverage"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-05",
+      "shot_name": "Hand-held shake scale proof",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-05--hand-held-shake-scale-proof--4x5.png",
+      "scores": {
+        "product_accuracy": 65,
+        "commerce_usefulness": 87,
+        "brand_fit": 73,
+        "scene_realism": 77,
+        "visual_clarity": 88,
+        "artifact_risk": 71
+      },
+      "weighted_score": 75.3,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-06",
+      "shot_name": "Bundle + contents kitchen layout",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-06--bundle-contents-kitchen-layout--4x5.png",
+      "scores": {
+        "product_accuracy": 84,
+        "commerce_usefulness": 83,
+        "brand_fit": 69,
+        "scene_realism": 79,
+        "visual_clarity": 88,
+        "artifact_risk": 62
+      },
+      "weighted_score": 79.0,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-07",
+      "shot_name": "Human body-crop mixing in-use",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-07--human-body-crop-mixing-in-use--9x16.png",
+      "scores": {
+        "product_accuracy": 74,
+        "commerce_usefulness": 58,
+        "brand_fit": 80,
+        "scene_realism": 85,
+        "visual_clarity": 58,
+        "artifact_risk": 58
+      },
+      "weighted_score": 70.15,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-08",
+      "shot_name": "Email routine hero",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-08--email-routine-hero--16x9.png",
+      "scores": {
+        "product_accuracy": 64,
+        "commerce_usefulness": 61,
+        "brand_fit": 87,
+        "scene_realism": 84,
+        "visual_clarity": 63,
+        "artifact_risk": 85
+      },
+      "weighted_score": 71.85,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-09",
+      "shot_name": "Seasonal wellness gifting",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-09--seasonal-wellness-gifting--4x5.png",
+      "scores": {
+        "product_accuracy": 57,
+        "commerce_usefulness": 63,
+        "brand_fit": 67,
+        "scene_realism": 74,
+        "visual_clarity": 58,
+        "artifact_risk": 76
+      },
+      "weighted_score": 64.25,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-10",
+      "shot_name": "Marketplace white-ground",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-10--marketplace-white-ground--1x1.png",
+      "scores": {
+        "product_accuracy": 74,
+        "commerce_usefulness": 70,
+        "brand_fit": 61,
+        "scene_realism": 75,
+        "visual_clarity": 81,
+        "artifact_risk": 57
+      },
+      "weighted_score": 70.4,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-11",
+      "shot_name": "Social trust square",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-11--social-trust-square--1x1.png",
+      "scores": {
+        "product_accuracy": 79,
+        "commerce_usefulness": 86,
+        "brand_fit": 71,
+        "scene_realism": 66,
+        "visual_clarity": 65,
+        "artifact_risk": 73
+      },
+      "weighted_score": 75.25,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "asset_id": "shot-12",
+      "shot_name": "Story prep vertical",
+      "image_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-12--story-prep-vertical--9x16.png",
+      "scores": {
+        "product_accuracy": 69,
+        "commerce_usefulness": 84,
+        "brand_fit": 60,
+        "scene_realism": 86,
+        "visual_clarity": 72,
+        "artifact_risk": 68
+      },
+      "weighted_score": 73.4,
+      "status": "manual_review",
+      "reject_reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "weighted score below threshold"
+      ],
+      "reroll_instruction": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing. ## Manual Generation Runbook 1. Generate priority High shots first and keep all manifests. 2. Run ./scripts/qa-images.py after each generation batch. 3. Run ./scripts/reroll-failed.py to simulate or execute rerolls for failed shots. 4. Only package assets that pass QA or are manually approved."
+    }
+  ]
+}

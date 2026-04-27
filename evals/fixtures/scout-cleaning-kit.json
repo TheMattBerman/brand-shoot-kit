@@ -1,0 +1,16 @@
+{
+  "url": "https://example.com/products/clean-home-essentials-kit",
+  "title": "Clean Home Essentials Kit | BrightNest",
+  "meta_description": "Refillable multi-surface cleaning kit with spray bottle, tablets, and cloth.",
+  "og_title": "Clean Home Essentials Kit",
+  "og_description": "Cleaning starter kit for kitchen and bath surfaces.",
+  "h1": [
+    "Clean Home Essentials Kit"
+  ],
+  "image_urls": [
+    "https://example.com/images/cleaning-kit-front.jpg",
+    "https://example.com/images/cleaning-kit-components.jpg"
+  ],
+  "degraded_mode": true,
+  "note": "Fixture scout for cleaning category coverage"
+}

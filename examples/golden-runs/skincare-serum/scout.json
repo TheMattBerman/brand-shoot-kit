@@ -66,6 +66,7 @@
   "extraction_warnings": [
     "low_confidence:price",
     "low_confidence:variants",
-    "degraded_mode_source:html_heuristics_only"
+    "degraded_mode_source:html_heuristics_only",
+    "structured_source:none_detected_using_heuristics"
   ]
 }

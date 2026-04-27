@@ -13,4 +13,4 @@ Use source evidence to tune scenes by category while preserving strict product f
 
 ## Category Lens
 - Category: coffee
-- Category scene guidance: Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise.
+- Category scene guidance: Use wood or stone counters and brew tools, but keep the bag front artwork dominant and readable. Beans/mugs can appear only as secondary support.

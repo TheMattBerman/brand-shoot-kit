@@ -2,8 +2,8 @@
 
 ## Reroll Summary
 - Eligible shots: 12
-- Total attempts: 18
-- Convergence rate: 91.67%
+- Total attempts: 17
+- Convergence rate: 100.0%
 
 ## Preserve In Future Runs
 - Keep product framing tight enough for label legibility in commerce shots.

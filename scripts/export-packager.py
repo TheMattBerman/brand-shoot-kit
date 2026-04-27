@@ -8,11 +8,28 @@ import hashlib
 import shutil
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from packet_utils import dump_json, ensure_packet_dir, load_json, parse_export_map, slug
 
+try:  # pragma: no cover - optional dependency
+    from PIL import Image
+except Exception:  # pragma: no cover - optional dependency
+    Image = None  # type: ignore
+
 DEFAULT_INCLUDE = {"pass", "manual_review"}
+
+RATIO_OUTPUT_DIMENSIONS: Dict[str, Tuple[int, int]] = {
+    "1:1": (1080, 1080),
+    "4:5": (1080, 1350),
+    "9:16": (1080, 1920),
+    "16:9": (1920, 1080),
+}
+
+
+def normalize_ratio(value: str | None) -> str:
+    raw = str(value or "1:1").strip().lower().replace("x", ":")
+    return raw if raw in RATIO_OUTPUT_DIMENSIONS else "1:1"
 
 
 def parse_args() -> argparse.Namespace:
@@ -92,6 +109,45 @@ def channels_for_shot(shot_name: str, export_map: Dict[str, str], use_case: str)
     return parts
 
 
+def pick_target_dimensions(entry: Dict[str, Any]) -> Tuple[int, int]:
+    ratio = normalize_ratio(str(entry.get("requested_ratio") or entry.get("ratio") or "1:1"))
+    final_dimensions = entry.get("final_dimensions")
+    if isinstance(final_dimensions, list) and len(final_dimensions) == 2:
+        width, height = final_dimensions
+        if isinstance(width, int) and isinstance(height, int) and width > 0 and height > 0:
+            return width, height
+    return RATIO_OUTPUT_DIMENSIONS[ratio]
+
+
+def render_channel_copy(source: Path, dest: Path, target: Tuple[int, int]) -> Tuple[Tuple[int, int], str]:
+    target_w, target_h = target
+
+    if Image is None:  # pragma: no cover - optional dependency
+        shutil.copy2(source, dest)
+        return target, "copy:pil_unavailable"
+
+    with Image.open(source) as img:
+        src_w, src_h = img.size
+        src_ratio = src_w / src_h
+        target_ratio = target_w / target_h
+
+        if src_ratio > target_ratio:
+            crop_w = int(src_h * target_ratio)
+            left = max(0, (src_w - crop_w) // 2)
+            box = (left, 0, left + crop_w, src_h)
+        else:
+            crop_h = int(src_w / target_ratio)
+            top = max(0, (src_h - crop_h) // 2)
+            box = (0, top, src_w, top + crop_h)
+
+        cropped = img.convert("RGB").crop(box)
+        resized = cropped.resize((target_w, target_h), Image.Resampling.LANCZOS)
+        resized.save(dest, format="PNG")
+        if (src_w, src_h) == (target_w, target_h):
+            return (target_w, target_h), "render:passthrough-dimensions"
+        return (target_w, target_h), "render:center-crop+resize"
+
+
 def main() -> int:
     args = parse_args()
     packet_dir = Path(args.packet).resolve()
@@ -117,7 +173,7 @@ def main() -> int:
     out_root.mkdir(parents=True, exist_ok=True)
 
     records: List[Dict[str, Any]] = []
-    copied = 0
+    rendered = 0
     decision_counts = {"approve": 0, "reroll": 0, "reject": 0}
     qa_counts: Dict[str, int] = {}
     reroll_counts: Dict[str, int] = {}
@@ -170,22 +226,27 @@ def main() -> int:
 
         channels = channels_for_shot(shot_name, export_map, str(entry.get("use_case", "unmapped")))
         outputs = []
-        ext = image_path.suffix.lower() or ".png"
+        ratio = normalize_ratio(str(entry.get("requested_ratio") or entry.get("ratio") or "1:1"))
+        target_dimensions = pick_target_dimensions(entry)
 
         for channel in channels:
             channel_slug = slug(channel)
             dest_dir = out_root / channel_slug
             dest_dir.mkdir(parents=True, exist_ok=True)
 
-            filename = f"{channel_slug}__{asset_id}__{slug(shot_name)}__{str(entry.get('ratio', 'unknown')).replace(':', 'x')}{ext}"
+            filename = f"{channel_slug}__{asset_id}__{slug(shot_name)}__{str(entry.get('ratio', 'unknown')).replace(':', 'x')}.png"
             dest = dest_dir / filename
-            shutil.copy2(image_path, dest)
-            copied += 1
+
+            output_dimensions, render_mode = render_channel_copy(image_path, dest, target_dimensions)
+            rendered += 1
             outputs.append(
                 {
                     "channel": channel,
                     "path": str(dest),
                     "sha256": hashlib.sha256(dest.read_bytes()).hexdigest(),
+                    "ratio": ratio,
+                    "output_dimensions": [output_dimensions[0], output_dimensions[1]],
+                    "render_mode": render_mode,
                 }
             )
 
@@ -202,7 +263,7 @@ def main() -> int:
                 "source": str(image_path),
                 "ratio": entry.get("ratio", "unknown"),
                 "outputs": outputs,
-                "notes": "deterministic copy packaging",
+                "notes": "deterministic render packaging",
             }
         )
 
@@ -219,7 +280,7 @@ def main() -> int:
         },
         "summary": {
             "total_assets": len(generation.get("entries", [])),
-            "copied_files": copied,
+            "rendered_files": rendered,
             "packaged_assets": sum(1 for r in records if r["status"] == "packaged"),
             "skipped_assets": sum(1 for r in records if r["status"] != "packaged"),
             "qa_status_counts": qa_counts,

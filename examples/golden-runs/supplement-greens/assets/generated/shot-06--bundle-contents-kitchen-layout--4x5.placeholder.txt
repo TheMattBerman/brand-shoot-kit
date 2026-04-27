@@ -1,0 +1,5 @@
+dry_run_placeholder=true
+asset_id=shot-06
+shot_name=Bundle + contents kitchen layout
+ratio=4:5
+dimensions=1024x1280

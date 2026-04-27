@@ -95,7 +95,7 @@ The current live proof pass used `gpt-image-2` with real product reference image
 | Grüns / supplement gummies | **12 / 12 QA pass** | Full 12-shot proof with review pack |
 | Rhode / skincare lip treatment | **3 / 3 QA pass** | Fixed reference picker to avoid cross-sell/lip-case images |
 | Blueland / cleaning kit | **3 / 3 QA pass** | Fixed category/reference selection for multi-product kits |
-| Stumptown / coffee | **2 / 3 QA pass** | Useful failure: coffee-specific prompt/reference nuance still needs tightening |
+| Stumptown / coffee | **2 / 3 QA pass** | Initial miss informed new coffee guardrails: bag label/artwork dominance + mug/beans suppression |
 
 This is the right kind of failure profile: the system works, and the misses are specific enough to improve.
 
@@ -393,13 +393,13 @@ Each suite module owns an executable artifact path:
 
 This is production-shaped, but not done forever.
 
-Known next improvements:
+Recently shipped improvements:
 
-1. **Coffee-specific prompt refinement** — Stumptown exposed that coffee bag scenes need tighter label/artwork preservation.
-2. **Better PDP extraction** — price, variants, ingredients/specs, and packaging text still depend on heuristic HTML extraction unless richer extraction is configured.
-3. **Contact sheet polish** — the review HTML works, but could become a slicker operator dashboard.
-4. **Channel crop/rendering** — export packaging is deterministic file organization, not true crop/resize rendering yet.
-5. **More category baselines** — beauty, supplement, cleaning, coffee are started; more products will sharpen the heuristics.
+1. **Coffee-specific prompt/reference refinement** — coffee prompts now enforce bag label/artwork dominance and include explicit mug/beans suppression constraints; reference ranking is coffee-aware.
+2. **Richer PDP extraction paths** — structured extraction now reads JSON-LD, Shopify product JSON, and metafield payloads when present for price, variants, specs/ingredients, and packaging text.
+3. **Operator review dashboard polish** — contact sheet is now a filterable card dashboard with decision summary, QA breakdown, dimensions/ratios, render metadata, and reference metadata.
+4. **Channel rendering in export package** — export packaging now writes rendered channel files (center-crop + resize) and records `output_dimensions` and `render_mode` in export manifests.
+5. **Category baselines expanded** — deterministic fixtures/evals/golden coverage now include supplement and cleaning kit in addition to coffee and skincare.
 
 ---
 

@@ -79,6 +79,8 @@ def detect_category_and_type(text: str) -> Tuple[str, str]:
         return "coffee", "sealed coffee bag"
     if any(k in t for k in ["supplement", "greens", "powder", "vitamin", "capsule", "protein"]):
         return "supplement", "supplement tub"
+    if any(k in t for k in ["cleaning", "multi-surface", "dish soap", "laundry", "refill", "spray"]):
+        return "cleaning", "cleaning kit"
     if any(k in t for k in ["candle", "jar", "home fragrance", "wax"]):
         return "home-goods", "glass jar candle"
     return "generic", "packaged consumer product"
@@ -213,16 +215,394 @@ def confidence_for(value: Any, *, min_items: int = 1) -> float:
     return 0.4
 
 
+def _safe_json_loads(raw: str) -> Any:
+    try:
+        return json.loads(raw)
+    except Exception:
+        return None
+
+
+def _coerce_jsonish(value: Any) -> List[Dict[str, Any]]:
+    out: List[Dict[str, Any]] = []
+    if isinstance(value, dict):
+        out.append(value)
+        return out
+    if isinstance(value, list):
+        for item in value:
+            if isinstance(item, dict):
+                out.append(item)
+            elif isinstance(item, str):
+                parsed = _safe_json_loads(item)
+                if isinstance(parsed, dict):
+                    out.append(parsed)
+                elif isinstance(parsed, list):
+                    out.extend([x for x in parsed if isinstance(x, dict)])
+        return out
+    if isinstance(value, str):
+        parsed = _safe_json_loads(value)
+        if isinstance(parsed, dict):
+            out.append(parsed)
+        elif isinstance(parsed, list):
+            out.extend([x for x in parsed if isinstance(x, dict)])
+    return out
+
+
+def _flatten_items(value: Any) -> List[Dict[str, Any]]:
+    items = _coerce_jsonish(value)
+    out: List[Dict[str, Any]] = []
+    stack = list(items)
+    while stack:
+        item = stack.pop(0)
+        out.append(item)
+        graph = item.get("@graph")
+        if isinstance(graph, list):
+            for row in graph:
+                if isinstance(row, dict):
+                    stack.append(row)
+    return out
+
+
+def _json_ld_products(base: Dict[str, Any]) -> List[Dict[str, Any]]:
+    collected: List[Dict[str, Any]] = []
+    for key in ["json_ld", "jsonld", "structured_data", "ld_json"]:
+        collected.extend(_flatten_items(base.get(key)))
+
+    out: List[Dict[str, Any]] = []
+    for item in collected:
+        t = item.get("@type")
+        type_text = ""
+        if isinstance(t, list):
+            type_text = " ".join(str(x) for x in t)
+        else:
+            type_text = str(t or "")
+        low = type_text.lower()
+        if "product" in low or "productgroup" in low:
+            out.append(item)
+    return out
+
+
+def _possible_product_json(base: Dict[str, Any]) -> List[Dict[str, Any]]:
+    out: List[Dict[str, Any]] = []
+    keys = [
+        "shopify_product",
+        "shopify_product_json",
+        "product_json",
+        "product",
+        "shopify",
+        "shopify_payload",
+    ]
+    for key in keys:
+        out.extend(_coerce_jsonish(base.get(key)))
+    return out
+
+
+def _shopify_metafields(base: Dict[str, Any]) -> List[Dict[str, Any]]:
+    out: List[Dict[str, Any]] = []
+    for key in ["metafields", "shopify_metafields", "product_metafields"]:
+        value = base.get(key)
+        if isinstance(value, dict):
+            out.append(value)
+        elif isinstance(value, list):
+            out.extend([x for x in value if isinstance(x, dict)])
+        elif isinstance(value, str):
+            parsed = _safe_json_loads(value)
+            if isinstance(parsed, dict):
+                out.append(parsed)
+            elif isinstance(parsed, list):
+                out.extend([x for x in parsed if isinstance(x, dict)])
+    return out
+
+
+def _extract_shopify_price(product: Dict[str, Any]) -> str:
+    for key in ["price", "price_min", "compare_at_price", "price_varies"]:
+        if key in product:
+            raw = product.get(key)
+            text = clean_text(str(raw))
+            if text and text not in {"true", "false"}:
+                if re.fullmatch(r"\d+(?:\.\d{2})?", text):
+                    return f"${text}"
+                return text
+
+    variants = product.get("variants")
+    if isinstance(variants, list):
+        for item in variants:
+            if not isinstance(item, dict):
+                continue
+            price = clean_text(str(item.get("price", "")))
+            if not price:
+                continue
+            if re.fullmatch(r"\d+(?:\.\d{2})?", price):
+                return f"${price}"
+            if re.search(r"\$", price):
+                return price
+    return ""
+
+
+def _extract_jsonld_price(products: List[Dict[str, Any]]) -> str:
+    for product in products:
+        offers = product.get("offers")
+        offer_rows = offers if isinstance(offers, list) else [offers]
+        for offer in offer_rows:
+            if not isinstance(offer, dict):
+                continue
+            amount = clean_text(str(offer.get("price", "")))
+            currency = clean_text(str(offer.get("priceCurrency", "")))
+            if not amount:
+                continue
+            if re.fullmatch(r"\d+(?:\.\d{2})?", amount):
+                symbol = "$" if currency.upper() in {"", "USD"} else f"{currency.upper()} "
+                return f"{symbol}{amount}"
+            return amount
+    return ""
+
+
+def _extract_variants_from_shopify(product: Dict[str, Any]) -> List[str]:
+    out: List[str] = []
+    variants = product.get("variants")
+    if isinstance(variants, list):
+        for item in variants:
+            if not isinstance(item, dict):
+                continue
+            for key in ["title", "name", "option1", "option2", "option3"]:
+                val = clean_text(str(item.get(key, "")))
+                if val and val.lower() not in {"default title", "default"}:
+                    out.append(val)
+    options = product.get("options")
+    if isinstance(options, list):
+        for item in options:
+            if isinstance(item, dict):
+                values = item.get("values")
+                if isinstance(values, list):
+                    out.extend(clean_text(str(v)) for v in values if clean_text(str(v)))
+            else:
+                val = clean_text(str(item))
+                if val:
+                    out.append(val)
+    return split_candidates(" | ".join(out))[:12]
+
+
+def _extract_variants_from_jsonld(products: List[Dict[str, Any]]) -> List[str]:
+    out: List[str] = []
+    for product in products:
+        for key in ["sku", "color", "size", "name"]:
+            val = clean_text(str(product.get(key, "")))
+            if key == "name":
+                if val and len(val) < 80:
+                    out.append(val)
+            elif val:
+                out.append(val)
+        variants = product.get("hasVariant")
+        if isinstance(variants, list):
+            for var in variants:
+                if isinstance(var, dict):
+                    name = clean_text(str(var.get("name", "")))
+                    if name:
+                        out.append(name)
+    return split_candidates(" | ".join(out))[:12]
+
+
+def _extract_ingredients_specs_from_structured(
+    products_jsonld: List[Dict[str, Any]],
+    shopify_products: List[Dict[str, Any]],
+    metafields: List[Dict[str, Any]],
+) -> List[str]:
+    out: List[str] = []
+
+    for product in products_jsonld:
+        for key in ["description", "additionalProperty", "material", "category"]:
+            value = product.get(key)
+            if isinstance(value, list):
+                for row in value:
+                    if isinstance(row, dict):
+                        nv = clean_text(f"{row.get('name', '')}: {row.get('value', '')}")
+                        if nv and len(nv) >= 4:
+                            out.append(nv)
+                    else:
+                        text = clean_text(str(row))
+                        if text:
+                            out.append(text)
+            elif isinstance(value, dict):
+                nv = clean_text(f"{value.get('name', '')}: {value.get('value', '')}")
+                if nv:
+                    out.append(nv)
+            else:
+                text = clean_text(str(value))
+                if text and any(k in text.lower() for k in ["ingredient", "spec", "net wt", "serving", "material", "roast", "oz", "ml"]):
+                    out.append(text)
+
+    for product in shopify_products:
+        for key in ["description", "body_html", "description_html", "subtitle"]:
+            text = clean_text(str(product.get(key, "")))
+            if not text:
+                continue
+            if any(k in text.lower() for k in ["ingredient", "spec", "serving", "net wt", "oz", "ml", "roast", "origin", "material"]):
+                out.append(text)
+
+    for meta in metafields:
+        for key, value in meta.items():
+            key_text = clean_text(str(key)).lower()
+            if isinstance(value, dict):
+                for k2, v2 in value.items():
+                    row = clean_text(f"{k2}: {v2}")
+                    if row and any(t in (key_text + " " + row.lower()) for t in ["ingredient", "spec", "serving", "net wt", "origin", "roast", "material"]):
+                        out.append(row)
+            elif isinstance(value, list):
+                for row in value:
+                    text = clean_text(str(row))
+                    if text and any(t in (key_text + " " + text.lower()) for t in ["ingredient", "spec", "serving", "net wt", "origin", "roast", "material"]):
+                        out.append(text)
+            else:
+                text = clean_text(str(value))
+                if text and any(t in (key_text + " " + text.lower()) for t in ["ingredient", "spec", "serving", "net wt", "origin", "roast", "material"]):
+                    out.append(text)
+
+    return split_candidates(" | ".join(out))[:14]
+
+
+def _extract_packaging_from_structured(
+    *,
+    products_jsonld: List[Dict[str, Any]],
+    shopify_products: List[Dict[str, Any]],
+    metafields: List[Dict[str, Any]],
+    product_name: str,
+    brand_name: str,
+) -> List[str]:
+    out: List[str] = [product_name, brand_name]
+
+    for product in products_jsonld:
+        for key in ["name", "sku", "brand", "gtin", "category"]:
+            value = product.get(key)
+            if isinstance(value, dict):
+                text = clean_text(str(value.get("name", "")))
+            else:
+                text = clean_text(str(value))
+            if text:
+                out.append(text)
+
+    for product in shopify_products:
+        for key in ["title", "vendor", "product_type", "tags", "sku"]:
+            value = product.get(key)
+            if isinstance(value, list):
+                for item in value:
+                    text = clean_text(str(item))
+                    if text:
+                        out.append(text)
+            else:
+                text = clean_text(str(value))
+                if text:
+                    out.append(text)
+
+    for meta in metafields:
+        stack: List[Tuple[str, Any]] = [(str(k), v) for k, v in meta.items()]
+        while stack:
+            key, value = stack.pop(0)
+            key_text = clean_text(str(key)).lower()
+            if isinstance(value, dict):
+                for k2, v2 in value.items():
+                    stack.append((f"{key}.{k2}", v2))
+            elif isinstance(value, list):
+                for idx, item in enumerate(value):
+                    stack.append((f"{key}[{idx}]", item))
+            else:
+                text = clean_text(str(value))
+                if not text:
+                    continue
+                if any(k in key_text for k in ["pack", "label", "title", "net", "weight", "size", "volume", "artwork"]):
+                    out.append(text)
+
+    return split_candidates(" | ".join(out))[:16]
+
+
+def extract_structured_product_fields(base: Dict[str, Any], product_name: str, brand_name: str) -> Dict[str, Any]:
+    jsonld_products = _json_ld_products(base)
+    shopify_products = _possible_product_json(base)
+    metafields = _shopify_metafields(base)
+
+    price = ""
+    variants: List[str] = []
+    ingredients_specs: List[str] = []
+    packaging: List[str] = []
+    source_hints: List[str] = []
+
+    if jsonld_products:
+        price = _extract_jsonld_price(jsonld_products)
+        variants = _extract_variants_from_jsonld(jsonld_products)
+        ingredients_specs = _extract_ingredients_specs_from_structured(jsonld_products, [], [])
+        packaging = _extract_packaging_from_structured(
+            products_jsonld=jsonld_products,
+            shopify_products=[],
+            metafields=[],
+            product_name=product_name,
+            brand_name=brand_name,
+        )
+        source_hints.append("json-ld")
+
+    if shopify_products:
+        if not price:
+            for product in shopify_products:
+                candidate = _extract_shopify_price(product)
+                if candidate:
+                    price = candidate
+                    break
+        shopify_variants: List[str] = []
+        for product in shopify_products:
+            shopify_variants.extend(_extract_variants_from_shopify(product))
+        if shopify_variants:
+            variants = split_candidates(" | ".join(variants + shopify_variants))[:12]
+
+        rich_specs = _extract_ingredients_specs_from_structured([], shopify_products, [])
+        if rich_specs:
+            ingredients_specs = split_candidates(" | ".join(ingredients_specs + rich_specs))[:14]
+
+        rich_packaging = _extract_packaging_from_structured(
+            products_jsonld=[],
+            shopify_products=shopify_products,
+            metafields=[],
+            product_name=product_name,
+            brand_name=brand_name,
+        )
+        if rich_packaging:
+            packaging = split_candidates(" | ".join(packaging + rich_packaging))[:16]
+
+        source_hints.append("shopify-product-json")
+
+    if metafields:
+        meta_specs = _extract_ingredients_specs_from_structured([], [], metafields)
+        if meta_specs:
+            ingredients_specs = split_candidates(" | ".join(ingredients_specs + meta_specs))[:14]
+        meta_packaging = _extract_packaging_from_structured(
+            products_jsonld=[],
+            shopify_products=[],
+            metafields=metafields,
+            product_name=product_name,
+            brand_name=brand_name,
+        )
+        if meta_packaging:
+            packaging = split_candidates(" | ".join(packaging + meta_packaging))[:16]
+        source_hints.append("shopify-metafields")
+
+    return {
+        "price": price,
+        "variants": variants,
+        "ingredients_specs": ingredients_specs,
+        "packaging": packaging,
+        "sources": source_hints,
+        "has_structured": bool(jsonld_products or shopify_products or metafields),
+    }
+
+
 def enrich_scout(base: Dict[str, Any]) -> Dict[str, Any]:
     scout = dict(base)
     brand_name, product_name = infer_brand_product(scout)
     corpus = text_corpus(scout)
     product_category, product_type = detect_category_and_type(corpus)
-    price = detect_price(corpus)
-    variants = detect_variants(corpus)
+
+    structured = extract_structured_product_fields(scout, product_name, brand_name)
+    price = structured["price"] or detect_price(corpus)
+    variants = structured["variants"] or detect_variants(corpus)
     claims = detect_claims(corpus)
-    ingredients_specs = detect_ingredients_specs(corpus)
-    packaging = detect_packaging_text(scout, corpus, product_name, brand_name)
+    ingredients_specs = structured["ingredients_specs"] or detect_ingredients_specs(corpus)
+    packaging = structured["packaging"] or detect_packaging_text(scout, corpus, product_name, brand_name)
     evidence = image_evidence(scout)
 
     field_confidence = {
@@ -244,6 +624,10 @@ def enrich_scout(base: Dict[str, Any]) -> Dict[str, Any]:
             warnings.append(f"low_confidence:{field}")
     if scout.get("degraded_mode", False):
         warnings.append("degraded_mode_source:html_heuristics_only")
+    if structured["has_structured"]:
+        warnings.append("structured_source:" + ",".join(structured["sources"]))
+    else:
+        warnings.append("structured_source:none_detected_using_heuristics")
     if not claims:
         warnings.append("no_claims_detected")
     if not ingredients_specs:

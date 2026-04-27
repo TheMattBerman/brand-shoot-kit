@@ -1,0 +1,262 @@
+{
+  "category": "supplement",
+  "shots": [
+    {
+      "shot_index": 1,
+      "asset_id": "shot-01",
+      "shot_name": "Clean front tub hero",
+      "use_case": "PDP",
+      "ratio": "1:1",
+      "channel": "PDP",
+      "priority": "High",
+      "scale_guidance": "clean hero framing; product fills 62-75% with immediate label readability",
+      "human_guidance": "no human subject required; keep focus on pack fidelity and commerce clarity",
+      "context_guidance": "controlled ecommerce set with minimal props and clean background separation",
+      "prompt": "Create a 1:1 ecommerce image for Daily Greens Superblend (Peak Harvest) optimized for PDP. Shot intent: Clean front tub hero. Scale guidance: clean hero framing; product fills 62-75% with immediate label readability. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: controlled ecommerce set with minimal props and clean background separation. Brand tone: brand-consistent ecommerce. Scene direction: Use kitchen or desk routine context with shaker, water, or scoop cues. Keep claims presentation credible. Evidence anchors from source: scoop, powder, label. Must preserve exactly: tub silhouette, front claims, supplement facts label. Never change: nutrition claims, servings text, brand name. Watch distortion risks: claim text drift, scoop scale mismatch, label warp. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "shot_index": 2,
+      "asset_id": "shot-02",
+      "shot_name": "Supplement-facts label/detail angle",
+      "use_case": "PDP",
+      "ratio": "4:5",
+      "channel": "PDP",
+      "priority": "High",
+      "scale_guidance": "detail-forward framing; product or key label zone fills 55-80%",
+      "human_guidance": "no human subject required; keep focus on pack fidelity and commerce clarity",
+      "context_guidance": "controlled ecommerce set with minimal props and clean background separation",
+      "prompt": "Create a 4:5 ecommerce image for Daily Greens Superblend (Peak Harvest) optimized for PDP. Shot intent: Supplement-facts label/detail angle. Scale guidance: detail-forward framing; product or key label zone fills 55-80%. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: controlled ecommerce set with minimal props and clean background separation. Brand tone: brand-consistent ecommerce. Scene direction: Use kitchen or desk routine context with shaker, water, or scoop cues. Keep claims presentation credible. Evidence anchors from source: scoop, powder, label. Must preserve exactly: tub silhouette, front claims, supplement facts label. Never change: nutrition claims, servings text, brand name. Watch distortion risks: claim text drift, scoop scale mismatch, label warp. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "shot_index": 3,
+      "asset_id": "shot-03",
+      "shot_name": "Powder texture + supporting props",
+      "use_case": "Lifestyle",
+      "ratio": "1:1",
+      "channel": "PDP/Social",
+      "priority": "High",
+      "scale_guidance": "detail-forward framing; product or key label zone fills 55-80%",
+      "human_guidance": "human presence optional; subtle traces are acceptable when they support realism",
+      "context_guidance": "real-world contextual set anchored to usage moment with supportive props only",
+      "prompt": "Create a 1:1 ecommerce image for Daily Greens Superblend (Peak Harvest) optimized for PDP/Social. Shot intent: Powder texture + supporting props. Scale guidance: detail-forward framing; product or key label zone fills 55-80%. Human guidance: human presence optional; subtle traces are acceptable when they support realism. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use kitchen or desk routine context with shaker, water, or scoop cues. Keep claims presentation credible. Evidence anchors from source: scoop, powder, label. Must preserve exactly: tub silhouette, front claims, supplement facts label. Never change: nutrition claims, servings text, brand name. Watch distortion risks: claim text drift, scoop scale mismatch, label warp. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "shot_index": 4,
+      "asset_id": "shot-04",
+      "shot_name": "Morning counter product-in-use routine",
+      "use_case": "Lifestyle",
+      "ratio": "4:5",
+      "channel": "PDP/Email",
+      "priority": "High",
+      "scale_guidance": "environment-led lifestyle framing; product occupies 24-40% within a believable moment",
+      "human_guidance": "include realistic human interaction (hands or body crop) with anatomically correct pose",
+      "context_guidance": "real-world contextual set anchored to usage moment with supportive props only",
+      "prompt": "Create a 4:5 ecommerce image for Daily Greens Superblend (Peak Harvest) optimized for PDP/Email. Shot intent: Morning counter product-in-use routine. Scale guidance: environment-led lifestyle framing; product occupies 24-40% within a believable moment. Human guidance: include realistic human interaction (hands or body crop) with anatomically correct pose. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use kitchen or desk routine context with shaker, water, or scoop cues. Keep claims presentation credible. Evidence anchors from source: scoop, powder, label. Must preserve exactly: tub silhouette, front claims, supplement facts label. Never change: nutrition claims, servings text, brand name. Watch distortion risks: claim text drift, scoop scale mismatch, label warp. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "shot_index": 5,
+      "asset_id": "shot-05",
+      "shot_name": "Hand-held shake scale proof",
+      "use_case": "Model",
+      "ratio": "4:5",
+      "channel": "PDP/Social",
+      "priority": "High",
+      "scale_guidance": "hand-held scale proof; product occupies 30-45% while hand gives believable size reference",
+      "human_guidance": "include realistic human interaction (hands or body crop) with anatomically correct pose",
+      "context_guidance": "real-world contextual set anchored to usage moment with supportive props only",
+      "prompt": "Create a 4:5 ecommerce image for Daily Greens Superblend (Peak Harvest) optimized for PDP/Social. Shot intent: Hand-held shake scale proof. Scale guidance: hand-held scale proof; product occupies 30-45% while hand gives believable size reference. Human guidance: include realistic human interaction (hands or body crop) with anatomically correct pose. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use kitchen or desk routine context with shaker, water, or scoop cues. Keep claims presentation credible. Evidence anchors from source: scoop, powder, label. Must preserve exactly: tub silhouette, front claims, supplement facts label. Never change: nutrition claims, servings text, brand name. Watch distortion risks: claim text drift, scoop scale mismatch, label warp. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "shot_index": 6,
+      "asset_id": "shot-06",
+      "shot_name": "Bundle + contents kitchen layout",
+      "use_case": "Lifestyle",
+      "ratio": "4:5",
+      "channel": "Social",
+      "priority": "Medium",
+      "scale_guidance": "bundle composition; primary product at 30-45%, secondary items readable but subordinate",
+      "human_guidance": "human presence optional; subtle traces are acceptable when they support realism",
+      "context_guidance": "real-world contextual set anchored to usage moment with supportive props only",
+      "prompt": "Create a 4:5 ecommerce image for Daily Greens Superblend (Peak Harvest) optimized for Social. Shot intent: Bundle + contents kitchen layout. Scale guidance: bundle composition; primary product at 30-45%, secondary items readable but subordinate. Human guidance: human presence optional; subtle traces are acceptable when they support realism. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use kitchen or desk routine context with shaker, water, or scoop cues. Keep claims presentation credible. Evidence anchors from source: scoop, powder, label. Must preserve exactly: tub silhouette, front claims, supplement facts label. Never change: nutrition claims, servings text, brand name. Watch distortion risks: claim text drift, scoop scale mismatch, label warp. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "shot_index": 7,
+      "asset_id": "shot-07",
+      "shot_name": "Human body-crop mixing in-use",
+      "use_case": "Model",
+      "ratio": "9:16",
+      "channel": "Social",
+      "priority": "Medium",
+      "scale_guidance": "story/social vertical composition; product occupies 22-38% with top and bottom safe zones",
+      "human_guidance": "include realistic human interaction (hands or body crop) with anatomically correct pose",
+      "context_guidance": "vertical social scene with depth layers and clear focal separation",
+      "prompt": "Create a 9:16 ecommerce image for Daily Greens Superblend (Peak Harvest) optimized for Social. Shot intent: Human body-crop mixing in-use. Scale guidance: story/social vertical composition; product occupies 22-38% with top and bottom safe zones. Human guidance: include realistic human interaction (hands or body crop) with anatomically correct pose. Context guidance: vertical social scene with depth layers and clear focal separation. Brand tone: brand-consistent ecommerce. Scene direction: Use kitchen or desk routine context with shaker, water, or scoop cues. Keep claims presentation credible. Evidence anchors from source: scoop, powder, label. Must preserve exactly: tub silhouette, front claims, supplement facts label. Never change: nutrition claims, servings text, brand name. Watch distortion risks: claim text drift, scoop scale mismatch, label warp. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "shot_index": 8,
+      "asset_id": "shot-08",
+      "shot_name": "Email routine hero",
+      "use_case": "Email",
+      "ratio": "16:9",
+      "channel": "Email",
+      "priority": "High",
+      "scale_guidance": "clean hero framing; product fills 62-75% with immediate label readability",
+      "human_guidance": "no human subject required; keep focus on pack fidelity and commerce clarity",
+      "context_guidance": "wide, editorial scene with structured negative space for email/header placements",
+      "prompt": "Create a 16:9 ecommerce image for Daily Greens Superblend (Peak Harvest) optimized for Email. Shot intent: Email routine hero. Scale guidance: clean hero framing; product fills 62-75% with immediate label readability. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: wide, editorial scene with structured negative space for email/header placements. Brand tone: brand-consistent ecommerce. Scene direction: Use kitchen or desk routine context with shaker, water, or scoop cues. Keep claims presentation credible. Evidence anchors from source: scoop, powder, label. Must preserve exactly: tub silhouette, front claims, supplement facts label. Never change: nutrition claims, servings text, brand name. Watch distortion risks: claim text drift, scoop scale mismatch, label warp. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "shot_index": 9,
+      "asset_id": "shot-09",
+      "shot_name": "Seasonal wellness gifting",
+      "use_case": "Seasonal",
+      "ratio": "4:5",
+      "channel": "Email/Social",
+      "priority": "Low",
+      "scale_guidance": "bundle composition; primary product at 30-45%, secondary items readable but subordinate",
+      "human_guidance": "no human subject required; keep focus on pack fidelity and commerce clarity",
+      "context_guidance": "real-world contextual set anchored to usage moment with supportive props only",
+      "prompt": "Create a 4:5 ecommerce image for Daily Greens Superblend (Peak Harvest) optimized for Email/Social. Shot intent: Seasonal wellness gifting. Scale guidance: bundle composition; primary product at 30-45%, secondary items readable but subordinate. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use kitchen or desk routine context with shaker, water, or scoop cues. Keep claims presentation credible. Evidence anchors from source: scoop, powder, label. Must preserve exactly: tub silhouette, front claims, supplement facts label. Never change: nutrition claims, servings text, brand name. Watch distortion risks: claim text drift, scoop scale mismatch, label warp. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "shot_index": 10,
+      "asset_id": "shot-10",
+      "shot_name": "Marketplace white-ground",
+      "use_case": "Marketplace",
+      "ratio": "1:1",
+      "channel": "Amazon",
+      "priority": "High",
+      "scale_guidance": "dominant commerce framing; product fills 82-92% with full pack clarity",
+      "human_guidance": "no human subject required; keep focus on pack fidelity and commerce clarity",
+      "context_guidance": "pure white or near-white seamless background with no distracting props",
+      "prompt": "Create a 1:1 ecommerce image for Daily Greens Superblend (Peak Harvest) optimized for Amazon. Shot intent: Marketplace white-ground. Scale guidance: dominant commerce framing; product fills 82-92% with full pack clarity. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: pure white or near-white seamless background with no distracting props. Brand tone: brand-consistent ecommerce. Scene direction: Use kitchen or desk routine context with shaker, water, or scoop cues. Keep claims presentation credible. Evidence anchors from source: scoop, powder, label. Must preserve exactly: tub silhouette, front claims, supplement facts label. Never change: nutrition claims, servings text, brand name. Watch distortion risks: claim text drift, scoop scale mismatch, label warp. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "shot_index": 11,
+      "asset_id": "shot-11",
+      "shot_name": "Social trust square",
+      "use_case": "Social",
+      "ratio": "1:1",
+      "channel": "Instagram",
+      "priority": "Medium",
+      "scale_guidance": "balanced ecommerce framing; product occupies 35-55% with clear label hierarchy",
+      "human_guidance": "no human subject required; keep focus on pack fidelity and commerce clarity",
+      "context_guidance": "neutral ecommerce context with believable materials and tidy composition",
+      "prompt": "Create a 1:1 ecommerce image for Daily Greens Superblend (Peak Harvest) optimized for Instagram. Shot intent: Social trust square. Scale guidance: balanced ecommerce framing; product occupies 35-55% with clear label hierarchy. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: neutral ecommerce context with believable materials and tidy composition. Brand tone: brand-consistent ecommerce. Scene direction: Use kitchen or desk routine context with shaker, water, or scoop cues. Keep claims presentation credible. Evidence anchors from source: scoop, powder, label. Must preserve exactly: tub silhouette, front claims, supplement facts label. Never change: nutrition claims, servings text, brand name. Watch distortion risks: claim text drift, scoop scale mismatch, label warp. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    },
+    {
+      "shot_index": 12,
+      "asset_id": "shot-12",
+      "shot_name": "Story prep vertical",
+      "use_case": "Social",
+      "ratio": "9:16",
+      "channel": "Instagram Story",
+      "priority": "Medium",
+      "scale_guidance": "story/social vertical composition; product occupies 22-38% with top and bottom safe zones",
+      "human_guidance": "no human subject required; keep focus on pack fidelity and commerce clarity",
+      "context_guidance": "vertical social scene with depth layers and clear focal separation",
+      "prompt": "Create a 9:16 ecommerce image for Daily Greens Superblend (Peak Harvest) optimized for Instagram Story. Shot intent: Story prep vertical. Scale guidance: story/social vertical composition; product occupies 22-38% with top and bottom safe zones. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: vertical social scene with depth layers and clear focal separation. Brand tone: brand-consistent ecommerce. Scene direction: Use kitchen or desk routine context with shaker, water, or scoop cues. Keep claims presentation credible. Evidence anchors from source: scoop, powder, label. Must preserve exactly: tub silhouette, front claims, supplement facts label. Never change: nutrition claims, servings text, brand name. Watch distortion risks: claim text drift, scoop scale mismatch, label warp. Keep props supportive, never dominant.",
+      "negative_constraints": [
+        "no altered logo or label text",
+        "no fake ingredient/claim badges",
+        "no malformed hands or impossible anatomy",
+        "no product count mismatch for intended SKU",
+        "no prop occlusion hiding the primary label"
+      ],
+      "reroll_if_failed": "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, cleaner background, and tighter product framing."
+    }
+  ],
+  "evidence_keywords": [
+    "scoop",
+    "powder",
+    "label"
+  ]
+}

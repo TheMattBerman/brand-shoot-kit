@@ -1,0 +1,366 @@
+{
+  "run": {
+    "run_id": "export-20260427T215453Z",
+    "timestamp_utc": "20260427T215453Z",
+    "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit",
+    "generation_manifest": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/generation-manifest.json",
+    "qa_results": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/qa-results.json",
+    "reroll_manifest": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/reroll-manifest.json",
+    "include_status": [
+      "manual_review",
+      "pass"
+    ],
+    "export_root": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final"
+  },
+  "summary": {
+    "total_assets": 12,
+    "rendered_files": 16,
+    "packaged_assets": 12,
+    "skipped_assets": 0,
+    "qa_status_counts": {
+      "manual_review": 12
+    },
+    "reroll_status_counts": {
+      "pass_after_reroll": 12
+    },
+    "decision_summary": {
+      "approve": 12,
+      "reroll": 0,
+      "reject": 0
+    }
+  },
+  "records": [
+    {
+      "asset_id": "shot-01",
+      "shot_name": "Clean front kit hero",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/shot-01--clean-front-kit-hero--1x1.png",
+      "ratio": "1:1",
+      "outputs": [
+        {
+          "channel": "PDP",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/pdp/pdp__shot-01__clean-front-kit-hero__1x1.png",
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-02",
+      "shot_name": "Label/detail trigger-spray angle",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/shot-02--label-detail-trigger-spray-angle--4x5.png",
+      "ratio": "4:5",
+      "outputs": [
+        {
+          "channel": "PDP",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/pdp/pdp__shot-02__label-detail-trigger-spray-angle__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-03",
+      "shot_name": "Cleaning tools + supporting props",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/shot-03--cleaning-tools-supporting-props--1x1.png",
+      "ratio": "1:1",
+      "outputs": [
+        {
+          "channel": "PDP",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/pdp/pdp__shot-03__cleaning-tools-supporting-props__1x1.png",
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        },
+        {
+          "channel": "Social",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/social/social__shot-03__cleaning-tools-supporting-props__1x1.png",
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-04",
+      "shot_name": "Kitchen counter product-in-use wipe scene",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/shot-04--kitchen-counter-product-in-use-wipe-scene--4x5.png",
+      "ratio": "4:5",
+      "outputs": [
+        {
+          "channel": "PDP",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/pdp/pdp__shot-04__kitchen-counter-product-in-use-wipe-scene__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        },
+        {
+          "channel": "Email",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/email/email__shot-04__kitchen-counter-product-in-use-wipe-scene__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-05",
+      "shot_name": "Hand-held spray scale proof",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/shot-05--hand-held-spray-scale-proof--4x5.png",
+      "ratio": "4:5",
+      "outputs": [
+        {
+          "channel": "PDP",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/pdp/pdp__shot-05__hand-held-spray-scale-proof__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        },
+        {
+          "channel": "Social",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/social/social__shot-05__hand-held-spray-scale-proof__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-06",
+      "shot_name": "Bundle + refill contents layout",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/shot-06--bundle-refill-contents-layout--4x5.png",
+      "ratio": "4:5",
+      "outputs": [
+        {
+          "channel": "Social",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/social/social__shot-06__bundle-refill-contents-layout__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-07",
+      "shot_name": "Human body-crop wipe in-use",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/shot-07--human-body-crop-wipe-in-use--9x16.png",
+      "ratio": "9:16",
+      "outputs": [
+        {
+          "channel": "Social",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/social/social__shot-07__human-body-crop-wipe-in-use__9x16.png",
+          "sha256": "de139c005688bf95b85d5edee07ec845707cdee170c61c26a4ba123096bc287f",
+          "ratio": "9:16",
+          "output_dimensions": [
+            1080,
+            1920
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-08",
+      "shot_name": "Email reset-clean hero",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/shot-08--email-reset-clean-hero--16x9.png",
+      "ratio": "16:9",
+      "outputs": [
+        {
+          "channel": "Email",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/email/email__shot-08__email-reset-clean-hero__16x9.png",
+          "sha256": "d020a753312316d53b80338f1e94ab25a09a76352b2a69f17e141f36f9e47de4",
+          "ratio": "16:9",
+          "output_dimensions": [
+            1920,
+            1080
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-09",
+      "shot_name": "Seasonal spring-clean gifting",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/shot-09--seasonal-spring-clean-gifting--4x5.png",
+      "ratio": "4:5",
+      "outputs": [
+        {
+          "channel": "Email",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/email/email__shot-09__seasonal-spring-clean-gifting__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        },
+        {
+          "channel": "Social",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/social/social__shot-09__seasonal-spring-clean-gifting__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-10",
+      "shot_name": "Marketplace white-ground",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/shot-10--marketplace-white-ground--1x1.png",
+      "ratio": "1:1",
+      "outputs": [
+        {
+          "channel": "Amazon",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/amazon/amazon__shot-10__marketplace-white-ground__1x1.png",
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-11",
+      "shot_name": "Social clean-benefit square",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/shot-11--social-clean-benefit-square--1x1.png",
+      "ratio": "1:1",
+      "outputs": [
+        {
+          "channel": "Instagram",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/instagram/instagram__shot-11__social-clean-benefit-square__1x1.png",
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-12",
+      "shot_name": "Story clean-routine vertical",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/shot-12--story-clean-routine-vertical--9x16.png",
+      "ratio": "9:16",
+      "outputs": [
+        {
+          "channel": "Instagram Story",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/exports/final/instagram-story/instagram-story__shot-12__story-clean-routine-vertical__9x16.png",
+          "sha256": "de139c005688bf95b85d5edee07ec845707cdee170c61c26a4ba123096bc287f",
+          "ratio": "9:16",
+          "output_dimensions": [
+            1080,
+            1920
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    }
+  ]
+}

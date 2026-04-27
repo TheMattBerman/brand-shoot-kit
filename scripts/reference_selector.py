@@ -36,6 +36,9 @@ POSITIVE_PRODUCT_TOKENS = {
     "lifestyle",
     "clean",
     "essentials",
+    "coffee-bag",
+    "front-pack",
+    "label-art",
 }
 
 STRONG_NEGATIVE_TOKENS = {
@@ -76,7 +79,48 @@ MILD_NEGATIVE_TOKENS = {
     "ugc",
     "footer",
     "header",
+    "beans-only",
+    "coffee-beans",
+    "mug",
+    "cup",
+    "latte",
+    "espresso-shot",
+    "story",
+    "tout",
+    "middle",
 }
+
+
+def _url_no_query(url: str) -> str:
+    parsed = urlparse(url)
+    # Ignore scheme so Shopify JSON-LD http URLs can match https image candidates.
+    return f"{parsed.netloc}{parsed.path}".lower()
+
+
+def _structured_product_image_urls(scout: Dict[str, Any]) -> set[str]:
+    urls: set[str] = set()
+    json_ld = scout.get("json_ld")
+    if isinstance(json_ld, list):
+        for obj in json_ld:
+            if not isinstance(obj, dict):
+                continue
+            image = obj.get("image")
+            values = image if isinstance(image, list) else [image]
+            for raw in values:
+                if isinstance(raw, str) and raw.strip():
+                    urls.add(_url_no_query(html.unescape(raw.strip())))
+    product = scout.get("shopify_product_json")
+    if isinstance(product, dict):
+        for key in ["image", "featured_image"]:
+            raw = product.get(key)
+            if isinstance(raw, str) and raw.strip():
+                urls.add(_url_no_query(html.unescape(raw.strip())))
+        images = product.get("images")
+        if isinstance(images, list):
+            for raw in images:
+                if isinstance(raw, str) and raw.strip():
+                    urls.add(_url_no_query(html.unescape(raw.strip())))
+    return urls
 
 
 def is_safe_reference_url(url: str) -> bool:
@@ -124,7 +168,8 @@ def reference_url_score(url: str, confidence: float, rank: int, scout: Dict[str,
     tokens = _tokenize(lower)
     score = confidence * 100.0
 
-    if lower.endswith(".svg"):
+    path_lower = urlparse(lower).path
+    if path_lower.endswith(".svg"):
         score -= 500.0
 
     strong_negative_hits = len(tokens & STRONG_NEGATIVE_TOKENS)
@@ -144,6 +189,10 @@ def reference_url_score(url: str, confidence: float, rank: int, scout: Dict[str,
     context_hits = len(tokens & context)
     score += min(5, context_hits) * 28.0
 
+    structured_product_images = _structured_product_image_urls(scout)
+    if _url_no_query(url) in structured_product_images:
+        score += 160.0
+
     product_name = str(scout.get("product_name") or scout.get("title") or "")
     product_tokens = [t for t in _tokenize(product_name) if len(t) >= 3]
     product_phrase_hits = sum(1 for token in product_tokens if token in lower)
@@ -156,6 +205,21 @@ def reference_url_score(url: str, confidence: float, rank: int, scout: Dict[str,
             score += 90.0
         else:
             score -= 45.0
+
+    # Coffee-specific guard: prefer bag/pack label references over mug/beans context shots.
+    category_hint = " ".join(
+        [
+            str(scout.get("product_category") or ""),
+            str(scout.get("product_type") or ""),
+            str(scout.get("product_name") or ""),
+            str(scout.get("title") or ""),
+        ]
+    ).lower()
+    if any(k in category_hint for k in {"coffee", "roast", "bean", "espresso", "brew"}):
+        bag_hits = len(tokens & {"bag", "pack", "package", "packshot", "front", "label"})
+        mug_hits = len(tokens & {"mug", "cup", "latte", "beans", "espresso"})
+        score += bag_hits * 45.0
+        score -= mug_hits * 52.0
 
     # Prefer early-ranked sources slightly while keeping token semantics dominant.
     score -= rank * 0.05
@@ -213,4 +277,3 @@ def pick_auto_reference_url(packet_dir: Path) -> Optional[str]:
     except Exception:
         return None
     return pick_auto_reference_url_from_scout(scout)
-

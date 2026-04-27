@@ -54,6 +54,20 @@ CATEGORY_SHOT_TEMPLATES = {
         ("Social trust square", "Social", "1:1", "Instagram", "Medium"),
         ("Story prep vertical", "Social", "9:16", "Instagram Story", "Medium"),
     ],
+    "cleaning": [
+        ("Clean front kit hero", "PDP", "1:1", "PDP", "High"),
+        ("Label/detail trigger-spray angle", "PDP", "4:5", "PDP", "High"),
+        ("Cleaning tools + supporting props", "Lifestyle", "1:1", "PDP/Social", "High"),
+        ("Kitchen counter product-in-use wipe scene", "Lifestyle", "4:5", "PDP/Email", "High"),
+        ("Hand-held spray scale proof", "Model", "4:5", "PDP/Social", "High"),
+        ("Bundle + refill contents layout", "Lifestyle", "4:5", "Social", "Medium"),
+        ("Human body-crop wipe in-use", "Model", "9:16", "Social", "Medium"),
+        ("Email reset-clean hero", "Email", "16:9", "Email", "High"),
+        ("Seasonal spring-clean gifting", "Seasonal", "4:5", "Email/Social", "Low"),
+        ("Marketplace white-ground", "Marketplace", "1:1", "Amazon", "High"),
+        ("Social clean-benefit square", "Social", "1:1", "Instagram", "Medium"),
+        ("Story clean-routine vertical", "Social", "9:16", "Instagram Story", "Medium"),
+    ],
     "home-goods": [
         ("Clean front jar hero", "PDP", "1:1", "PDP", "High"),
         ("Label + wax detail angle", "PDP", "4:5", "PDP", "High"),
@@ -86,8 +100,9 @@ CATEGORY_SHOT_TEMPLATES = {
 
 CATEGORY_SCENE_HINTS = {
     "skincare": "Use clean vanity, stone, glass, folded towels, and subtle botanical accents. Avoid heavy makeup mood.",
-    "coffee": "Use wood or stone counters, brewing tools, beans, steam, and warm morning light. Avoid cafe branding noise.",
+    "coffee": "Use wood or stone counters and brew tools, but keep the bag front artwork dominant and readable. Beans/mugs can appear only as secondary support.",
     "supplement": "Use kitchen or desk routine context with shaker, water, or scoop cues. Keep claims presentation credible.",
+    "cleaning": "Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable.",
     "home-goods": "Use interior decor context with soft textile, wood, and ambient practical lighting. Avoid clutter.",
     "generic": "Use ecommerce-safe set design with believable props and clear product dominance.",
 }
@@ -187,14 +202,17 @@ def infer_category(scout: Dict[str, Any], product_type: str, product: str) -> st
         ]
     ).lower()
 
-    if any(k in corpus for k in ["lip treatment", "serum", "skincare", "moistur", "cleanser", "dropper", "cream"]):
-        return "skincare"
+    # Check coffee before skincare: coffee descriptions often say "creamy", which must not trip "cream".
     if any(k in corpus for k in ["coffee", "espresso", "beans", "brew", "roast"]):
         return "coffee"
+    if any(k in corpus for k in ["lip treatment", "serum", "skincare", "moistur", "cleanser", "dropper"]):
+        return "skincare"
+    if " cream" in f" {corpus} " or "cream " in f" {corpus} ":
+        return "skincare"
     if any(k in corpus for k in ["supplement", "greens", "protein", "powder", "capsule", "vitamin"]):
         return "supplement"
     if any(k in corpus for k in ["clean essentials", "cleaning kit", "cleaner", "multi-surface", "dish soap", "laundry", "refill", "spray"]):
-        return "generic"
+        return "cleaning"
     if any(k in corpus for k in ["candle", "home fragrance", "decor", "sofa", "linen", "room spray"]):
         return "home-goods"
     return "generic"
@@ -235,10 +253,10 @@ def infer_preservation_rules(product_type: str) -> Dict[str, List[str]]:
         }
     if "coffee" in p:
         return {
-            "must_preserve": ["bag silhouette", "origin/roast callouts", "brand lockup"],
-            "can_vary": ["brew props", "counter surface", "lighting warmth"],
-            "never_change": ["origin text", "net weight", "brand name"],
-            "distortion_risks": ["bag fold distortion", "small text drift", "scale mismatch"],
+            "must_preserve": ["bag silhouette", "front label artwork", "origin/roast callouts", "brand lockup"],
+            "can_vary": ["brew props (secondary only)", "counter surface", "lighting warmth"],
+            "never_change": ["origin text", "net weight", "brand name", "front artwork motif"],
+            "distortion_risks": ["bag fold distortion", "small text drift", "generic mug/beans overpowering pack", "scale mismatch"],
         }
     if "supplement" in p:
         return {
@@ -246,6 +264,13 @@ def infer_preservation_rules(product_type: str) -> Dict[str, List[str]]:
             "can_vary": ["props", "camera angle", "scene context"],
             "never_change": ["nutrition claims", "servings text", "brand name"],
             "distortion_risks": ["claim text drift", "scoop scale mismatch", "label warp"],
+        }
+    if "cleaning" in p:
+        return {
+            "must_preserve": ["bottle/refill geometry", "front label hierarchy", "kit component count"],
+            "can_vary": ["props", "camera angle", "scene context"],
+            "never_change": ["active ingredient statements", "size/volume callouts", "brand name"],
+            "distortion_risks": ["trigger geometry deformation", "label text drift", "missing kit components"],
         }
     if "candle" in p:
         return {
@@ -418,6 +443,13 @@ def compose_prompt(
     scale_guidance = shot_scale_guidance(shot)
     human_guidance = shot_human_guidance(shot)
     context_guidance = shot_context_guidance(shot)
+    coffee_guard = ""
+    shot_name = str(shot.get("name", "")).lower()
+    if "coffee" in scene_hint.lower() or any(k in shot_name for k in ["brew", "roast", "beans", "pour-over", "coffee"]):
+        coffee_guard = (
+            " Coffee guardrail: keep the coffee bag front label/artwork as the primary subject at all times; "
+            "mugs, cups, loose beans, and brewing gear must stay secondary and never overtake the bag."
+        )
 
     return (
         f"Create a {shot.get('ratio')} ecommerce image for {product} ({brand}) optimized for {shot.get('channel')}. "
@@ -426,7 +458,7 @@ def compose_prompt(
         f"Brand tone: {tone}. Scene direction: {scene_hint} "
         f"Evidence anchors from source: {evidence_text}. "
         f"Must preserve exactly: {preserve_text}. Never change: {never_text}. "
-        f"Watch distortion risks: {risk_text}. Keep props supportive, never dominant."
+        f"Watch distortion risks: {risk_text}. Keep props supportive, never dominant.{coffee_guard}"
     )
 
 
@@ -530,7 +562,15 @@ def stage_prompts(
                 "no malformed hands or impossible anatomy",
                 "no product count mismatch for intended SKU",
                 "no prop occlusion hiding the primary label",
-            ],
+            ]
+            + (
+                [
+                    "coffee-specific: no hero mug/cup-only composition",
+                    "coffee-specific: loose beans cannot dominate frame over the bag label/artwork",
+                ]
+                if category == "coffee"
+                else []
+            ),
             "reroll_if_failed": (
                 "If label legibility, pack geometry, or product count fails, reroll with flatter camera angle, "
                 "cleaner background, and tighter product framing."

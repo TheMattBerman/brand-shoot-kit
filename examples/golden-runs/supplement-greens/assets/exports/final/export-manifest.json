@@ -1,0 +1,367 @@
+{
+  "run": {
+    "run_id": "export-20260427T215452Z",
+    "timestamp_utc": "20260427T215452Z",
+    "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens",
+    "generation_manifest": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/generation-manifest.json",
+    "qa_results": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/qa-results.json",
+    "reroll_manifest": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/reroll-manifest.json",
+    "include_status": [
+      "manual_review",
+      "pass"
+    ],
+    "export_root": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final"
+  },
+  "summary": {
+    "total_assets": 12,
+    "rendered_files": 16,
+    "packaged_assets": 12,
+    "skipped_assets": 0,
+    "qa_status_counts": {
+      "manual_review": 12
+    },
+    "reroll_status_counts": {
+      "pass_after_reroll": 11,
+      "reroll_exhausted": 1
+    },
+    "decision_summary": {
+      "approve": 11,
+      "reroll": 0,
+      "reject": 1
+    }
+  },
+  "records": [
+    {
+      "asset_id": "shot-01",
+      "shot_name": "Clean front tub hero",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-01--clean-front-tub-hero--1x1.png",
+      "ratio": "1:1",
+      "outputs": [
+        {
+          "channel": "PDP",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/pdp/pdp__shot-01__clean-front-tub-hero__1x1.png",
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-02",
+      "shot_name": "Supplement-facts label/detail angle",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-02--supplement-facts-label-detail-angle--4x5.png",
+      "ratio": "4:5",
+      "outputs": [
+        {
+          "channel": "PDP",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/pdp/pdp__shot-02__supplement-facts-label-detail-angle__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-03",
+      "shot_name": "Powder texture + supporting props",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-03--powder-texture-supporting-props--1x1.png",
+      "ratio": "1:1",
+      "outputs": [
+        {
+          "channel": "PDP",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/pdp/pdp__shot-03__powder-texture-supporting-props__1x1.png",
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        },
+        {
+          "channel": "Social",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/social/social__shot-03__powder-texture-supporting-props__1x1.png",
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-04",
+      "shot_name": "Morning counter product-in-use routine",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-04--morning-counter-product-in-use-routine--4x5.png",
+      "ratio": "4:5",
+      "outputs": [
+        {
+          "channel": "PDP",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/pdp/pdp__shot-04__morning-counter-product-in-use-routine__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        },
+        {
+          "channel": "Email",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/email/email__shot-04__morning-counter-product-in-use-routine__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-05",
+      "shot_name": "Hand-held shake scale proof",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-05--hand-held-shake-scale-proof--4x5.png",
+      "ratio": "4:5",
+      "outputs": [
+        {
+          "channel": "PDP",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/pdp/pdp__shot-05__hand-held-shake-scale-proof__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        },
+        {
+          "channel": "Social",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/social/social__shot-05__hand-held-shake-scale-proof__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-06",
+      "shot_name": "Bundle + contents kitchen layout",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-06--bundle-contents-kitchen-layout--4x5.png",
+      "ratio": "4:5",
+      "outputs": [
+        {
+          "channel": "Social",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/social/social__shot-06__bundle-contents-kitchen-layout__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-07",
+      "shot_name": "Human body-crop mixing in-use",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-07--human-body-crop-mixing-in-use--9x16.png",
+      "ratio": "9:16",
+      "outputs": [
+        {
+          "channel": "Social",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/social/social__shot-07__human-body-crop-mixing-in-use__9x16.png",
+          "sha256": "de139c005688bf95b85d5edee07ec845707cdee170c61c26a4ba123096bc287f",
+          "ratio": "9:16",
+          "output_dimensions": [
+            1080,
+            1920
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-08",
+      "shot_name": "Email routine hero",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-08--email-routine-hero--16x9.png",
+      "ratio": "16:9",
+      "outputs": [
+        {
+          "channel": "Email",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/email/email__shot-08__email-routine-hero__16x9.png",
+          "sha256": "d020a753312316d53b80338f1e94ab25a09a76352b2a69f17e141f36f9e47de4",
+          "ratio": "16:9",
+          "output_dimensions": [
+            1920,
+            1080
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-09",
+      "shot_name": "Seasonal wellness gifting",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-09--seasonal-wellness-gifting--4x5.png",
+      "ratio": "4:5",
+      "outputs": [
+        {
+          "channel": "Email",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/email/email__shot-09__seasonal-wellness-gifting__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        },
+        {
+          "channel": "Social",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/social/social__shot-09__seasonal-wellness-gifting__4x5.png",
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-10",
+      "shot_name": "Marketplace white-ground",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-10--marketplace-white-ground--1x1.png",
+      "ratio": "1:1",
+      "outputs": [
+        {
+          "channel": "Amazon",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/amazon/amazon__shot-10__marketplace-white-ground__1x1.png",
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-11",
+      "shot_name": "Social trust square",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "reroll_exhausted",
+      "decision": "reject",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-11--social-trust-square--1x1.png",
+      "ratio": "1:1",
+      "outputs": [
+        {
+          "channel": "Instagram",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/instagram/instagram__shot-11__social-trust-square__1x1.png",
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    },
+    {
+      "asset_id": "shot-12",
+      "shot_name": "Story prep vertical",
+      "status": "packaged",
+      "qa_status": "manual_review",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
+      "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/shot-12--story-prep-vertical--9x16.png",
+      "ratio": "9:16",
+      "outputs": [
+        {
+          "channel": "Instagram Story",
+          "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/exports/final/instagram-story/instagram-story__shot-12__story-prep-vertical__9x16.png",
+          "sha256": "de139c005688bf95b85d5edee07ec845707cdee170c61c26a4ba123096bc287f",
+          "ratio": "9:16",
+          "output_dimensions": [
+            1080,
+            1920
+          ],
+          "render_mode": "render:passthrough-dimensions"
+        }
+      ],
+      "notes": "deterministic render packaging"
+    }
+  ]
+}

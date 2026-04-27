@@ -1,0 +1,5 @@
+dry_run_placeholder=true
+asset_id=shot-05
+shot_name=Hand-held shake scale proof
+ratio=4:5
+dimensions=1024x1280

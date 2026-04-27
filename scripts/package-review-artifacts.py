@@ -96,23 +96,79 @@ def relpath(path: Path, base: Path) -> str:
         return str(path.resolve())
 
 
-def html_row(row: Dict[str, Any]) -> str:
+def ratio_from_dimensions(dimensions: List[int]) -> str:
+    if len(dimensions) != 2:
+        return "unknown"
+    width, height = dimensions
+    known = {
+        (1, 1): "1:1",
+        (4, 5): "4:5",
+        (9, 16): "9:16",
+        (16, 9): "16:9",
+    }
+    for (a, b), label in known.items():
+        if width * b == height * a:
+            return label
+    return f"{width}:{height}"
+
+
+def row_card(row: Dict[str, Any]) -> str:
     reasons = row.get("reject_reasons") or []
     outputs = row.get("export_outputs") or []
-    reasons_text = "<br/>".join(html.escape(str(x)) for x in reasons[:3]) or "none"
-    channels_text = "<br/>".join(html.escape(str(x.get("channel", ""))) for x in outputs) or "none"
+    score = row.get("weighted_score")
+    score_text = "n/a" if score is None else str(score)
+    qa_status = str(row.get("qa_status", "unscored"))
+    decision = str(row.get("suggested_decision", "reroll"))
+    entry_dims = row.get("entry_dimensions") or []
+    entry_ratio = ratio_from_dimensions(entry_dims) if entry_dims else "unknown"
+    channels = ", ".join(str(x.get("channel", "")) for x in outputs if x.get("channel")) or "none"
+
+    top_output = outputs[0] if outputs else {}
+    out_dims = top_output.get("output_dimensions") or []
+    out_ratio = ratio_from_dimensions(out_dims) if out_dims else "unknown"
+    render_mode = str(top_output.get("render_mode", "unknown"))
+
+    reasons_html = "".join(f"<li>{html.escape(str(x))}</li>" for x in reasons[:4]) or "<li>none</li>"
     img_src = html.escape(str(row.get("image_path_for_html", "")))
+
+    scores = row.get("scores") or {}
+    qa_breakdown = " ".join(
+        [
+            f"PA {scores.get('product_accuracy', '-')}",
+            f"CU {scores.get('commerce_usefulness', '-')}",
+            f"BF {scores.get('brand_fit', '-')}",
+            f"SR {scores.get('scene_realism', '-')}",
+            f"VC {scores.get('visual_clarity', '-')}",
+            f"AR {scores.get('artifact_risk', '-')}",
+        ]
+    )
+
     return (
-        "<tr>"
-        f"<td>{html.escape(str(row.get('asset_id', '')))}</td>"
-        f"<td>{html.escape(str(row.get('shot_name', '')))}</td>"
-        f"<td>{html.escape(str(row.get('suggested_decision', '')))}</td>"
-        f"<td>{html.escape(str(row.get('qa_status', '')))}</td>"
-        f"<td>{html.escape(str(row.get('weighted_score', '')))}</td>"
-        f"<td>{reasons_text}</td>"
-        f"<td>{channels_text}</td>"
-        f"<td><img src=\"{img_src}\" alt=\"{html.escape(str(row.get('asset_id', '')))}\"/></td>"
-        "</tr>"
+        f"<article class=\"card decision-{html.escape(decision)} qa-{html.escape(qa_status)}\" "
+        f"data-decision=\"{html.escape(decision)}\" data-qa=\"{html.escape(qa_status)}\" data-channels=\"{html.escape(channels.lower())}\" "
+        f"data-name=\"{html.escape(str(row.get('shot_name', '')).lower())}\">"
+        "<div class=\"card-head\">"
+        f"<h3>{html.escape(str(row.get('asset_id', '')))} - {html.escape(str(row.get('shot_name', '')))}</h3>"
+        "<div class=\"badges\">"
+        f"<span class=\"pill decision\">{html.escape(decision)}</span>"
+        f"<span class=\"pill qa\">{html.escape(qa_status)}</span>"
+        f"<span class=\"pill score\">score {html.escape(score_text)}</span>"
+        "</div></div>"
+        "<div class=\"media\">"
+        f"<img src=\"{img_src}\" alt=\"{html.escape(str(row.get('asset_id', '')))}\"/>"
+        "</div>"
+        "<dl class=\"meta\">"
+        f"<div><dt>Decision reason</dt><dd>{html.escape(str(row.get('decision_reason', '')))}</dd></div>"
+        f"<div><dt>Channels</dt><dd>{html.escape(channels)}</dd></div>"
+        f"<div><dt>Source dims/ratio</dt><dd>{html.escape(' x '.join(str(v) for v in entry_dims) if entry_dims else 'unknown')} ({html.escape(entry_ratio)})</dd></div>"
+        f"<div><dt>Output dims/ratio</dt><dd>{html.escape(' x '.join(str(v) for v in out_dims) if out_dims else 'unknown')} ({html.escape(out_ratio)})</dd></div>"
+        f"<div><dt>Render mode</dt><dd>{html.escape(render_mode)}</dd></div>"
+        f"<div><dt>QA breakdown</dt><dd>{html.escape(qa_breakdown)}</dd></div>"
+        "</dl>"
+        "<div class=\"reasons\"><strong>Top reasons</strong><ul>"
+        f"{reasons_html}"
+        "</ul></div>"
+        "</article>"
     )
 
 
@@ -122,7 +178,10 @@ def build_contact_sheet_html(
     out_dir: Path,
     rows: List[Dict[str, Any]],
     reference_image: Optional[Path],
+    reference_image_url: Optional[str],
     export_manifest_path: Path,
+    decision_counts: Dict[str, int],
+    qa_counts: Dict[str, int],
 ) -> str:
     timestamp = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
     ref_html = "<p>Reference image: none</p>"
@@ -130,67 +189,152 @@ def build_contact_sheet_html(
         src = html.escape(relpath(reference_image, out_dir))
         ref_html = (
             "<div class=\"ref\">"
-            "<h2>Reference Image</h2>"
+            "<h2>Reference</h2>"
             f"<img src=\"{src}\" alt=\"reference image\"/>"
+            f"<p>Local: {html.escape(str(reference_image))}</p>"
+            f"<p>URL: {html.escape(reference_image_url or 'none')}</p>"
             "</div>"
         )
-    table_rows = "\n".join(html_row(row) for row in rows)
+
+    cards = "\n".join(row_card(row) for row in rows)
+
+    qa_summary = ", ".join(f"{k} {v}" for k, v in sorted(qa_counts.items())) or "none"
+
     return f"""<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Brand Shoot Contact Sheet</title>
+  <title>Brand Shoot Review Dashboard</title>
   <style>
     :root {{
-      --bg: #f4f3ef;
-      --ink: #181818;
-      --muted: #6b6b6b;
-      --line: #d9d4c8;
-      --accent: #935f2d;
+      --bg: #f2eee7;
+      --panel: #fffdf9;
+      --ink: #1d1a17;
+      --muted: #6f665c;
+      --line: #d9cec0;
+      --ok: #1f7a47;
+      --warn: #8d5d00;
+      --bad: #9d1f1f;
+      --accent: #5b3d1d;
     }}
-    body {{ background: var(--bg); color: var(--ink); font-family: "IBM Plex Sans", "Helvetica Neue", sans-serif; margin: 24px; }}
-    h1, h2 {{ margin: 0 0 12px 0; }}
-    p {{ color: var(--muted); margin: 0 0 10px 0; }}
-    .meta {{ margin-bottom: 16px; }}
-    .ref img {{ width: min(360px, 90vw); border: 1px solid var(--line); background: #fff; }}
-    table {{ width: 100%; border-collapse: collapse; margin-top: 18px; background: #fff; }}
-    th, td {{ border: 1px solid var(--line); padding: 8px; vertical-align: top; font-size: 13px; }}
-    th {{ background: #f2ede3; text-align: left; }}
-    td img {{ width: 132px; height: 132px; object-fit: contain; background: #fff; border: 1px solid var(--line); }}
-    .decision-approve {{ color: #1e6e3e; font-weight: 700; }}
-    .decision-reroll {{ color: #8b5b00; font-weight: 700; }}
-    .decision-reject {{ color: #9e1f1f; font-weight: 700; }}
-    .foot {{ margin-top: 14px; font-size: 12px; color: var(--muted); }}
+    * {{ box-sizing: border-box; }}
+    body {{ margin: 0; background: radial-gradient(circle at 20% 10%, #f7f4ee, var(--bg)); color: var(--ink); font-family: "IBM Plex Sans", "Avenir Next", sans-serif; }}
+    .wrap {{ max-width: 1320px; margin: 0 auto; padding: 20px; }}
+    h1, h2, h3 {{ margin: 0; }}
+    .top {{ display: grid; gap: 12px; grid-template-columns: 2fr 1fr; align-items: start; }}
+    .panel {{ background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; }}
+    .meta p {{ margin: 0 0 6px 0; color: var(--muted); font-size: 13px; }}
+    .summary {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }}
+    .kpi {{ border: 1px solid var(--line); border-radius: 10px; padding: 8px; background: #fff; }}
+    .kpi .label {{ color: var(--muted); font-size: 12px; }}
+    .kpi .value {{ font-size: 20px; font-weight: 700; }}
+    .kpi.approve .value {{ color: var(--ok); }}
+    .kpi.reroll .value {{ color: var(--warn); }}
+    .kpi.reject .value {{ color: var(--bad); }}
+    .ref img {{ width: 100%; max-width: 360px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }}
+    .controls {{ margin-top: 14px; display: grid; gap: 8px; grid-template-columns: 1fr 1fr 1fr 2fr; }}
+    .controls select, .controls input {{ width: 100%; border-radius: 8px; border: 1px solid var(--line); padding: 8px; font-size: 13px; }}
+    .cards {{ margin-top: 14px; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); }}
+    .card {{ border: 1px solid var(--line); border-radius: 12px; background: var(--panel); padding: 10px; box-shadow: 0 2px 0 rgba(0,0,0,0.02); }}
+    .card-head {{ display: flex; justify-content: space-between; gap: 8px; align-items: start; }}
+    .card-head h3 {{ font-size: 15px; line-height: 1.2; }}
+    .badges {{ display: flex; gap: 6px; flex-wrap: wrap; justify-content: end; }}
+    .pill {{ display: inline-flex; border-radius: 999px; border: 1px solid var(--line); padding: 2px 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }}
+    .decision-approve .pill.decision {{ background: #e8f6ee; border-color: #bee6ce; color: var(--ok); }}
+    .decision-reroll .pill.decision {{ background: #fff4de; border-color: #efd69b; color: var(--warn); }}
+    .decision-reject .pill.decision {{ background: #fde8e8; border-color: #f2baba; color: var(--bad); }}
+    .media {{ margin-top: 8px; }}
+    .media img {{ width: 100%; aspect-ratio: 1 / 1; object-fit: contain; background: #fff; border: 1px solid var(--line); border-radius: 10px; }}
+    .meta {{ margin-top: 8px; display: grid; gap: 4px; }}
+    .meta div {{ display: grid; grid-template-columns: 140px 1fr; gap: 8px; font-size: 12px; }}
+    .meta dt {{ color: var(--muted); }}
+    .meta dd {{ margin: 0; }}
+    .reasons {{ margin-top: 8px; font-size: 12px; }}
+    .reasons ul {{ margin: 6px 0 0 16px; padding: 0; }}
+    .hidden {{ display: none !important; }}
+    @media (max-width: 1020px) {{
+      .top {{ grid-template-columns: 1fr; }}
+      .controls {{ grid-template-columns: 1fr 1fr; }}
+    }}
+    @media (max-width: 640px) {{
+      .controls {{ grid-template-columns: 1fr; }}
+      .cards {{ grid-template-columns: 1fr; }}
+      .meta div {{ grid-template-columns: 1fr; }}
+    }}
   </style>
 </head>
 <body>
-  <h1>Brand Shoot Contact Sheet</h1>
-  <div class="meta">
-    <p>Generated: {html.escape(timestamp)}</p>
-    <p>Packet: {html.escape(str(packet))}</p>
-    <p>Export manifest: {html.escape(str(export_manifest_path))}</p>
+  <div class="wrap">
+    <div class="top">
+      <section class="panel meta">
+        <h1>Brand Shoot Review Dashboard</h1>
+        <p>Generated: {html.escape(timestamp)}</p>
+        <p>Packet: {html.escape(str(packet))}</p>
+        <p>Export manifest: {html.escape(str(export_manifest_path))}</p>
+        <p>QA status mix: {html.escape(qa_summary)}</p>
+        <div class="summary">
+          <div class="kpi approve"><div class="label">Suggest approve</div><div class="value">{decision_counts.get('approve', 0)}</div></div>
+          <div class="kpi reroll"><div class="label">Suggest reroll</div><div class="value">{decision_counts.get('reroll', 0)}</div></div>
+          <div class="kpi reject"><div class="label">Suggest reject</div><div class="value">{decision_counts.get('reject', 0)}</div></div>
+        </div>
+      </section>
+      <section class="panel">
+        {ref_html}
+      </section>
+    </div>
+
+    <section class="panel controls">
+      <select id="filter-decision">
+        <option value="">All decisions</option>
+        <option value="approve">Approve</option>
+        <option value="reroll">Reroll</option>
+        <option value="reject">Reject</option>
+      </select>
+      <select id="filter-qa">
+        <option value="">All QA</option>
+        <option value="pass">pass</option>
+        <option value="manual_review">manual_review</option>
+        <option value="fail">fail</option>
+        <option value="unscored">unscored</option>
+      </select>
+      <input id="filter-channel" type="text" placeholder="Filter channel (instagram, pdp, amazon...)" />
+      <input id="filter-name" type="text" placeholder="Filter by shot name or asset id" />
+    </section>
+
+    <section id="cards" class="cards">
+      {cards}
+    </section>
   </div>
-  {ref_html}
-  <h2>Generated Assets</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Asset</th>
-        <th>Shot</th>
-        <th>Suggested Decision</th>
-        <th>QA</th>
-        <th>Score</th>
-        <th>Top Reasons</th>
-        <th>Export Channels</th>
-        <th>Preview</th>
-      </tr>
-    </thead>
-    <tbody>
-      {table_rows}
-    </tbody>
-  </table>
-  <p class="foot">Decisions are suggestions only; final approve/reroll/reject is human-owned.</p>
+
+  <script>
+    (function () {{
+      const cards = Array.from(document.querySelectorAll('.card'));
+      const decision = document.getElementById('filter-decision');
+      const qa = document.getElementById('filter-qa');
+      const channel = document.getElementById('filter-channel');
+      const name = document.getElementById('filter-name');
+
+      function applyFilters() {{
+        const d = (decision.value || '').toLowerCase().trim();
+        const q = (qa.value || '').toLowerCase().trim();
+        const c = (channel.value || '').toLowerCase().trim();
+        const n = (name.value || '').toLowerCase().trim();
+
+        cards.forEach((card) => {{
+          const passDecision = !d || card.dataset.decision === d;
+          const passQa = !q || card.dataset.qa === q;
+          const passChannel = !c || (card.dataset.channels || '').includes(c);
+          const text = card.dataset.name + ' ' + card.querySelector('h3').textContent.toLowerCase();
+          const passName = !n || text.includes(n);
+          card.classList.toggle('hidden', !(passDecision && passQa && passChannel && passName));
+        }});
+      }}
+
+      [decision, qa, channel, name].forEach((el) => el.addEventListener('input', applyFilters));
+      applyFilters();
+    }})();
+  </script>
 </body>
 </html>
 """
@@ -247,11 +391,14 @@ def main() -> int:
                 "image_path": str(image_path),
                 "image_path_for_html": image_for_html,
                 "qa_status": qa_status,
+                "scores": qa_row.get("scores") or {},
                 "weighted_score": qa_row.get("weighted_score"),
                 "reject_reasons": qa_row.get("reject_reasons") or [],
                 "reroll_final_status": reroll_status,
                 "suggested_decision": decision,
                 "decision_reason": reason,
+                "entry_dimensions": entry.get("final_dimensions") or [],
+                "entry_ratio": entry.get("requested_ratio") or entry.get("ratio"),
                 "export_outputs": export_row.get("outputs") or [],
             }
         )
@@ -316,7 +463,10 @@ def main() -> int:
         out_dir=out_dir,
         rows=rows,
         reference_image=reference_image,
+        reference_image_url=generation.get("reference_image_url"),
         export_manifest_path=export_path,
+        decision_counts=decision_counts,
+        qa_counts=qa_counts,
     )
     html_path.write_text(html_payload, encoding="utf-8")
 
@@ -330,6 +480,7 @@ def main() -> int:
             "reroll_manifest": str(reroll_path) if reroll_path.exists() else None,
             "export_manifest": str(export_path),
             "reference_image_path": str(reference_image) if reference_image else None,
+            "reference_image_url": generation.get("reference_image_url"),
             "out_dir": str(out_dir),
         },
         "summary": {
@@ -350,4 +501,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

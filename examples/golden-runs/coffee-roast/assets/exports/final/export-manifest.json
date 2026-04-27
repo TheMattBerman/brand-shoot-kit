@@ -1,7 +1,7 @@
 {
   "run": {
-    "run_id": "export-20260427T212057Z",
-    "timestamp_utc": "20260427T212057Z",
+    "run_id": "export-20260427T215451Z",
+    "timestamp_utc": "20260427T215451Z",
     "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast",
     "generation_manifest": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/generation-manifest.json",
     "qa_results": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/qa-results.json",
@@ -14,20 +14,19 @@
   },
   "summary": {
     "total_assets": 12,
-    "copied_files": 16,
+    "rendered_files": 16,
     "packaged_assets": 12,
     "skipped_assets": 0,
     "qa_status_counts": {
       "manual_review": 12
     },
     "reroll_status_counts": {
-      "pass_after_reroll": 11,
-      "reroll_exhausted": 1
+      "pass_after_reroll": 12
     },
     "decision_summary": {
-      "approve": 11,
+      "approve": 12,
       "reroll": 0,
-      "reject": 1
+      "reject": 0
     }
   },
   "records": [
@@ -44,10 +43,16 @@
         {
           "channel": "PDP",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/pdp/pdp__shot-01__clean-front-pack-hero__1x1.png",
-          "sha256": "1f607a58e45fd182668f90816a512732d941f88e867e37058f457356ccc9690f"
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
         }
       ],
-      "notes": "deterministic copy packaging"
+      "notes": "deterministic render packaging"
     },
     {
       "asset_id": "shot-02",
@@ -62,10 +67,16 @@
         {
           "channel": "PDP",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/pdp/pdp__shot-02__roast-label-detail-angle__4x5.png",
-          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
         }
       ],
-      "notes": "deterministic copy packaging"
+      "notes": "deterministic render packaging"
     },
     {
       "asset_id": "shot-03",
@@ -80,15 +91,27 @@
         {
           "channel": "PDP",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/pdp/pdp__shot-03__beans-texture-supporting-props__1x1.png",
-          "sha256": "1f607a58e45fd182668f90816a512732d941f88e867e37058f457356ccc9690f"
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
         },
         {
           "channel": "Social",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/social/social__shot-03__beans-texture-supporting-props__1x1.png",
-          "sha256": "1f607a58e45fd182668f90816a512732d941f88e867e37058f457356ccc9690f"
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
         }
       ],
-      "notes": "deterministic copy packaging"
+      "notes": "deterministic render packaging"
     },
     {
       "asset_id": "shot-04",
@@ -103,15 +126,27 @@
         {
           "channel": "PDP",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/pdp/pdp__shot-04__pour-over-product-in-use-counter-scene__4x5.png",
-          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
         },
         {
           "channel": "Email",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/email/email__shot-04__pour-over-product-in-use-counter-scene__4x5.png",
-          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
         }
       ],
-      "notes": "deterministic copy packaging"
+      "notes": "deterministic render packaging"
     },
     {
       "asset_id": "shot-05",
@@ -126,15 +161,27 @@
         {
           "channel": "PDP",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/pdp/pdp__shot-05__hand-scoop-scale-proof__4x5.png",
-          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
         },
         {
           "channel": "Social",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/social/social__shot-05__hand-scoop-scale-proof__4x5.png",
-          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
         }
       ],
-      "notes": "deterministic copy packaging"
+      "notes": "deterministic render packaging"
     },
     {
       "asset_id": "shot-06",
@@ -149,10 +196,16 @@
         {
           "channel": "Social",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/social/social__shot-06__bundle-contents-pantry-spread__4x5.png",
-          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
         }
       ],
-      "notes": "deterministic copy packaging"
+      "notes": "deterministic render packaging"
     },
     {
       "asset_id": "shot-07",
@@ -167,28 +220,40 @@
         {
           "channel": "Social",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/social/social__shot-07__human-brew-body-crop-in-use__9x16.png",
-          "sha256": "d077028be48166bc0a61aef1280d41f352f097b47888d94b274368eb39151057"
+          "sha256": "de139c005688bf95b85d5edee07ec845707cdee170c61c26a4ba123096bc287f",
+          "ratio": "9:16",
+          "output_dimensions": [
+            1080,
+            1920
+          ],
+          "render_mode": "render:passthrough-dimensions"
         }
       ],
-      "notes": "deterministic copy packaging"
+      "notes": "deterministic render packaging"
     },
     {
       "asset_id": "shot-08",
       "shot_name": "Email morning hero",
       "status": "packaged",
       "qa_status": "manual_review",
-      "reroll_status": "reroll_exhausted",
-      "decision": "reject",
+      "reroll_status": "pass_after_reroll",
+      "decision": "approve",
       "source": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/shot-08--email-morning-hero--16x9.png",
       "ratio": "16:9",
       "outputs": [
         {
           "channel": "Email",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/email/email__shot-08__email-morning-hero__16x9.png",
-          "sha256": "4bb0692f40fce072a7351edc4ed7da5db4449789eec331d0fa5499aa851c6956"
+          "sha256": "d020a753312316d53b80338f1e94ab25a09a76352b2a69f17e141f36f9e47de4",
+          "ratio": "16:9",
+          "output_dimensions": [
+            1920,
+            1080
+          ],
+          "render_mode": "render:passthrough-dimensions"
         }
       ],
-      "notes": "deterministic copy packaging"
+      "notes": "deterministic render packaging"
     },
     {
       "asset_id": "shot-09",
@@ -203,15 +268,27 @@
         {
           "channel": "Email",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/email/email__shot-09__holiday-gifting-stack__4x5.png",
-          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
         },
         {
           "channel": "Social",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/social/social__shot-09__holiday-gifting-stack__4x5.png",
-          "sha256": "2b1a60f19d1c0f6457187aeb4e5ffc07699702f376e423da1f0e16e46017e2cb"
+          "sha256": "21b6fa2880b06239e972b44b05cb53c73852175b84c94ba629a26c86b9f50c47",
+          "ratio": "4:5",
+          "output_dimensions": [
+            1024,
+            1280
+          ],
+          "render_mode": "render:passthrough-dimensions"
         }
       ],
-      "notes": "deterministic copy packaging"
+      "notes": "deterministic render packaging"
     },
     {
       "asset_id": "shot-10",
@@ -226,10 +303,16 @@
         {
           "channel": "Amazon",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/amazon/amazon__shot-10__marketplace-white-ground__1x1.png",
-          "sha256": "1f607a58e45fd182668f90816a512732d941f88e867e37058f457356ccc9690f"
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
         }
       ],
-      "notes": "deterministic copy packaging"
+      "notes": "deterministic render packaging"
     },
     {
       "asset_id": "shot-11",
@@ -244,10 +327,16 @@
         {
           "channel": "Instagram",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/instagram/instagram__shot-11__social-brew-square__1x1.png",
-          "sha256": "1f607a58e45fd182668f90816a512732d941f88e867e37058f457356ccc9690f"
+          "sha256": "4f0df2b6015a3d5d12f14952c8be445ab85883cc53566bd5c2477480f46fe915",
+          "ratio": "1:1",
+          "output_dimensions": [
+            1024,
+            1024
+          ],
+          "render_mode": "render:passthrough-dimensions"
         }
       ],
-      "notes": "deterministic copy packaging"
+      "notes": "deterministic render packaging"
     },
     {
       "asset_id": "shot-12",
@@ -262,10 +351,16 @@
         {
           "channel": "Instagram Story",
           "path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/exports/final/instagram-story/instagram-story__shot-12__story-brew-vertical__9x16.png",
-          "sha256": "d077028be48166bc0a61aef1280d41f352f097b47888d94b274368eb39151057"
+          "sha256": "de139c005688bf95b85d5edee07ec845707cdee170c61c26a4ba123096bc287f",
+          "ratio": "9:16",
+          "output_dimensions": [
+            1080,
+            1920
+          ],
+          "render_mode": "render:passthrough-dimensions"
         }
       ],
-      "notes": "deterministic copy packaging"
+      "notes": "deterministic render packaging"
     }
   ]
 }

@@ -1,0 +1,91 @@
+{
+  "recommended_direction": "Category-aware commerce with contextual lifestyle",
+  "strategy_rationale": "Use source evidence to tune scenes by category while preserving strict product fidelity.",
+  "category": "supplement",
+  "shots": [
+    {
+      "name": "Clean front tub hero",
+      "category": "PDP",
+      "ratio": "1:1",
+      "channel": "PDP",
+      "priority": "High"
+    },
+    {
+      "name": "Supplement-facts label/detail angle",
+      "category": "PDP",
+      "ratio": "4:5",
+      "channel": "PDP",
+      "priority": "High"
+    },
+    {
+      "name": "Powder texture + supporting props",
+      "category": "Lifestyle",
+      "ratio": "1:1",
+      "channel": "PDP/Social",
+      "priority": "High"
+    },
+    {
+      "name": "Morning counter product-in-use routine",
+      "category": "Lifestyle",
+      "ratio": "4:5",
+      "channel": "PDP/Email",
+      "priority": "High"
+    },
+    {
+      "name": "Hand-held shake scale proof",
+      "category": "Model",
+      "ratio": "4:5",
+      "channel": "PDP/Social",
+      "priority": "High"
+    },
+    {
+      "name": "Bundle + contents kitchen layout",
+      "category": "Lifestyle",
+      "ratio": "4:5",
+      "channel": "Social",
+      "priority": "Medium"
+    },
+    {
+      "name": "Human body-crop mixing in-use",
+      "category": "Model",
+      "ratio": "9:16",
+      "channel": "Social",
+      "priority": "Medium"
+    },
+    {
+      "name": "Email routine hero",
+      "category": "Email",
+      "ratio": "16:9",
+      "channel": "Email",
+      "priority": "High"
+    },
+    {
+      "name": "Seasonal wellness gifting",
+      "category": "Seasonal",
+      "ratio": "4:5",
+      "channel": "Email/Social",
+      "priority": "Low"
+    },
+    {
+      "name": "Marketplace white-ground",
+      "category": "Marketplace",
+      "ratio": "1:1",
+      "channel": "Amazon",
+      "priority": "High"
+    },
+    {
+      "name": "Social trust square",
+      "category": "Social",
+      "ratio": "1:1",
+      "channel": "Instagram",
+      "priority": "Medium"
+    },
+    {
+      "name": "Story prep vertical",
+      "category": "Social",
+      "ratio": "9:16",
+      "channel": "Instagram Story",
+      "priority": "Medium"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "url": "https://example.com/products/clean-home-essentials-kit",
+  "title": "Clean Home Essentials Kit | BrightNest",
+  "meta_description": "Refillable multi-surface cleaning kit with spray bottle, tablets, and cloth.",
+  "og_title": "Clean Home Essentials Kit",
+  "og_description": "Cleaning starter kit for kitchen and bath surfaces.",
+  "h1": [
+    "Clean Home Essentials Kit"
+  ],
+  "image_urls": [
+    "https://example.com/images/cleaning-kit-front.jpg",
+    "https://example.com/images/cleaning-kit-components.jpg"
+  ],
+  "degraded_mode": true,
+  "note": "Fixture scout for cleaning category coverage",
+  "product_name": "Clean Home Essentials Kit",
+  "brand_name": "Example",
+  "product_category": "cleaning",
+  "product_type": "cleaning kit",
+  "price": "unknown",
+  "variants": [],
+  "claims_benefits": [],
+  "ingredients_materials_specs": [],
+  "visible_packaging_text_candidates": [
+    "Clean Home Essentials Kit",
+    "Example",
+    "Clean Home Essentials Kit BrightNest"
+  ],
+  "image_evidence": [
+    {
+      "url": "https://example.com/images/cleaning-kit-front.jpg",
+      "source": "scout.image_urls",
+      "confidence": 0.8,
+      "rank": 1
+    },
+    {
+      "url": "https://example.com/images/cleaning-kit-components.jpg",
+      "source": "scout.image_urls",
+      "confidence": 0.55,
+      "rank": 2
+    }
+  ],
+  "field_confidence": {
+    "product_name": 0.86,
+    "brand_name": 0.64,
+    "product_category": 0.64,
+    "product_type": 0.64,
+    "price": 0.2,
+    "variants": 0.25,
+    "claims_benefits": 0.25,
+    "ingredients_materials_specs": 0.25,
+    "visible_packaging_text_candidates": 0.82,
+    "image_evidence": 0.62
+  },
+  "extraction_warnings": [
+    "low_confidence:price",
+    "low_confidence:variants",
+    "low_confidence:claims_benefits",
+    "low_confidence:ingredients_materials_specs",
+    "degraded_mode_source:html_heuristics_only",
+    "structured_source:none_detected_using_heuristics",
+    "no_claims_detected",
+    "no_ingredients_or_specs_detected"
+  ]
+}

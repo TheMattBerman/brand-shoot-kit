@@ -101,6 +101,8 @@ mkdir -p "$GOLDEN_DIR"
 BUNDLES=(
   "skincare-serum|${ROOT_DIR}/examples/scout-samples/skincare-serum-scout.json|Example Skin|Hydrating Face Serum"
   "coffee-roast|${ROOT_DIR}/evals/fixtures/scout-coffee.json|Alpine Goods|Summit Roast Whole Bean Coffee"
+  "supplement-greens|${ROOT_DIR}/evals/fixtures/scout-supplement.json|Peak Harvest|Daily Greens Superblend"
+  "cleaning-kit|${ROOT_DIR}/evals/fixtures/scout-cleaning-kit.json|BrightNest|Clean Home Essentials Kit"
 )
 
 if [[ "$CHECK_ONLY" -eq 1 ]]; then

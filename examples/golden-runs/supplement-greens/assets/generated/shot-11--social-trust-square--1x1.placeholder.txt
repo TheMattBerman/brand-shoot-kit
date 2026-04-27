@@ -1,0 +1,5 @@
+dry_run_placeholder=true
+asset_id=shot-11
+shot_name=Social trust square
+ratio=1:1
+dimensions=1024x1024

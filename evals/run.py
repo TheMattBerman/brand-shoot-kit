@@ -127,6 +127,25 @@ def eval_artifacts_and_structured_extraction(errors: List[str]) -> Path:
     return packet
 
 
+def eval_structured_shopify_extraction(errors: List[str]) -> None:
+    packet = run_packet_from_fixture("structured-shopify", FIXTURES / "scout-shopify-rich.json")
+    scout = load_json(packet / "scout.json")
+
+    assert_true(str(scout.get("price", "")).startswith("$18"), "structured extraction prefers JSON-LD/Shopify price", errors)
+    variants = [str(v).lower() for v in (scout.get("variants") or [])]
+    assert_true(any("whole bean" in v for v in variants), "structured extraction captures Shopify variants", errors)
+    specs = " | ".join(str(v) for v in (scout.get("ingredients_materials_specs") or []))
+    assert_true("arabica" in specs.lower() or "origin" in specs.lower(), "structured extraction captures ingredients/specs", errors)
+    packaging = " | ".join(str(v) for v in (scout.get("visible_packaging_text_candidates") or []))
+    assert_true("net wt" in packaging.lower() or "single origin" in packaging.lower(), "structured extraction captures packaging text", errors)
+    warnings = [str(v) for v in (scout.get("extraction_warnings") or [])]
+    assert_true(
+        any("structured_source:" in w and "none_detected" not in w for w in warnings),
+        "structured extraction records structured source hint",
+        errors,
+    )
+
+
 def eval_prompt_differentiation(errors: List[str]) -> None:
     coffee_packet = run_packet_from_fixture("category-coffee", FIXTURES / "scout-coffee.json")
     skin_packet = run_packet_from_fixture("category-skin", ROOT / "examples" / "scout-samples" / "skincare-serum-scout.json")
@@ -142,6 +161,48 @@ def eval_prompt_differentiation(errors: List[str]) -> None:
     overlap = len(set(coffee_texts) & set(skin_texts))
     max_allowed = max(1, min(len(coffee_texts), len(skin_texts)) // 5)
     assert_true(overlap <= max_allowed, "prompt overlap is not clone-level across fixtures", errors)
+    assert_true(
+        "coffee bag front label/artwork as the primary subject" in "\n".join(coffee_texts).lower(),
+        "coffee prompts include bag-label dominance guidance",
+        errors,
+    )
+    coffee_constraints = [
+        c.lower()
+        for shot in (coffee.get("shots") or [])
+        for c in (shot.get("negative_constraints") or [])
+    ]
+    assert_true(
+        any("coffee-specific: no hero mug/cup-only composition" in c for c in coffee_constraints),
+        "coffee prompts include mug/beans suppression constraints",
+        errors,
+    )
+
+
+def eval_category_taxonomy_baselines(errors: List[str]) -> None:
+    fixtures = {
+        "coffee": FIXTURES / "scout-coffee.json",
+        "coffee_creamy_regression": FIXTURES / "scout-coffee-creamy.json",
+        "supplement": FIXTURES / "scout-supplement.json",
+        "cleaning": FIXTURES / "scout-cleaning-kit.json",
+        "skincare": ROOT / "examples" / "scout-samples" / "skincare-serum-scout.json",
+    }
+    expected_terms = {
+        "coffee": "clean front pack hero",
+        "coffee_creamy_regression": "clean front pack hero",
+        "supplement": "clean front tub hero",
+        "cleaning": "clean front kit hero",
+        "skincare": "clean front label hero",
+    }
+
+    for category, fixture in fixtures.items():
+        packet = run_packet_from_fixture(f"category-baseline-{category}", fixture)
+        shoot_plan = load_json(packet / "shoot-plan.json")
+        prompts = load_json(packet / "prompts.json")
+        inferred = str(shoot_plan.get("category", ""))
+        expected_category = "coffee" if category == "coffee_creamy_regression" else category
+        assert_true(inferred == expected_category, f"category baseline inferred as {expected_category}", errors)
+        shot_names = [str(s.get("shot_name", "")).lower() for s in (prompts.get("shots") or [])]
+        assert_true(any(expected_terms[category] in name for name in shot_names), f"{category} baseline shots include category-specific template", errors)
 
 
 def eval_module_entrypoints(errors: List[str]) -> None:
@@ -190,6 +251,39 @@ def eval_dry_run_loop(errors: List[str]) -> None:
     assert_true((packet / "assets" / "generated" / "qa-results.json").exists(), "qa results produced", errors)
     assert_true((packet / "assets" / "generated" / "reroll-manifest.json").exists(), "reroll manifest produced", errors)
     assert_true((packet / "assets" / "exports" / "final" / "export-manifest.json").exists(), "export manifest produced", errors)
+
+
+def eval_export_rendering_metadata(errors: List[str]) -> None:
+    packet = run_packet_from_fixture("export-rendering", FIXTURES / "scout-coffee.json")
+    for cmd in [
+        ["scripts/generate-images.py", "--packet", str(packet), "--limit", "2"],
+        ["scripts/qa-images.py", "--packet", str(packet)],
+        ["scripts/reroll-failed.py", "--packet", str(packet)],
+        ["scripts/export-packager.py", "--packet", str(packet), "--out", str(packet / "assets" / "exports" / "final")],
+    ]:
+        proc = run(cmd)
+        label = " ".join(Path(c).name if i == 0 else c for i, c in enumerate(cmd))
+        assert_true(proc.returncode == 0, f"command succeeds: {label}", errors)
+
+    export_manifest = load_json(packet / "assets" / "exports" / "final" / "export-manifest.json")
+    records = export_manifest.get("records") or []
+    packaged = [r for r in records if r.get("status") == "packaged"]
+    assert_true(bool(packaged), "export rendering eval has packaged records", errors)
+    for record in packaged:
+        for output in record.get("outputs") or []:
+            dims = output.get("output_dimensions")
+            assert_true(
+                isinstance(dims, list) and len(dims) == 2 and all(isinstance(v, int) and v > 0 for v in dims),
+                "export output has output_dimensions",
+                errors,
+            )
+            render_mode = str(output.get("render_mode", ""))
+            assert_true(render_mode.startswith("render:") or render_mode.startswith("copy:"), "export output has render_mode", errors)
+            path = Path(str(output.get("path", "")))
+            assert_true(path.exists(), "rendered export file exists", errors)
+            if path.exists() and isinstance(dims, list) and len(dims) == 2:
+                actual_dims = parse_png_dimensions(path)
+                assert_true(actual_dims == (dims[0], dims[1]), "rendered export dimensions match manifest", errors)
 
 
 def eval_ratio_aware_generation_manifest(errors: List[str]) -> None:
@@ -397,7 +491,12 @@ def eval_golden_bundle_completeness(errors: List[str]) -> None:
     assert_true(check.returncode == 0, "golden bundles pass completeness check", errors)
 
     bundles = sorted([p for p in GOLDEN_ROOT.iterdir() if p.is_dir() and p.name != "__pycache__"])
-    assert_true(len(bundles) >= 2, "at least two golden bundles exist", errors)
+    assert_true(len(bundles) >= 4, "at least four golden bundles exist", errors)
+    assert_true(
+        {"coffee-roast", "skincare-serum", "supplement-greens", "cleaning-kit"}.issubset({b.name for b in bundles}),
+        "golden bundles include coffee/skincare/supplement/cleaning",
+        errors,
+    )
     for bundle in bundles:
         required = [
             bundle / "input" / "scout-fixture.json",
@@ -440,10 +539,13 @@ def main() -> int:
 
     try:
         eval_artifacts_and_structured_extraction(errors)
+        eval_structured_shopify_extraction(errors)
         eval_prompt_differentiation(errors)
+        eval_category_taxonomy_baselines(errors)
         eval_prompt_scale_human_context_guidance(errors)
         eval_module_entrypoints(errors)
         eval_dry_run_loop(errors)
+        eval_export_rendering_metadata(errors)
         eval_ratio_aware_generation_manifest(errors)
         eval_reference_image_manifest(errors)
         eval_reference_selection_ranking(errors)

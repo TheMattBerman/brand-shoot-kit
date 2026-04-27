@@ -1,0 +1,74 @@
+{
+  "url": "https://example-shop.myshopify.com/products/aurora-summit-roast",
+  "title": "Aurora Summit Roast | North Ridge Coffee",
+  "meta_description": "Small-batch whole bean coffee with caramel and citrus notes.",
+  "og_title": "Aurora Summit Roast",
+  "og_description": "Single origin whole bean coffee.",
+  "h1": [
+    "Aurora Summit Roast"
+  ],
+  "image_urls": [
+    "https://cdn.example.com/products/aurora-front-pack.jpg",
+    "https://cdn.example.com/products/aurora-brew-scene.jpg"
+  ],
+  "json_ld": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Aurora Summit Roast",
+      "sku": "NSR-12OZ-WB",
+      "category": "Coffee",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "USD",
+        "price": "18.00"
+      },
+      "additionalProperty": [
+        {
+          "@type": "PropertyValue",
+          "name": "Roast",
+          "value": "Medium"
+        },
+        {
+          "@type": "PropertyValue",
+          "name": "Origin",
+          "value": "Guatemala"
+        }
+      ]
+    }
+  ],
+  "shopify_product_json": {
+    "id": 10001,
+    "title": "Aurora Summit Roast",
+    "vendor": "North Ridge Coffee",
+    "product_type": "Coffee",
+    "price": "18.00",
+    "variants": [
+      {
+        "title": "Whole Bean / 12 oz",
+        "price": "18.00",
+        "option1": "Whole Bean",
+        "option2": "12 oz"
+      },
+      {
+        "title": "Ground / 12 oz",
+        "price": "18.00",
+        "option1": "Ground",
+        "option2": "12 oz"
+      }
+    ],
+    "body_html": "Ingredients: 100% Arabica coffee beans. Net Wt 12 oz (340g)."
+  },
+  "metafields": {
+    "custom": {
+      "ingredients": "100% Arabica coffee",
+      "packaging_text": "Single Origin - Medium Roast - Net Wt 12 oz"
+    },
+    "details": {
+      "brew": "Pour-over, espresso, drip",
+      "origin": "Guatemala"
+    }
+  },
+  "degraded_mode": true,
+  "note": "Fixture for structured Shopify/JSON-LD extraction coverage"
+}

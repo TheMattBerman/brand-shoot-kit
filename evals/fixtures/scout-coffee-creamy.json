@@ -1,0 +1,14 @@
+{
+  "url": "https://example.com/products/holler-mountain",
+  "title": "Holler Mountain Blend – Whole Bean Coffee | Stumptown Coffee Roasters",
+  "meta_description": "Creamy, sweet, and endlessly drinkable. Holler Mountain is a go-to blend for espresso, drip, or pour over fans buying coffee online.",
+  "og_title": "Holler Mountain Coffee",
+  "og_description": "Whole bean coffee blend for espresso, drip, and pour over.",
+  "h1": ["Holler Mountain Blend"],
+  "image_urls": [
+    "https://example.com/images/holler-front-pack.jpg",
+    "https://example.com/images/holler-bag-angle.jpg"
+  ],
+  "degraded_mode": true,
+  "note": "Regression fixture: creamy coffee copy must not be misclassified as skincare cream."
+}

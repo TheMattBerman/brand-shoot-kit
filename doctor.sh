@@ -100,6 +100,10 @@ check_file "evals/output-quality-rubric.md"
 check_file "evals/run.py"
 check_file "examples/scout-samples/skincare-serum-scout.json"
 check_file "evals/fixtures/reference-product.png"
+check_file "evals/fixtures/scout-shopify-rich.json"
+check_file "evals/fixtures/scout-supplement.json"
+check_file "evals/fixtures/scout-cleaning-kit.json"
+check_file "evals/fixtures/scout-coffee-creamy.json"
 check_file "examples/live-proof-review-template.json"
 check_dir "examples/golden-runs"
 
@@ -177,6 +181,8 @@ check_help "./scripts/package-review-artifacts.py --packet ./output/doctor-refer
 rm -rf "./output/doctor-prompt-guidance"
 check_help "./scripts/run-brand-shoot.py --scout-json ./evals/fixtures/scout-coffee.json --out ./output/doctor-prompt-guidance"
 check_help "python3 -c \"import json; from pathlib import Path; p=json.loads(Path('./output/doctor-prompt-guidance/prompts.json').read_text(encoding='utf-8')); shots=p.get('shots',[]); txt='\\n'.join((s.get('prompt','') for s in shots)).lower(); assert shots; assert 'scale guidance:' in txt; assert 'human guidance:' in txt; assert 'context guidance:' in txt; assert '32-48%' not in txt\""
+check_help "python3 -c \"import json; from pathlib import Path; p=json.loads(Path('./output/doctor-prompt-guidance/prompts.json').read_text(encoding='utf-8')); txt='\\n'.join((s.get('prompt','') for s in p.get('shots',[]))).lower(); neg='\\n'.join(' '.join(s.get('negative_constraints',[])).lower() for s in p.get('shots',[])); assert 'coffee bag front label/artwork as the primary subject' in txt; assert 'coffee-specific: no hero mug/cup-only composition' in neg\""
+check_help "python3 -c \"import json; from pathlib import Path; m=json.loads(Path('./output/doctor-reference-packet/assets/exports/final/export-manifest.json').read_text(encoding='utf-8')); rec=[r for r in m.get('records',[]) if r.get('status')=='packaged']; assert rec; out=(rec[0].get('outputs') or [{}])[0]; assert out.get('output_dimensions'); assert out.get('render_mode')\""
 
 # Basic dependency checks
 command -v bash >/dev/null 2>&1 && pass "binary available: bash" || fail "missing binary: bash"

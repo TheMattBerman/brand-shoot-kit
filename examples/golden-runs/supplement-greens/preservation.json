@@ -1,0 +1,26 @@
+{
+  "product_type": "supplement tub",
+  "must_preserve": [
+    "tub silhouette",
+    "front claims",
+    "supplement facts label"
+  ],
+  "can_vary": [
+    "camera angle (safe)",
+    "background depth (minimal)",
+    "neutral scene context"
+  ],
+  "never_change": [
+    "nutrition claims",
+    "servings text",
+    "brand name"
+  ],
+  "distortion_risks": [
+    "claim text drift",
+    "scoop scale mismatch",
+    "label warp"
+  ],
+  "accuracy_confidence": "low",
+  "audience": "daily routine shoppers",
+  "tone": "brand-consistent ecommerce"
+}

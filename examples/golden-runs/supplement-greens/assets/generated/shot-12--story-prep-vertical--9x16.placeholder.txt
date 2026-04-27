@@ -1,0 +1,5 @@
+dry_run_placeholder=true
+asset_id=shot-12
+shot_name=Story prep vertical
+ratio=9:16
+dimensions=1080x1920

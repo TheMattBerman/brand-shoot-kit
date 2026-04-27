@@ -1,0 +1,26 @@
+{
+  "product_type": "cleaning kit",
+  "must_preserve": [
+    "bottle/refill geometry",
+    "front label hierarchy",
+    "kit component count"
+  ],
+  "can_vary": [
+    "camera angle (safe)",
+    "background depth (minimal)",
+    "neutral scene context"
+  ],
+  "never_change": [
+    "active ingredient statements",
+    "size/volume callouts",
+    "brand name"
+  ],
+  "distortion_risks": [
+    "trigger geometry deformation",
+    "label text drift",
+    "missing kit components"
+  ],
+  "accuracy_confidence": "low",
+  "audience": "ecommerce shoppers",
+  "tone": "brand-consistent ecommerce"
+}

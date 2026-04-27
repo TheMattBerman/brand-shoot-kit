@@ -49,6 +49,12 @@ def first(pattern, text):
     m = re.search(pattern, text, flags=re.I | re.S)
     return unescape(m.group(1).strip()) if m else ""
 
+def try_json(value):
+    try:
+        return json.loads(value)
+    except Exception:
+        return None
+
 title = first(r"<title[^>]*>(.*?)</title>", html)
 meta_desc = first(r'<meta[^>]+name=["\']description["\'][^>]+content=["\'](.*?)["\']', html)
 og_title = first(r'<meta[^>]+property=["\']og:title["\'][^>]+content=["\'](.*?)["\']', html)
@@ -76,6 +82,48 @@ for i in clean_imgs:
         uniq.append(i)
         seen.add(i)
 
+json_ld = []
+for raw in re.findall(r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', html, flags=re.I | re.S):
+    text = unescape(raw).strip()
+    if not text:
+        continue
+    parsed = try_json(text)
+    if parsed is not None:
+        json_ld.append(parsed)
+
+shopify_product = None
+for pat in [
+    r'var\s+meta\s*=\s*(\{.*?\});',
+    r'window\.__PRELOADED_STATE__\s*=\s*(\{.*?\});',
+    r'"product"\s*:\s*(\{.*?\})\s*,\s*"selectedVariant"',
+    r'<script[^>]+id=["\']ProductJson-[^"\']+["\'][^>]*>(.*?)</script>',
+]:
+    m = re.search(pat, html, flags=re.I | re.S)
+    if not m:
+        continue
+    blob = m.group(1).strip()
+    blob = re.sub(r';\s*$', '', blob)
+    parsed = try_json(blob)
+    if isinstance(parsed, dict):
+        if "product" in parsed and isinstance(parsed.get("product"), dict):
+            shopify_product = parsed.get("product")
+        else:
+            shopify_product = parsed
+        break
+
+metafields = None
+for pat in [
+    r'"metafields"\s*:\s*(\{.*?\})\s*(?:,|\})',
+    r'window\.meta\s*=\s*(\{.*?\});',
+]:
+    m = re.search(pat, html, flags=re.I | re.S)
+    if not m:
+        continue
+    parsed = try_json(m.group(1).strip())
+    if isinstance(parsed, dict):
+        metafields = parsed
+        break
+
 payload = {
     "url": url,
     "title": title,
@@ -84,8 +132,11 @@ payload = {
     "og_description": og_desc,
     "h1": h1s[:5],
     "image_urls": uniq[:40],
+    "json_ld": json_ld[:8],
+    "shopify_product_json": shopify_product,
+    "metafields": metafields,
     "degraded_mode": True,
-    "note": "Basic HTML extraction only. If FIRECRAWL_API_KEY is configured, use richer extraction externally.",
+    "note": "Basic HTML extraction + embedded JSON-LD/Shopify parse when available. If FIRECRAWL_API_KEY is configured, use richer extraction externally.",
 }
 print(json.dumps(payload, indent=2))
 PY

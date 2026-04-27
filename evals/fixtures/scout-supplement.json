@@ -1,0 +1,16 @@
+{
+  "url": "https://example.com/products/greens-superblend",
+  "title": "Daily Greens Superblend | Peak Harvest",
+  "meta_description": "Daily greens powder with probiotics and adaptogens for routine wellness.",
+  "og_title": "Daily Greens Superblend",
+  "og_description": "Greens supplement powder with vitamins and minerals.",
+  "h1": [
+    "Daily Greens Superblend"
+  ],
+  "image_urls": [
+    "https://example.com/images/greens-front-tub.jpg",
+    "https://example.com/images/greens-scoop.jpg"
+  ],
+  "degraded_mode": true,
+  "note": "Fixture scout for supplement category coverage"
+}

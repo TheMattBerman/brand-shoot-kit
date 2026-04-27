@@ -18,7 +18,7 @@
 - Claims/benefits: Hydrating Face Serum Example Skin Clinical-grade hydration with a lightweight non-sticky finish
 - Ingredients/materials/specs: Hydrating Face Serum Example Skin Hydrating serum with niacinamide and hyaluronic acid for daily barrier support
 - Packaging text candidates: Hydrating Face Serum Example Skin, Example, Hydrating Face Serum
-- Extraction warnings: low_confidence:price, low_confidence:variants, degraded_mode_source:html_heuristics_only
+- Extraction warnings: low_confidence:price, low_confidence:variants, degraded_mode_source:html_heuristics_only, structured_source:none_detected_using_heuristics
 
 ## Product Preservation Brief
 - Product type: skincare bottle

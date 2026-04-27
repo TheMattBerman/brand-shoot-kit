@@ -1,0 +1,5 @@
+dry_run_placeholder=true
+asset_id=shot-10
+shot_name=Marketplace white-ground
+ratio=1:1
+dimensions=1024x1024

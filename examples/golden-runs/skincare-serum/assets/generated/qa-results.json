@@ -1,7 +1,7 @@
 {
   "run": {
-    "run_id": "qa-20260427T212056Z",
-    "timestamp_utc": "20260427T212056Z",
+    "run_id": "qa-20260427T215450Z",
+    "timestamp_utc": "20260427T215450Z",
     "mode": "deterministic-manual",
     "manifest_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/generation-manifest.json",
     "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum",

@@ -1,0 +1,5 @@
+dry_run_placeholder=true
+asset_id=shot-02
+shot_name=Label/detail trigger-spray angle
+ratio=4:5
+dimensions=1024x1280

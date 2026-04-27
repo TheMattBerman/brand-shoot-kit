@@ -2,6 +2,7 @@
   "product_type": "sealed coffee bag",
   "must_preserve": [
     "bag silhouette",
+    "front label artwork",
     "origin/roast callouts",
     "brand lockup"
   ],
@@ -13,11 +14,13 @@
   "never_change": [
     "origin text",
     "net weight",
-    "brand name"
+    "brand name",
+    "front artwork motif"
   ],
   "distortion_risks": [
     "bag fold distortion",
     "small text drift",
+    "generic mug/beans overpowering pack",
     "scale mismatch"
   ],
   "accuracy_confidence": "low",

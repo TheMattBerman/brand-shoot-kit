@@ -1,0 +1,328 @@
+{
+  "run": {
+    "run_id": "reroll-20260427T215453Z",
+    "timestamp_utc": "20260427T215453Z",
+    "mode": "dry-run-simulated",
+    "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit",
+    "qa_results": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/qa-results.json",
+    "generation_manifest": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/generation-manifest.json",
+    "max_attempts": 2,
+    "live_qa": false,
+    "qa_threshold": 80.0
+  },
+  "summary": {
+    "eligible_shots": 12,
+    "total_attempts": 13,
+    "pass_after_reroll": 12,
+    "reroll_exhausted": 0,
+    "convergence_rate": 100.0
+  },
+  "shots": [
+    {
+      "asset_id": "shot-01",
+      "shot_name": "Clean front kit hero",
+      "original_status": "manual_review",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "original_prompt": "Create a 1:1 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for PDP. Shot intent: Clean front kit hero. Scale guidance: clean hero framing; product fills 62-75% with immediate label readability. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: controlled ecommerce set with minimal props and clean background separation. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "revised_prompt": "Create a 1:1 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for PDP. Shot intent: Clean front kit hero. Scale guidance: clean hero framing; product fills 62-75% with immediate label readability. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: controlled ecommerce set with minimal props and clean background separation. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant. Reroll attempt 1: tighten product framing, enforce label legibility, reduce distracting props, and resolve: dry-run placeholder asset requires manual visual review; possible label/geometry mismatch risk; product framing may be too weak for commerce.",
+          "reason": [
+            "dry-run placeholder asset requires manual visual review",
+            "possible label/geometry mismatch risk",
+            "product framing may be too weak for commerce",
+            "weighted score below threshold"
+          ],
+          "status": "pass"
+        }
+      ],
+      "final_status": "pass_after_reroll"
+    },
+    {
+      "asset_id": "shot-02",
+      "shot_name": "Label/detail trigger-spray angle",
+      "original_status": "manual_review",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "weighted score below threshold",
+        "simulated artifact risk trigger for smoke/eval coverage"
+      ],
+      "original_prompt": "Create a 4:5 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for PDP. Shot intent: Label/detail trigger-spray angle. Scale guidance: detail-forward framing; product or key label zone fills 55-80%. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: controlled ecommerce set with minimal props and clean background separation. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "revised_prompt": "Create a 4:5 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for PDP. Shot intent: Label/detail trigger-spray angle. Scale guidance: detail-forward framing; product or key label zone fills 55-80%. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: controlled ecommerce set with minimal props and clean background separation. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant. Reroll attempt 1: tighten product framing, enforce label legibility, reduce distracting props, and resolve: dry-run placeholder asset requires manual visual review; possible label/geometry mismatch risk; weighted score below threshold.",
+          "reason": [
+            "dry-run placeholder asset requires manual visual review",
+            "possible label/geometry mismatch risk",
+            "weighted score below threshold",
+            "simulated artifact risk trigger for smoke/eval coverage"
+          ],
+          "status": "pass"
+        }
+      ],
+      "final_status": "pass_after_reroll"
+    },
+    {
+      "asset_id": "shot-03",
+      "shot_name": "Cleaning tools + supporting props",
+      "original_status": "manual_review",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "original_prompt": "Create a 1:1 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for PDP/Social. Shot intent: Cleaning tools + supporting props. Scale guidance: environment-led lifestyle framing; product occupies 24-40% within a believable moment. Human guidance: human presence optional; subtle traces are acceptable when they support realism. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "revised_prompt": "Create a 1:1 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for PDP/Social. Shot intent: Cleaning tools + supporting props. Scale guidance: environment-led lifestyle framing; product occupies 24-40% within a believable moment. Human guidance: human presence optional; subtle traces are acceptable when they support realism. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant. Reroll attempt 1: tighten product framing, enforce label legibility, reduce distracting props, and resolve: dry-run placeholder asset requires manual visual review; possible soft-focus or legibility issue; weighted score below threshold.",
+          "reason": [
+            "dry-run placeholder asset requires manual visual review",
+            "possible soft-focus or legibility issue",
+            "weighted score below threshold"
+          ],
+          "status": "pass"
+        }
+      ],
+      "final_status": "pass_after_reroll"
+    },
+    {
+      "asset_id": "shot-04",
+      "shot_name": "Kitchen counter product-in-use wipe scene",
+      "original_status": "manual_review",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "weighted score below threshold"
+      ],
+      "original_prompt": "Create a 4:5 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for PDP/Email. Shot intent: Kitchen counter product-in-use wipe scene. Scale guidance: environment-led lifestyle framing; product occupies 24-40% within a believable moment. Human guidance: include realistic human interaction (hands or body crop) with anatomically correct pose. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "revised_prompt": "Create a 4:5 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for PDP/Email. Shot intent: Kitchen counter product-in-use wipe scene. Scale guidance: environment-led lifestyle framing; product occupies 24-40% within a believable moment. Human guidance: include realistic human interaction (hands or body crop) with anatomically correct pose. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant. Reroll attempt 1: tighten product framing, enforce label legibility, reduce distracting props, and resolve: dry-run placeholder asset requires manual visual review; weighted score below threshold.",
+          "reason": [
+            "dry-run placeholder asset requires manual visual review",
+            "weighted score below threshold"
+          ],
+          "status": "pass"
+        }
+      ],
+      "final_status": "pass_after_reroll"
+    },
+    {
+      "asset_id": "shot-05",
+      "shot_name": "Hand-held spray scale proof",
+      "original_status": "manual_review",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "weighted score below threshold"
+      ],
+      "original_prompt": "Create a 4:5 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for PDP/Social. Shot intent: Hand-held spray scale proof. Scale guidance: hand-held scale proof; product occupies 30-45% while hand gives believable size reference. Human guidance: include realistic human interaction (hands or body crop) with anatomically correct pose. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "revised_prompt": "Create a 4:5 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for PDP/Social. Shot intent: Hand-held spray scale proof. Scale guidance: hand-held scale proof; product occupies 30-45% while hand gives believable size reference. Human guidance: include realistic human interaction (hands or body crop) with anatomically correct pose. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant. Reroll attempt 1: tighten product framing, enforce label legibility, reduce distracting props, and resolve: dry-run placeholder asset requires manual visual review; possible label/geometry mismatch risk; weighted score below threshold.",
+          "reason": [
+            "dry-run placeholder asset requires manual visual review",
+            "possible label/geometry mismatch risk",
+            "weighted score below threshold"
+          ],
+          "status": "pass"
+        }
+      ],
+      "final_status": "pass_after_reroll"
+    },
+    {
+      "asset_id": "shot-06",
+      "shot_name": "Bundle + refill contents layout",
+      "original_status": "manual_review",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "original_prompt": "Create a 4:5 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Social. Shot intent: Bundle + refill contents layout. Scale guidance: bundle composition; primary product at 30-45%, secondary items readable but subordinate. Human guidance: human presence optional; subtle traces are acceptable when they support realism. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "revised_prompt": "Create a 4:5 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Social. Shot intent: Bundle + refill contents layout. Scale guidance: bundle composition; primary product at 30-45%, secondary items readable but subordinate. Human guidance: human presence optional; subtle traces are acceptable when they support realism. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant. Reroll attempt 1: tighten product framing, enforce label legibility, reduce distracting props, and resolve: dry-run placeholder asset requires manual visual review; product framing may be too weak for commerce; weighted score below threshold.",
+          "reason": [
+            "dry-run placeholder asset requires manual visual review",
+            "product framing may be too weak for commerce",
+            "weighted score below threshold"
+          ],
+          "status": "pass"
+        }
+      ],
+      "final_status": "pass_after_reroll"
+    },
+    {
+      "asset_id": "shot-07",
+      "shot_name": "Human body-crop wipe in-use",
+      "original_status": "manual_review",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "original_prompt": "Create a 9:16 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Social. Shot intent: Human body-crop wipe in-use. Scale guidance: story/social vertical composition; product occupies 22-38% with top and bottom safe zones. Human guidance: include realistic human interaction (hands or body crop) with anatomically correct pose. Context guidance: vertical social scene with depth layers and clear focal separation. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "revised_prompt": "Create a 9:16 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Social. Shot intent: Human body-crop wipe in-use. Scale guidance: story/social vertical composition; product occupies 22-38% with top and bottom safe zones. Human guidance: include realistic human interaction (hands or body crop) with anatomically correct pose. Context guidance: vertical social scene with depth layers and clear focal separation. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant. Reroll attempt 1: tighten product framing, enforce label legibility, reduce distracting props, and resolve: dry-run placeholder asset requires manual visual review; product framing may be too weak for commerce; weighted score below threshold.",
+          "reason": [
+            "dry-run placeholder asset requires manual visual review",
+            "product framing may be too weak for commerce",
+            "weighted score below threshold"
+          ],
+          "status": "pass"
+        }
+      ],
+      "final_status": "pass_after_reroll"
+    },
+    {
+      "asset_id": "shot-08",
+      "shot_name": "Email reset-clean hero",
+      "original_status": "manual_review",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "weighted score below threshold"
+      ],
+      "original_prompt": "Create a 16:9 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Email. Shot intent: Email reset-clean hero. Scale guidance: clean hero framing; product fills 62-75% with immediate label readability. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: wide, editorial scene with structured negative space for email/header placements. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "revised_prompt": "Create a 16:9 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Email. Shot intent: Email reset-clean hero. Scale guidance: clean hero framing; product fills 62-75% with immediate label readability. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: wide, editorial scene with structured negative space for email/header placements. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant. Reroll attempt 1: tighten product framing, enforce label legibility, reduce distracting props, and resolve: dry-run placeholder asset requires manual visual review; possible label/geometry mismatch risk; weighted score below threshold.",
+          "reason": [
+            "dry-run placeholder asset requires manual visual review",
+            "possible label/geometry mismatch risk",
+            "weighted score below threshold"
+          ],
+          "status": "pass"
+        }
+      ],
+      "final_status": "pass_after_reroll"
+    },
+    {
+      "asset_id": "shot-09",
+      "shot_name": "Seasonal spring-clean gifting",
+      "original_status": "manual_review",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "original_prompt": "Create a 4:5 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Email/Social. Shot intent: Seasonal spring-clean gifting. Scale guidance: bundle composition; primary product at 30-45%, secondary items readable but subordinate. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "revised_prompt": "Create a 4:5 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Email/Social. Shot intent: Seasonal spring-clean gifting. Scale guidance: bundle composition; primary product at 30-45%, secondary items readable but subordinate. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: real-world contextual set anchored to usage moment with supportive props only. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant. Reroll attempt 1: tighten product framing, enforce label legibility, reduce distracting props, and resolve: dry-run placeholder asset requires manual visual review; possible label/geometry mismatch risk; possible soft-focus or legibility issue.",
+          "reason": [
+            "dry-run placeholder asset requires manual visual review",
+            "possible label/geometry mismatch risk",
+            "possible soft-focus or legibility issue",
+            "weighted score below threshold"
+          ],
+          "status": "pass"
+        }
+      ],
+      "final_status": "pass_after_reroll"
+    },
+    {
+      "asset_id": "shot-10",
+      "shot_name": "Marketplace white-ground",
+      "original_status": "manual_review",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "product framing may be too weak for commerce",
+        "weighted score below threshold"
+      ],
+      "original_prompt": "Create a 1:1 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Amazon. Shot intent: Marketplace white-ground. Scale guidance: dominant commerce framing; product fills 82-92% with full pack clarity. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: pure white or near-white seamless background with no distracting props. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "revised_prompt": "Create a 1:1 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Amazon. Shot intent: Marketplace white-ground. Scale guidance: dominant commerce framing; product fills 82-92% with full pack clarity. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: pure white or near-white seamless background with no distracting props. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant. Reroll attempt 1: tighten product framing, enforce label legibility, reduce distracting props, and resolve: dry-run placeholder asset requires manual visual review; product framing may be too weak for commerce; weighted score below threshold.",
+          "reason": [
+            "dry-run placeholder asset requires manual visual review",
+            "product framing may be too weak for commerce",
+            "weighted score below threshold"
+          ],
+          "status": "pass"
+        }
+      ],
+      "final_status": "pass_after_reroll"
+    },
+    {
+      "asset_id": "shot-11",
+      "shot_name": "Social clean-benefit square",
+      "original_status": "manual_review",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "weighted score below threshold"
+      ],
+      "original_prompt": "Create a 1:1 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Instagram. Shot intent: Social clean-benefit square. Scale guidance: balanced ecommerce framing; product occupies 35-55% with clear label hierarchy. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: neutral ecommerce context with believable materials and tidy composition. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "revised_prompt": "Create a 1:1 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Instagram. Shot intent: Social clean-benefit square. Scale guidance: balanced ecommerce framing; product occupies 35-55% with clear label hierarchy. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: neutral ecommerce context with believable materials and tidy composition. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant. Reroll attempt 1: tighten product framing, enforce label legibility, reduce distracting props, and resolve: dry-run placeholder asset requires manual visual review; weighted score below threshold.",
+          "reason": [
+            "dry-run placeholder asset requires manual visual review",
+            "weighted score below threshold"
+          ],
+          "status": "pass"
+        }
+      ],
+      "final_status": "pass_after_reroll"
+    },
+    {
+      "asset_id": "shot-12",
+      "shot_name": "Story clean-routine vertical",
+      "original_status": "manual_review",
+      "reasons": [
+        "dry-run placeholder asset requires manual visual review",
+        "possible label/geometry mismatch risk",
+        "product framing may be too weak for commerce",
+        "possible soft-focus or legibility issue",
+        "weighted score below threshold"
+      ],
+      "original_prompt": "Create a 9:16 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Instagram Story. Shot intent: Story clean-routine vertical. Scale guidance: story/social vertical composition; product occupies 22-38% with top and bottom safe zones. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: vertical social scene with depth layers and clear focal separation. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant.",
+      "attempts": [
+        {
+          "attempt": 1,
+          "revised_prompt": "Create a 9:16 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Instagram Story. Shot intent: Story clean-routine vertical. Scale guidance: story/social vertical composition; product occupies 22-38% with top and bottom safe zones. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: vertical social scene with depth layers and clear focal separation. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant. Reroll attempt 1: tighten product framing, enforce label legibility, reduce distracting props, and resolve: dry-run placeholder asset requires manual visual review; possible label/geometry mismatch risk; product framing may be too weak for commerce.",
+          "reason": [
+            "dry-run placeholder asset requires manual visual review",
+            "possible label/geometry mismatch risk",
+            "product framing may be too weak for commerce",
+            "possible soft-focus or legibility issue",
+            "weighted score below threshold"
+          ],
+          "status": "fail"
+        },
+        {
+          "attempt": 2,
+          "revised_prompt": "Create a 9:16 ecommerce image for Clean Home Essentials Kit (BrightNest) optimized for Instagram Story. Shot intent: Story clean-routine vertical. Scale guidance: story/social vertical composition; product occupies 22-38% with top and bottom safe zones. Human guidance: no human subject required; keep focus on pack fidelity and commerce clarity. Context guidance: vertical social scene with depth layers and clear focal separation. Brand tone: brand-consistent ecommerce. Scene direction: Use sink, countertop, and cloth/brush props with bright realistic daylight. Keep kit components and packaging copy clearly readable. Evidence anchors from source: label. Must preserve exactly: bottle/refill geometry, front label hierarchy, kit component count. Never change: active ingredient statements, size/volume callouts, brand name. Watch distortion risks: trigger geometry deformation, label text drift, missing kit components. Keep props supportive, never dominant. Reroll attempt 2: tighten product framing, enforce label legibility, reduce distracting props, and resolve: dry-run placeholder asset requires manual visual review; possible label/geometry mismatch risk; product framing may be too weak for commerce.",
+          "reason": [
+            "dry-run placeholder asset requires manual visual review",
+            "possible label/geometry mismatch risk",
+            "product framing may be too weak for commerce",
+            "possible soft-focus or legibility issue",
+            "weighted score below threshold"
+          ],
+          "status": "pass"
+        }
+      ],
+      "final_status": "pass_after_reroll"
+    }
+  ]
+}

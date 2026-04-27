@@ -1,0 +1,5 @@
+dry_run_placeholder=true
+asset_id=shot-02
+shot_name=Supplement-facts label/detail angle
+ratio=4:5
+dimensions=1024x1280
