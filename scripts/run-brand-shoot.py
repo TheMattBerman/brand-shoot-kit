@@ -86,6 +86,89 @@ def top_images(scout: Dict[str, Any], limit: int = 5) -> List[str]:
     return out
 
 
+def infer_product_type(scout: Dict[str, Any], product: str) -> str:
+    corpus = " ".join(
+        [
+            clean_text(scout.get("title", "")),
+            clean_text(scout.get("meta_description", "")),
+            clean_text(product),
+            clean_text(scout.get("url", "")),
+        ]
+    ).lower()
+
+    if any(k in corpus for k in ["serum", "cleanser", "moistur", "dropper", "skincare"]):
+        return "skincare bottle"
+    if any(k in corpus for k in ["coffee", "beans", "brew", "roast"]):
+        return "sealed coffee bag"
+    if any(k in corpus for k in ["greens", "supplement", "powder", "vitamin"]):
+        return "supplement tub"
+    if any(k in corpus for k in ["candle", "jar", "wax", "home fragrance"]):
+        return "glass jar candle"
+    return "packaged consumer product"
+
+
+def infer_audience(description: str) -> str:
+    text = description.lower()
+    if any(k in text for k in ["daily", "routine", "everyday"]):
+        return "daily routine shoppers"
+    if any(k in text for k in ["gift", "gifting"]):
+        return "gift-oriented shoppers"
+    if any(k in text for k in ["professional", "athlete", "health"]):
+        return "performance and wellness buyers"
+    return "ecommerce shoppers"
+
+
+def infer_tone(description: str) -> str:
+    text = description.lower()
+    if any(k in text for k in ["clinical", "dermat", "ingredient"]):
+        return "quiet clinical"
+    if any(k in text for k in ["craft", "artisan", "single origin"]):
+        return "warm craft premium"
+    if any(k in text for k in ["minimal", "calm", "home"]):
+        return "calm editorial"
+    if any(k in text for k in ["energy", "active", "performance"]):
+        return "credible and energetic"
+    return "brand-consistent ecommerce"
+
+
+def infer_preservation_rules(product_type: str) -> Dict[str, List[str]]:
+    p = product_type.lower()
+    if "skincare" in p:
+        return {
+            "must_preserve": ["bottle silhouette", "cap geometry", "front label hierarchy"],
+            "can_vary": ["set styling", "camera angle", "background depth"],
+            "never_change": ["brand name", "ingredient claims", "product count"],
+            "distortion_risks": ["small label text drift", "cap deformation", "glass glare"],
+        }
+    if "coffee" in p:
+        return {
+            "must_preserve": ["bag silhouette", "origin/roast callouts", "brand lockup"],
+            "can_vary": ["brew props", "counter surface", "lighting warmth"],
+            "never_change": ["origin text", "net weight", "brand name"],
+            "distortion_risks": ["bag fold distortion", "small text drift", "scale mismatch"],
+        }
+    if "supplement" in p:
+        return {
+            "must_preserve": ["tub silhouette", "front claims", "supplement facts label"],
+            "can_vary": ["props", "camera angle", "scene context"],
+            "never_change": ["nutrition claims", "servings text", "brand name"],
+            "distortion_risks": ["claim text drift", "scoop scale mismatch", "label warp"],
+        }
+    if "candle" in p:
+        return {
+            "must_preserve": ["jar proportions", "glass tone", "label typography"],
+            "can_vary": ["room styling", "props", "angle"],
+            "never_change": ["scent name", "brand name", "burn-time claims"],
+            "distortion_risks": ["reflection artifacts", "label warp", "wick geometry errors"],
+        }
+    return {
+        "must_preserve": ["package geometry", "brand mark", "primary label text"],
+        "can_vary": ["camera angle", "lighting direction", "set and props"],
+        "never_change": ["brand name spelling", "required claims and warnings", "product count"],
+        "distortion_risks": ["label text drift", "shape distortion", "scale mismatch"],
+    }
+
+
 def build_config(scout: Dict[str, Any], explicit_brand: str, explicit_product: str, url: str) -> Dict[str, Any]:
     brand, product = infer_brand_and_product(scout, url)
     if explicit_brand:
@@ -98,22 +181,27 @@ def build_config(scout: Dict[str, Any], explicit_brand: str, explicit_product: s
     if description and len(description) > 120:
         confidence = "medium-high"
 
+    product_type = infer_product_type(scout, product)
+    rules = infer_preservation_rules(product_type)
+    tone = infer_tone(description)
+    audience = infer_audience(description)
+
     return {
         "brand": brand,
         "product": product,
         "product_url": url or scout.get("url", "not provided"),
         "price_tier": "unknown",
-        "audience": "unknown",
-        "tone": "brand-consistent ecommerce",
+        "audience": audience,
+        "tone": tone,
         "palette": [],
-        "product_type": "unknown",
-        "must_preserve": ["package geometry", "brand mark", "primary label text"],
-        "can_vary": ["camera angle", "lighting direction", "set and props"],
-        "never_change": ["brand name spelling", "required claims and warnings", "product count"],
-        "distortion_risks": ["label text drift", "shape distortion", "scale mismatch"],
+        "product_type": product_type,
+        "must_preserve": rules["must_preserve"],
+        "can_vary": rules["can_vary"],
+        "never_change": rules["never_change"],
+        "distortion_risks": rules["distortion_risks"],
         "accuracy_confidence": confidence,
-        "recommended_direction": "Clean commerce with contextual lifestyle",
-        "strategy_rationale": "Default safe direction until deeper brand scouting is available.",
+        "recommended_direction": "Category-aware commerce with contextual lifestyle",
+        "strategy_rationale": "Use source evidence to tune scenes by category while preserving strict product fidelity.",
         "visual_gaps": [
             {"asset": "PDP hero", "status": "Unknown", "notes": "Review current hero quality from source page", "priority": "High"},
             {"asset": "Human scale/in-use", "status": "Unknown", "notes": "Confirm if human context exists", "priority": "High"},

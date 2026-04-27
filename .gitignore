@@ -8,3 +8,7 @@ outputs/
 output/
 brand-shoot-output/
 *.log
+
+__pycache__/
+**/__pycache__/
+*.pyc

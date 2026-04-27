@@ -24,3 +24,12 @@ Expected: fidelity warning, planning-first output, recommendation for real photo
 
 Input: `scripts/run-brand-shoot.py --url <product-url>` or `--scout-json <fixture>`.
 Expected: generated packet path contains all required docs, memory files, and assets directories; `validate-packet.py` passes.
+
+## Eval 6: Dry-Run Generation -> QA -> Export
+
+Input: `scripts/run-smoke.sh` (or sequentially run `generate-images.py`, `qa-images.py`, `export-packager.py` on a packet).
+Expected:
+- `assets/generated/generation-manifest.json` exists with shot entries and placeholder image files.
+- `assets/generated/qa-results.json` exists with deterministic/manual status and per-criterion scores.
+- `05-qa-report.md` is appended with a run section.
+- `assets/exports/<run-id>/export-manifest.json` exists with deterministic channel copy records.

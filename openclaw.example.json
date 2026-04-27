@@ -1,6 +1,7 @@
 {
   "extraDirs": [
-    "/ABS/PATH/TO/brand-shoot-kit"
+    "/ABS/PATH/TO/brand-shoot-kit",
+    "/ABS/PATH/TO/brand-shoot-kit/skills"
   ],
   "env": {
     "OPENAI_API_KEY": "${OPENAI_API_KEY}",

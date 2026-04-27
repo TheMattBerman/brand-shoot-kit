@@ -53,6 +53,7 @@ check_dir "references"
 check_dir "scripts"
 check_dir "evals"
 check_dir "examples"
+check_dir "skills"
 check_dir "output"
 
 # Required references
@@ -76,6 +77,20 @@ for f in \
   check_file "$f"
 done
 
+
+# Real suite skills
+for f in \
+  "skills/brand-scout/SKILL.md" \
+  "skills/product-preservation/SKILL.md" \
+  "skills/visual-gap-audit/SKILL.md" \
+  "skills/shoot-director/SKILL.md" \
+  "skills/prompt-factory/SKILL.md" \
+  "skills/qa-reroll/SKILL.md" \
+  "skills/export-packager/SKILL.md" \
+  "skills/memory-writer/SKILL.md"; do
+  check_file "$f"
+done
+
 # Required evals
 check_file "evals/trigger-evals.md"
 check_file "evals/execution-evals.md"
@@ -92,7 +107,10 @@ for s in \
   "scripts/run-smoke.sh" \
   "scripts/scaffold-output.sh" \
   "scripts/create-shoot-packet.py" \
-  "scripts/validate-packet.py"; do
+  "scripts/validate-packet.py" \
+  "scripts/generate-images.py" \
+  "scripts/qa-images.py" \
+  "scripts/export-packager.py"; do
   check_exec "$s"
 done
 
@@ -103,6 +121,9 @@ check_help "./scripts/run-brand-shoot.py --help"
 check_help "./scripts/scaffold-output.sh --help"
 check_help "./scripts/create-shoot-packet.py --help"
 check_help "./scripts/validate-packet.py --help"
+check_help "./scripts/generate-images.py --help"
+check_help "./scripts/qa-images.py --help"
+check_help "./scripts/export-packager.py --help"
 check_help "./scripts/run-smoke.sh"
 
 # Basic dependency checks

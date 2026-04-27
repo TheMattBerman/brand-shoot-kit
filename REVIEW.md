@@ -60,16 +60,18 @@ The repo now includes a first-pass suite architecture doc and module contracts, 
 ## Key Gaps (By Capability)
 
 - Scripts:
-  - Missing provider-backed image generation script.
-  - Missing automated QA scorer on generated images.
-  - Missing export/crop/package script.
+  - Provider-backed generation/QA/export scripts now exist, but live mode quality is uncalibrated and dry-run is still the default path.
+  - No automated reroll executor yet (reject reasons are produced, but failed shots are not regenerated automatically).
+  - Export is deterministic copy packaging; crop/resize variants per channel are not implemented yet.
 - Browser/data extraction:
   - `scout-url.sh` is useful but basic HTML parsing only.
   - No robust structured product extraction (variants, claims, ingredients, specs).
 - Real image generation:
-  - Not integrated yet; output is planning-only.
+  - Integrated behind explicit `--live` flags (`generate-images.py`, `qa-images.py`) and env checks.
+  - Doctor/smoke remain no-spend dry-run by design.
 - QA:
-  - No vision loop, no reroll queue automation.
+  - Deterministic/manual QA and optional vision-based scoring now exist.
+  - No closed-loop reroll execution yet.
 - Examples:
   - Current example packets are formulaic and not “golden quality” artifacts.
 - Evals:
@@ -89,9 +91,10 @@ The repo now includes a first-pass suite architecture doc and module contracts, 
 
 ## v0.2
 
-- Add real generation script (`generate-images.py`) with OpenAI provider support.
-- Add `qa-images.py` vision scoring script producing machine-readable pass/fail output.
-- Upgrade prompt output from generic templates to category-aware shot directives using scout evidence.
+- Add real generation script (`generate-images.py`) with OpenAI provider support. (Implemented: dry-run + optional live)
+- Add `qa-images.py` vision scoring script producing machine-readable pass/fail output. (Implemented: deterministic/manual + optional live vision)
+- Upgrade prompt output from generic templates to category-aware shot directives using scout evidence. (Implemented)
+- Add deterministic packaging pipeline (`export-packager.py`) and end-to-end smoke coverage. (Implemented)
 
 ## v0.3
 

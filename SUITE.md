@@ -46,12 +46,17 @@ Without module boundaries, output quality drifts and the system cannot be tested
   - `brand-scout` (degraded HTML scout via `scripts/scout-url.sh`)
   - `suite-orchestrator` (`scripts/run-brand-shoot.py`) that turns URL/scout JSON into packet
   - packet generation + structure validation (`create-shoot-packet.py`, `validate-packet.py`)
+  - generation stage with dry-run + optional OpenAI live mode (`scripts/generate-images.py`)
+  - QA stage with deterministic/manual scoring + optional OpenAI vision mode (`scripts/qa-images.py`)
+  - deterministic export packaging and manifests (`scripts/export-packager.py`)
 - Partial:
-  - preservation/gap/strategy/prompt/qa/export are template-driven in packet generator
+  - preservation/gap/strategy remain heuristic/template-driven
+  - prompt generation is now category-aware but still rule-based, not model-directed
+  - QA reroll automation is not yet implemented (only reject reasons + reroll instructions output)
 - Missing:
-  - provider-backed image generation
-  - vision-based QA scoring and reroll automation
-  - real export packaging/cropping pipeline
+  - robust structured extraction (variants/claims/spec-level parsing)
+  - automated reroll loop that regenerates failed shots
+  - crop/resize variant rendering per channel (current export is deterministic copy packaging)
 
 ## Contract Files
 
@@ -64,3 +69,19 @@ This suite is "actually good" only when each module has:
 - at least one script or executable path
 - eval coverage for failure cases
 - rerun-safe behavior and memory handoff
+
+
+## Actual Skill Directories
+
+The suite now includes real OpenClaw skill folders under `skills/`:
+
+- `skills/brand-scout/`
+- `skills/product-preservation/`
+- `skills/visual-gap-audit/`
+- `skills/shoot-director/`
+- `skills/prompt-factory/`
+- `skills/qa-reroll/`
+- `skills/export-packager/`
+- `skills/memory-writer/`
+
+The root `brand-shoot-kit` skill orchestrates the full workflow. The subskills are narrower modules with their own trigger descriptions and behavior contracts.

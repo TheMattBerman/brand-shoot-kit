@@ -1,87 +1,82 @@
 # CODEX_RESULT
 
-## Review Outcome
+## Pass Summary (v0.2 executable push)
 
-A full critical productized-system review was completed in `REVIEW.md`.
+This pass moved Brand Shoot Kit from packet-only planning into an executable dry-run pipeline with optional live provider paths.
 
-Headline verdict:
-- Repo quality is early alpha, not yet a production-grade visual system.
-- Current maturity score: **4.2/10**.
-- BigSkills rubric score: **29/45** (major revision needed).
+Implemented now:
+- `scripts/generate-images.py`
+  - Consumes packet (`--packet`) or prompt file (`--prompts`)
+  - Default no-spend dry-run writes deterministic placeholder PNGs + `assets/generated/generation-manifest.json`
+  - Optional live mode behind `--live` and `OPENAI_API_KEY` (OpenAI Images API)
+- `scripts/qa-images.py`
+  - Consumes generation manifest and scores generated assets
+  - Default deterministic/manual mode writes `assets/generated/qa-results.json`
+  - Appends truthful run sections to `05-qa-report.md`
+  - Optional live vision path behind `--live` and `OPENAI_API_KEY`
+- `scripts/export-packager.py`
+  - Deterministic packaging step from generated assets + QA statuses + export map
+  - Writes channel copies under `assets/exports/<run-id>/` and `export-manifest.json`
 
-Core diagnosis:
-- Strong strategy and boundaries.
-- Useful references and decent operational scaffolding.
-- But current execution is mostly planning templates and scaffold-level automation, not a real URL-to-image production loop.
+Additional capability upgrades:
+- `scripts/create-shoot-packet.py`
+  - Prompt generation is now materially category-aware (`skincare`, `coffee`, `supplement`, `home-goods`, `generic`)
+  - Uses source evidence tokens + preservation rules in prompt text
+  - Produces less template-clone output across product categories
+- `scripts/run-brand-shoot.py`
+  - Stronger inferred `product_type`, tone/audience heuristics, and preservation defaults from scout evidence
+- `scripts/run-smoke.sh`
+  - Now exercises dry-run end-to-end: packet -> generation -> QA -> export
+- `doctor.sh`
+  - Verifies new scripts are executable, have working `--help`, and runs updated smoke test
 
-## Highest-Leverage Improvements Implemented
+## Verification
 
-This pass focused on architecture and practical usefulness, not fake bulk.
-
-### 1) Added suite architecture layer
-
-- Added `SUITE.md` to define moduleized system architecture and current implementation status.
-- Added first-pass module I/O contracts:
-  - `references/module-contracts/brand-scout.md`
-  - `references/module-contracts/product-preservation.md`
-  - `references/module-contracts/visual-gap-audit.md`
-  - `references/module-contracts/shoot-director.md`
-  - `references/module-contracts/prompt-factory.md`
-  - `references/module-contracts/qa-reroll.md`
-  - `references/module-contracts/export-packager.md`
-  - `references/module-contracts/memory-writer.md`
-
-### 2) Added deterministic URL/scout-to-packet orchestrator
-
-- New script: `scripts/run-brand-shoot.py`
-- Supports:
-  - `--url` (runs `scripts/scout-url.sh` then derives config)
-  - `--scout-json` (offline deterministic mode)
-  - optional brand/product overrides
-  - optional config save path
-  - packet generation + validation in one command
-
-This is a real usability jump: the repo now has a concrete orchestration entrypoint instead of only disconnected helper scripts.
-
-### 3) Added smoke-test path and fixture
-
-- New fixture: `examples/scout-samples/skincare-serum-scout.json`
-- New script: `scripts/run-smoke.sh`
-  - runs full offline orchestration
-  - validates packet structure
-
-### 4) Upgraded operational checks and docs
-
-- Updated `doctor.sh` to verify new architecture files/scripts and run smoke test.
-- Updated `README.md` quick start to include `run-brand-shoot.py` and smoke flow.
-- Updated `SKILL.md` to reference suite contracts and deterministic orchestration scripts.
-- Updated `examples/README.md` with scout-fixture usage.
-- Updated `evals/execution-evals.md` with deterministic URL-to-packet execution eval.
-
-## Verification Run
-
-Commands executed:
+Executed successfully:
 
 ```bash
-./doctor.sh
+python3 -m py_compile scripts/*.py
 ./scripts/run-smoke.sh
-./scripts/run-brand-shoot.py --scout-json examples/scout-samples/skincare-serum-scout.json --out output/manual-check
-./scripts/validate-packet.py --packet output/manual-check
+./doctor.sh
 ```
 
-Results:
-- All core checks passed.
-- Smoke test passed.
-- URL/scout-to-packet orchestration succeeded and produced valid packet structure.
+Smoke now verifies existence of:
+- `assets/generated/generation-manifest.json`
+- `assets/generated/qa-results.json`
+- `assets/exports/<run-id>/export-manifest.json`
 
-## What Is Still Missing (Not Claimed As Done)
+## Honest Remaining Gaps
 
-- Provider-backed real image generation (`generate-images.py` equivalent).
-- Vision-based QA scoring + automated reroll loop.
-- Deterministic export packaging/cropping pipeline.
-- Golden examples with real generated assets and QA traces.
+Not implemented in this pass:
+- Automated reroll execution loop (failed shots are identified, not auto-regenerated)
+- Structured high-fidelity extraction for variants/claims/spec details
+- Crop/resize rendering variants in export packaging (current export is deterministic copy/manifest)
+- Calibrated quality baselines for live provider runs
+
+## Docs Updated
+
+- `README.md` (new v0.2 executable flow and live gating)
+- `SUITE.md` (implementation status updated)
+- `REVIEW.md` (roadmap/gaps updated honestly)
+- `evals/execution-evals.md` (new dry-run flow eval)
 
 ## Commit
 
 All changes from this pass were committed locally with a clear message.
 No push was performed.
+
+## Correction: Real Multi-Skill Suite Added
+
+Matt correctly caught that the previous "suite" was only module contracts plus one root skill. This has been fixed.
+
+Added actual OpenClaw skill directories under `skills/`:
+- `skills/brand-scout/SKILL.md`
+- `skills/product-preservation/SKILL.md`
+- `skills/visual-gap-audit/SKILL.md`
+- `skills/shoot-director/SKILL.md`
+- `skills/prompt-factory/SKILL.md`
+- `skills/qa-reroll/SKILL.md`
+- `skills/export-packager/SKILL.md`
+- `skills/memory-writer/SKILL.md`
+
+Updated `doctor.sh` to fail if those real skill files are missing. Updated `openclaw.example.json`, `README.md`, and `SUITE.md` to expose both the root orchestrator skill and the module skills.

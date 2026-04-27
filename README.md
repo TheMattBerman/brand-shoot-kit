@@ -1,7 +1,7 @@
 # Brand Shoot Kit
 
 Brand Shoot Kit turns a product URL into an ecommerce visual production workflow:
-`product URL -> brand analysis -> visual gap audit -> shoot strategy -> shot list -> GPT Image-ready prompts -> QA rubric -> export map`.
+`product URL -> brand analysis -> visual gap audit -> shoot strategy -> shot list -> prompts -> generation manifest -> QA results -> export package`.
 
 This kit is for product photography and ecommerce asset libraries. It is explicitly not an ad spy/ad intelligence workflow.
 
@@ -30,6 +30,21 @@ Offline/no-network smoke flow:
 ./scripts/run-smoke.sh
 ```
 
+Dry-run executable v0.2 flow (no paid API calls):
+
+```bash
+./scripts/generate-images.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
+./scripts/qa-images.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
+./scripts/export-packager.py --packet ./output/example-skin/hydrating-face-serum/$(date +%F)
+```
+
+Opt-in live generation/vision (requires `OPENAI_API_KEY` and explicit `--live`):
+
+```bash
+./scripts/generate-images.py --packet <packet-dir> --live
+./scripts/qa-images.py --packet <packet-dir> --live
+```
+
 Config-driven fallback:
 
 ```bash
@@ -47,8 +62,9 @@ Without `OPENAI_API_KEY` (or other optional keys), the kit still produces:
 - shoot strategy
 - shot list
 - generation prompts
-- QA template/rubric
-- export map
+- deterministic generation manifests + placeholder images
+- deterministic/manual QA JSON + markdown report append
+- deterministic channel export package + export manifest
 
 ## Repo Layout
 
@@ -83,3 +99,11 @@ Options:
 ```
 
 Removes installed copy only; generated output remains in your workspace.
+
+
+## Skill Suite
+
+This repo includes the root `brand-shoot-kit` skill plus real module skills in `skills/`:
+`brand-scout`, `product-preservation`, `visual-gap-audit`, `shoot-director`, `prompt-factory`, `qa-reroll`, `export-packager`, and `memory-writer`.
+
+Add both the repo root and `skills/` to OpenClaw `extraDirs` if you want the orchestrator and each module independently discoverable.
