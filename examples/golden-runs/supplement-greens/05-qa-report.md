@@ -24,8 +24,8 @@
 
 ## Automated QA Runs
 
-### Run qa-20260427T215452Z
-- Timestamp (UTC): 20260427T215452Z
+### Run qa-20260427T220658Z
+- Timestamp (UTC): 20260427T220658Z
 - Mode: deterministic-manual
 - Source manifest: `/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/generation-manifest.json`
 - Pass: 0 / 12
@@ -49,8 +49,8 @@
 
 ## Reroll History
 
-### Reroll Run reroll-20260427T215452Z
-- Timestamp (UTC): 20260427T215452Z
+### Reroll Run reroll-20260427T220658Z
+- Timestamp (UTC): 20260427T220658Z
 - Mode: dry-run-simulated
 - Eligible shots: 12
 - Converged: 11

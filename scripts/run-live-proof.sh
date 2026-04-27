@@ -232,11 +232,14 @@ fi
 # 5) export
 run_cmd "$ROOT_DIR/scripts/export-packager.py" --packet "$OUT"
 
-# 6) review artifact packager (human JSON template + HTML contact sheet)
+# Write command log before the frontend is packaged so index.html can show provenance as present.
+printf '%s\n' "${COMMANDS[@]}" > "$RUN_LOG"
+
+# 6) review artifact packager (human JSON template + HTML contact sheet + magic frontend)
 run_cmd "$ROOT_DIR/scripts/package-review-artifacts.py" --packet "$OUT"
+printf '%s\n' "${COMMANDS[@]}" > "$RUN_LOG"
 
 # 7) summary
-printf '%s\n' "${COMMANDS[@]}" > "$RUN_LOG"
 
 python3 - "$OUT" "$SUMMARY" "$URL" "$MODE" "$MAX_SHOTS" "$QA_THRESHOLD" "$REROLL_MODE" "$RUN_LOG" <<'PY'
 import json
@@ -264,6 +267,7 @@ man_reroll = out / "assets" / "generated" / "reroll-manifest.json"
 man_review_pack = out / "assets" / "review" / "artifact-pack-manifest.json"
 man_review_template = out / "assets" / "review" / "human-review-template.json"
 man_contact_sheet = out / "assets" / "review" / "contact-sheet.html"
+man_magic_index = out / "index.html"
 
 export_manifests = sorted(out.glob("assets/exports/**/export-manifest.json"))
 export_manifest = export_manifests[-1] if export_manifests else None
@@ -333,6 +337,7 @@ lines.extend(
         artifact_line(export_manifest) if export_manifest else "- missing: export manifest",
         artifact_line(man_review_pack),
         artifact_line(man_review_template),
+        artifact_line(man_magic_index),
         artifact_line(man_contact_sheet),
         "",
         "## Outcome Snapshot",
@@ -349,6 +354,7 @@ lines.extend(
         f"- suggested_approve: {decision_summary.get('approve', 0)}",
         f"- suggested_reroll: {decision_summary.get('reroll', 0)}",
         f"- suggested_reject: {decision_summary.get('reject', 0)}",
+        f"- magic_frontend: {man_magic_index}",
         "",
         "## Cost Tracking",
     ]

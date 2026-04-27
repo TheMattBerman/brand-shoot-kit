@@ -1,6 +1,6 @@
 {
-  "run_id": "gen-20260427T215452Z",
-  "timestamp_utc": "20260427T215452Z",
+  "run_id": "gen-20260427T220657Z",
+  "timestamp_utc": "20260427T220657Z",
   "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens",
   "prompts_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/04-generation-prompts.md",
   "output_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated",

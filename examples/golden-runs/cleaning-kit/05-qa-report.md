@@ -24,8 +24,8 @@
 
 ## Automated QA Runs
 
-### Run qa-20260427T215453Z
-- Timestamp (UTC): 20260427T215453Z
+### Run qa-20260427T220659Z
+- Timestamp (UTC): 20260427T220659Z
 - Mode: deterministic-manual
 - Source manifest: `/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/generation-manifest.json`
 - Pass: 0 / 12
@@ -49,8 +49,8 @@
 
 ## Reroll History
 
-### Reroll Run reroll-20260427T215453Z
-- Timestamp (UTC): 20260427T215453Z
+### Reroll Run reroll-20260427T220659Z
+- Timestamp (UTC): 20260427T220659Z
 - Mode: dry-run-simulated
 - Eligible shots: 12
 - Converged: 12

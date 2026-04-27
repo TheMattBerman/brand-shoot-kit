@@ -1,7 +1,7 @@
 {
   "run": {
-    "run_id": "reroll-20260427T215450Z",
-    "timestamp_utc": "20260427T215450Z",
+    "run_id": "reroll-20260427T220656Z",
+    "timestamp_utc": "20260427T220656Z",
     "mode": "dry-run-simulated",
     "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum",
     "qa_results": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/skincare-serum/assets/generated/qa-results.json",

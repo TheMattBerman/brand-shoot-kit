@@ -24,8 +24,8 @@
 
 ## Automated QA Runs
 
-### Run qa-20260427T215451Z
-- Timestamp (UTC): 20260427T215451Z
+### Run qa-20260427T220657Z
+- Timestamp (UTC): 20260427T220657Z
 - Mode: deterministic-manual
 - Source manifest: `/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated/generation-manifest.json`
 - Pass: 0 / 12
@@ -49,8 +49,8 @@
 
 ## Reroll History
 
-### Reroll Run reroll-20260427T215451Z
-- Timestamp (UTC): 20260427T215451Z
+### Reroll Run reroll-20260427T220657Z
+- Timestamp (UTC): 20260427T220657Z
 - Mode: dry-run-simulated
 - Eligible shots: 12
 - Converged: 12

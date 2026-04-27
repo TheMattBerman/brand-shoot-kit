@@ -1,7 +1,7 @@
 {
   "run": {
-    "run_id": "reroll-20260427T215453Z",
-    "timestamp_utc": "20260427T215453Z",
+    "run_id": "reroll-20260427T220659Z",
+    "timestamp_utc": "20260427T220659Z",
     "mode": "dry-run-simulated",
     "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit",
     "qa_results": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/cleaning-kit/assets/generated/qa-results.json",

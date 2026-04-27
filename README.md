@@ -1,126 +1,118 @@
 # Brand Shoot Kit
 
-**An AI product photography operator that turns a product URL into a reference-guided ecommerce shoot, QA pass, reroll loop, and review-ready asset pack.**
+**An end-to-end AI product photography operator for ecommerce brands.**
 
-Brand Shoot Kit is built for the moment every ecommerce brand hits: you need more product shots than a human team can reasonably produce, but generic AI images destroy the packaging, invent label text, and make everything look like plastic slop.
-
-This kit does the opposite.
-
-It starts from the real product page, pulls the real product imagery, builds a preservation plan, generates new shots with a visual reference, scores the outputs, rerolls failures, exports channel-ready assets, and packages everything for human review.
+Give it a product URL. It scouts the page, finds the real product reference, builds a preservation plan, generates a channel-ready shoot, QA-scores every frame, rerolls failures, exports resized assets, and finishes with a polished static frontend at:
 
 ```text
-Product URL → Scout → Preservation Plan → Shot Plan → Reference-Guided Generation → QA → Reroll → Export → Review Pack
+<packet>/index.html
 ```
 
-Not an ad spy tool. Not a prompt dump. Not “make me a pretty product image.”
+That page is the magic moment: open one file and see the generated product shoot as a premium review gallery — images first, QA visible, export links ready, provenance included.
 
-**A controlled visual production loop for ecommerce assets.**
+```text
+URL → Scout → Preserve → Shot Plan → Generate → QA → Reroll → Export → Review Frontend
+```
 
----
+Not a prompt dump. Not an ad-spy workflow. Not “make a pretty product image.”
 
-## What It Does
-
-Brand Shoot Kit turns one product URL into a full shoot packet:
-
-1. **Scouts the product page** — title, product name, claims, packaging text, image evidence, visual cues
-2. **Selects a real product reference image** — avoids logos, icons, nutrition panels, cross-sell images, and other bad inputs
-3. **Builds preservation constraints** — what must stay true: package shape, label, brand mark, count, required claims
-4. **Plans the shot library** — PDP, lifestyle, model, email, social, marketplace, seasonal
-5. **Generates images with ratio-aware sizing** — each shot honors `1:1`, `4:5`, `9:16`, or `16:9` with provider-size mapping plus deterministic output dimensions
-6. **Scores the outputs with vision QA** — product accuracy, commerce usefulness, brand fit, realism, clarity, artifact risk
-7. **Rerolls failures** — failed QA can trigger prompt rewrite → regenerate with the same reference → re-score
-8. **Exports assets by channel** — deterministic package structure for PDP, social, email, marketplace, etc.
-9. **Creates a human review pack** — JSON review template, HTML contact sheet, approve/reroll/reject summary
-
-The point is simple: **more ecommerce visuals without losing product fidelity.**
+**A controlled visual production system for ecommerce assets.**
 
 ---
 
 ## Why This Exists
 
-Ecommerce teams are drowning in visual demand.
+Ecommerce teams need more product visuals than traditional shoots can reasonably produce:
 
-Every product needs:
-
-- clean PDP shots
-- angle/detail shots
-- lifestyle context
-- model/hand scale
-- email hero images
+- PDP heroes
+- detail/label shots
+- hand-held scale proof
+- lifestyle/product-in-use scenes
+- email heroes
 - social crops
+- marketplace-safe assets
 - seasonal variants
-- marketplace-safe white-ground shots
+- bundle/contents layouts
 
-Traditional shoots are expensive and slow. Generic AI generation is fast but unreliable. It changes logos, mangles labels, invents claims, adds weird props, and quietly breaks compliance.
+Generic AI is fast, but it breaks the things brands actually care about: package geometry, label text, claims, product count, and brand cues.
 
-Brand Shoot Kit is built around one belief:
-
-> AI product photography is only useful if product preservation is the system’s first-class job.
-
-So the kit does not just ask an image model to imagine a package from text. It gives the model a real visual reference, tracks where that reference came from, scores the output, and forces every image through a QA/review loop.
-
-That’s the difference between a toy demo and a production workflow.
+Brand Shoot Kit puts product truth first. Every run starts from source-page evidence and a real reference image, then wraps generation in QA, reroll, export, and human review.
 
 ---
 
-## The Pipeline
+## Current Proof
+
+Live proofs have already exercised the core categories and failure modes.
+
+| Brand / Category | Result | What was proven |
+|---|---:|---|
+| **Grüns / supplements** | **12 / 12 live QA pass** | Full ratio-aware 12-shot library with `1:1`, `4:5`, `9:16`, and `16:9` outputs |
+| **Rhode / skincare** | **3 / 3 live QA pass** | Reference selection avoided cross-sell drift and preserved primary product fidelity |
+| **Blueland / cleaning kit** | **3 / 3 live QA pass** | Multi-product kit references and packaging constraints stayed stable |
+| **Stumptown / coffee** | **3 / 3 live QA pass after fix** | Product-reference selection now prefers real product bag imagery and coffee guardrails suppress mug/beans/story-art drift |
+
+The important part: when a category exposed a weakness, the system got better. Stumptown first failed because story art was selected as the reference. The selector now prefers JSON-LD/Shopify product images and coffee prompts enforce bag label/artwork dominance.
+
+---
+
+## The Magic Moment Frontend
+
+Every end-to-end proof run now emits a static showpiece frontend:
 
 ```text
-SCOUT → PRESERVE → AUDIT → DIRECT → PROMPT → GENERATE → QA → REROLL → EXPORT → REVIEW
+<packet>/index.html
 ```
 
-| Stage | Artifact | What It Means |
-|---|---|---|
-| Scout | `scout.json` | Product facts, page evidence, claims, image URLs |
-| Preserve | `preservation.json` | Must-preserve product and label constraints |
-| Gap Audit | `visual-gaps.json` | What the brand is missing visually |
-| Shoot Direction | `shoot-plan.json` | Shot strategy by channel and use case |
-| Prompt Factory | `prompts.json` + `04-generation-prompts.md` | Generation prompts with shot-specific scale/human/context guidance + negative constraints |
-| Generate | `assets/generated/generation-manifest.json` | Image outputs, ratio metadata (`requested_ratio`, `provider_size`, `final_dimensions`), model, reference path, endpoint |
-| QA | `assets/generated/qa-results.json` | Vision/manual QA scores and failure reasons |
-| Reroll | `assets/generated/reroll-manifest.json` | Reroll attempts and convergence status |
-| Export | `assets/exports/**/export-manifest.json` | Channel-packaged final files |
-| Review | `assets/review/*` | Human review template + contact sheet |
+It is offline-safe, uses relative paths, and can be opened directly in a browser.
 
-Every stage writes an artifact. No hidden vibes. No “trust me bro.”
+The frontend includes:
+
+- premium gallery layout with all generated images front and center
+- product/brand/run-status hero
+- approve/reroll/reject summary
+- filterable image cards
+- QA status and weighted scores
+- product accuracy / commerce usefulness / brand fit / realism / clarity / artifact-risk breakdown
+- requested ratio and final dimensions
+- rendered export links by channel
+- reference-image panel
+- command/provenance summary
+- legacy review artifacts preserved under `assets/review/`
+
+This is what you show someone. Not the JSON. Not the terminal output. The frontend.
 
 ---
 
-## Proof From Live Tests
+## What the Pipeline Produces
 
-The current live proof pass used `gpt-image-2` with real product reference images.
+A full packet includes:
 
-| Brand / Category | Result | Notes |
-|---|---:|---|
-| Grüns / supplement gummies | **12 / 12 QA pass** | Full 12-shot proof with review pack |
-| Rhode / skincare lip treatment | **3 / 3 QA pass** | Fixed reference picker to avoid cross-sell/lip-case images |
-| Blueland / cleaning kit | **3 / 3 QA pass** | Fixed category/reference selection for multi-product kits |
-| Stumptown / coffee | **2 / 3 QA pass** | Initial miss informed new coffee guardrails: bag label/artwork dominance + mug/beans suppression |
-
-This is the right kind of failure profile: the system works, and the misses are specific enough to improve.
+| Artifact | Purpose |
+|---|---|
+| `scout.json` | Product facts, page evidence, source images, structured extraction |
+| `preservation.json` | Must-preserve packaging, label, claim, and geometry constraints |
+| `visual-gaps.json` | What the current brand gallery is missing |
+| `shoot-plan.json` | Category-aware PDP/lifestyle/social/email/marketplace shot plan |
+| `prompts.json` | Shot-specific prompts with scale, human, context, and negative constraints |
+| `assets/generated/*` | Generated images + generation manifest |
+| `assets/generated/qa-results.json` | QA scores, reasons, reroll queue |
+| `assets/generated/reroll-manifest.json` | Reroll attempts and final status |
+| `assets/exports/**` | Channel-rendered assets with dimensions metadata |
+| `assets/review/contact-sheet.html` | Legacy-compatible review dashboard |
+| `index.html` | Primary magic-moment frontend |
 
 ---
 
 ## Quick Start
 
-### 1. Validate the kit
+Validate everything:
 
 ```bash
 ./doctor.sh
 ./evals/run.py
 ```
 
-### 2. Build a no-spend packet from a product URL
-
-```bash
-./scripts/run-brand-shoot.py \
-  --url "https://example.com/products/sample" \
-  --out ./output/sample/$(date +%F)
-```
-
-This produces strategy, shot planning, prompts, and deterministic scaffolding without live generation spend.
-
-### 3. Run a safe dry proof
+Run no-spend end-to-end mode:
 
 ```bash
 ./scripts/run-live-proof.sh \
@@ -130,9 +122,13 @@ This produces strategy, shot planning, prompts, and deterministic scaffolding wi
   --max-shots 3
 ```
 
-Dry mode creates the full artifact structure with placeholder images. No paid API calls.
+Open:
 
-### 4. Run a capped live proof
+```text
+./output/live-proof-dry/sample/index.html
+```
+
+Run a capped live proof:
 
 ```bash
 ./scripts/run-live-proof.sh \
@@ -143,69 +139,49 @@ Dry mode creates the full artifact structure with placeholder images. No paid AP
   --reroll dry
 ```
 
-Live mode requires `OPENAI_API_KEY`. It is explicit on purpose.
+Live mode requires `OPENAI_API_KEY` and explicit `--live-confirm`.
 
 ---
 
-## Live Generation: How It Actually Works
+## Ratio-Aware Generation
 
-Brand Shoot Kit calls OpenAI directly.
+Shots do not just say they are different sizes. They actually render that way.
 
-| Task | Provider | Endpoint |
-|---|---|---|
-| Text-only generation fallback | OpenAI | `POST /v1/images/generations` |
-| Reference-guided product generation | OpenAI | `POST /v1/images/edits` |
-| Vision QA | OpenAI | `POST /v1/responses` |
+| Requested Ratio | Final Dimensions |
+|---|---:|
+| `1:1` | `1024 × 1024` |
+| `4:5` | `1024 × 1280` |
+| `9:16` | `1080 × 1920` |
+| `16:9` | `1920 × 1080` |
 
-Default live image model: **`gpt-image-2`**
+Each generation entry records:
 
-`scripts/generate-images.py` defaults to `--size auto` so shot ratios map to provider sizes and deterministic final dimensions.
-
-Live packet runs auto-select a reference image from `scout.json`, cache it into:
-
-```text
-assets/reference-images/
-```
-
-Then each generated asset records:
-
-- `reference_image_url`
-- `reference_image_path`
-- `openai_image_endpoint`
-- `model`
-- `image_sha256`
 - `requested_ratio`
 - `provider_size`
 - `final_dimensions`
-
-So you can always see what the model saw and how the output was produced.
+- `postprocess_mode`
+- `reference_image_path`
+- `reference_image_url`
+- `image_sha256`
 
 ---
 
-## Reference Image Selection
+## Reference Selection
 
-Bad reference images create bad product shots.
+Bad references create bad product shots. The selector prefers actual product/package imagery over:
 
-The kit scores source images and strongly prefers actual package/product imagery over:
-
-- logos
-- SVG icons
+- logos/icons
 - nutrition/facts panels
-- review graphics
 - trust badges
+- review graphics
 - cross-sell products
-- phone cases/accessories
-- tiny thumbnails when better product imagery exists
+- story/tout art
+- mug/beans-only coffee context
+- accessories or phone cases
 
-The selector lives in:
+For Shopify-style stores, structured JSON-LD/product JSON images get priority because they often contain the cleanest product reference.
 
-```text
-scripts/reference_selector.py
-```
-
-It uses product-name tokens, ecommerce filename patterns, confidence/rank, URL safety checks, and category heuristics to choose the safest reference.
-
-You can override it manually:
+Manual override is still available:
 
 ```bash
 ./scripts/generate-images.py \
@@ -214,20 +190,11 @@ You can override it manually:
   --reference-image ./path/to/product.png
 ```
 
-Or let it auto-select:
-
-```bash
-./scripts/generate-images.py \
-  --packet <packet-dir> \
-  --live \
-  --auto-reference-image
-```
-
 ---
 
-## QA and Reroll Loop
+## QA + Reroll Loop
 
-QA scores each generated image across:
+QA scores each frame across:
 
 | Criterion | Weight |
 |---|---:|
@@ -238,179 +205,81 @@ QA scores each generated image across:
 | Visual clarity | 10% |
 | Artifact risk | 10% |
 
-If an image fails, live reroll can now close the loop:
-
-```bash
-./scripts/reroll-failed.py \
-  --packet <packet-dir> \
-  --live \
-  --live-qa \
-  --qa-threshold 80 \
-  --max-attempts 1
-```
-
-That means:
+Reroll flow:
 
 ```text
-Fail → Rewrite Prompt → Regenerate With Same Product Reference → Re-score → Pass or Exhaust
+Fail → Rewrite Prompt → Regenerate With Same Reference → Re-score → Pass or Exhaust
 ```
 
-No fake “reroll complete” flags. It actually regenerates and rechecks.
+The point is not to pretend every AI output is good. The point is to catch failures before a human has to.
 
 ---
 
-## Human Review Pack
+## Export Rendering
 
-After export, the kit creates review artifacts in:
+Exports are not just copied into folders. They are rendered into channel-ready dimensions with manifest metadata:
 
-```text
-assets/review/
-```
+- `output_dimensions`
+- `render_mode`
+- `channel`
+- `ratio`
+- `source_path`
+- `path`
 
-| File | Purpose |
+So the frontend can show both the source image and the actual deliverable files.
+
+---
+
+## Category Coverage
+
+Deterministic fixtures/golden runs currently cover:
+
+- coffee
+- skincare
+- supplements
+- cleaning kits
+
+Category logic includes shot taxonomy, preservation constraints, scene hints, negative constraints, and reference-selection guardrails.
+
+---
+
+## Core Commands
+
+| Command | Job |
 |---|---|
-| `human-review-template.json` | Fillable approve/reroll/reject review sheet |
-| `contact-sheet.html` | Visual gallery for fast human review |
-| `artifact-pack-manifest.json` | Asset list, QA status, suggested decision counts |
-
-Generate manually:
-
-```bash
-./scripts/package-review-artifacts.py --packet <packet-dir>
-```
-
-This is where Matt-eye comes in. Model QA catches obvious issues. Human review decides what is actually good enough for a brand.
+| `./scripts/run-live-proof.sh` | Full end-to-end proof runner |
+| `./scripts/run-brand-shoot.py` | Build packet strategy artifacts |
+| `./scripts/generate-images.py` | Generate ratio-aware images |
+| `./scripts/qa-images.py` | Score outputs |
+| `./scripts/reroll-failed.py` | Reroll failed/manual-review shots |
+| `./scripts/export-packager.py` | Render/export channel assets |
+| `./scripts/package-review-artifacts.py` | Build `index.html` + review artifacts |
+| `./evals/run.py` | Deterministic contract/eval harness |
+| `./doctor.sh` | Environment and end-to-end sanity check |
 
 ---
 
-## No-Spend Mode
-
-The kit is safe by default.
-
-Without live flags/API keys, it still produces:
-
-- brand analysis
-- visual gap audit
-- shoot strategy
-- shot list
-- generation prompts
-- placeholder image manifests
-- deterministic/manual QA
-- simulated reroll manifest
-- export package
-- review pack
-- `LIVE_PROOF_SUMMARY.md`
-
-Paid/live calls require explicit flags like `--live`, `--live-confirm`, or `--reroll live`.
-
----
-
-## Install
-
-```bash
-./install.sh
-```
-
-Options:
-
-```bash
-./install.sh --target "$HOME/.clawd/skills"
-./install.sh --dry-run
-```
-
-Validate:
-
-```bash
-./doctor.sh
-./evals/run.py
-```
-
-Uninstall installed copies only:
-
-```bash
-./uninstall.sh
-```
-
-Generated output remains in your workspace.
-
----
-
-## Repo Structure
+## Repo Map
 
 ```text
-brand-shoot-kit/
-├── README.md
-├── SKILL.md
-├── SUITE.md
-├── LIVE-PROOF-PLAYBOOK.md
-├── CODEX_RESULT.md
-├── install.sh
-├── doctor.sh
-├── uninstall.sh
-├── references/
-├── skills/
-│   ├── brand-scout/
-│   ├── product-preservation/
-│   ├── visual-gap-audit/
-│   ├── shoot-director/
-│   ├── prompt-factory/
-│   ├── qa-reroll/
-│   ├── export-packager/
-│   └── memory-writer/
-├── scripts/
-│   ├── run-brand-shoot.py
-│   ├── generate-images.py
-│   ├── qa-images.py
-│   ├── reroll-failed.py
-│   ├── export-packager.py
-│   ├── package-review-artifacts.py
-│   └── reference_selector.py
-├── evals/
-├── examples/
-└── output/
+scripts/      pipeline + module entrypoints
+references/   rubrics, guidance, module contracts
+skills/       skill modules
+evals/        deterministic harness and fixtures
+examples/     golden runs and sample inputs
+output/       generated run packets
 ```
-
----
-
-## Module Entrypoints
-
-Each suite module owns an executable artifact path:
-
-| Module | Script | Owns |
-|---|---|---|
-| Brand Scout | `scripts/modules/brand_scout.py` | `scout.json` |
-| Product Preservation | `scripts/modules/product_preservation.py` | `preservation.json` |
-| Visual Gap Audit | `scripts/modules/visual_gap_audit.py` | `visual-gaps.json` |
-| Shoot Director | `scripts/modules/shoot_director.py` | `shoot-plan.json` |
-| Prompt Factory | `scripts/modules/prompt_factory.py` | `prompts.json` |
-| QA / Reroll | `scripts/modules/qa_reroll.py` | QA + reroll manifests |
-| Export Packager | `scripts/modules/export_packager.py` | export manifests |
-| Memory Writer | `scripts/modules/memory_writer.py` | `memory/*.md` |
-
----
-
-## What Still Needs Work
-
-This is production-shaped, but not done forever.
-
-Recently shipped improvements:
-
-1. **Coffee-specific prompt/reference refinement** — coffee prompts now enforce bag label/artwork dominance and include explicit mug/beans suppression constraints; reference ranking is coffee-aware.
-2. **Richer PDP extraction paths** — structured extraction now reads JSON-LD, Shopify product JSON, and metafield payloads when present for price, variants, specs/ingredients, and packaging text.
-3. **Operator review dashboard polish** — contact sheet is now a filterable card dashboard with decision summary, QA breakdown, dimensions/ratios, render metadata, and reference metadata.
-4. **Channel rendering in export package** — export packaging now writes rendered channel files (center-crop + resize) and records `output_dimensions` and `render_mode` in export manifests.
-5. **Category baselines expanded** — deterministic fixtures/evals/golden coverage now include supplement and cleaning kit in addition to coffee and skincare.
 
 ---
 
 ## The Big Idea
 
-The future of ecommerce creative is not “generate one magic image.”
+The future of ecommerce creative is not one magic prompt.
 
-It is a system:
+It is a production loop:
 
 ```text
-Real product evidence → constrained generation → automated QA → human taste → reusable memory
+Real product evidence → constrained generation → automated QA → channel exports → human taste → reusable memory
 ```
 
-Brand Shoot Kit is that system in repo form.
+Brand Shoot Kit is that loop in repo form.

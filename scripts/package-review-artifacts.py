@@ -4,6 +4,7 @@
 Outputs:
 - human-review-template.json
 - contact-sheet.html
+- <packet>/index.html (magic-moment review frontend)
 - artifact-pack-manifest.json
 """
 
@@ -72,12 +73,7 @@ def export_index(export_manifest: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
     return out
 
 
-def decision_for(
-    *,
-    qa_status: str,
-    reroll_final_status: str,
-    image_exists: bool,
-) -> Tuple[str, str]:
+def decision_for(*, qa_status: str, reroll_final_status: str, image_exists: bool) -> Tuple[str, str]:
     if not image_exists:
         return "reject", "source image missing"
     if reroll_final_status == "reroll_exhausted":
@@ -112,7 +108,49 @@ def ratio_from_dimensions(dimensions: List[int]) -> str:
     return f"{width}:{height}"
 
 
-def row_card(row: Dict[str, Any]) -> str:
+def parse_image_path(value: Any, packet: Path) -> Optional[Path]:
+    if not isinstance(value, str) or not value.strip():
+        return None
+    path = Path(value)
+    if not path.is_absolute():
+        path = packet / path
+    return path.resolve()
+
+
+def format_dims(dimensions: List[int]) -> str:
+    if len(dimensions) != 2:
+        return "unknown"
+    return f"{dimensions[0]} x {dimensions[1]}"
+
+
+def run_status(decision_counts: Dict[str, int]) -> str:
+    if decision_counts.get("reject", 0) > 0:
+        return "Needs operator intervention"
+    if decision_counts.get("reroll", 0) > 0:
+        return "Review and reroll candidates ready"
+    return "Ready for human approval"
+
+
+def build_export_links(outputs: List[Dict[str, Any]], page_base: Path) -> str:
+    if not outputs:
+        return '<span class="muted">none</span>'
+    links: List[str] = []
+    for output in outputs[:4]:
+        path_value = output.get("path")
+        if not isinstance(path_value, str):
+            continue
+        path = Path(path_value)
+        if not path.is_absolute():
+            path = (page_base / path).resolve()
+        href = html.escape(relpath(path, page_base))
+        channel = html.escape(str(output.get("channel", "export")))
+        dims = output.get("output_dimensions") or []
+        ratio = output.get("ratio") or ratio_from_dimensions(dims)
+        links.append(f'<a href="{href}" target="_blank" rel="noopener">{channel} ({html.escape(str(ratio))})</a>')
+    return " ".join(links) if links else '<span class="muted">none</span>'
+
+
+def row_card(row: Dict[str, Any], page_base: Path) -> str:
     reasons = row.get("reject_reasons") or []
     outputs = row.get("export_outputs") or []
     score = row.get("weighted_score")
@@ -120,16 +158,17 @@ def row_card(row: Dict[str, Any]) -> str:
     qa_status = str(row.get("qa_status", "unscored"))
     decision = str(row.get("suggested_decision", "reroll"))
     entry_dims = row.get("entry_dimensions") or []
-    entry_ratio = ratio_from_dimensions(entry_dims) if entry_dims else "unknown"
-    channels = ", ".join(str(x.get("channel", "")) for x in outputs if x.get("channel")) or "none"
+    entry_ratio = str(row.get("entry_ratio") or ratio_from_dimensions(entry_dims))
+    channels = ", ".join(str(x.get("channel", "")).lower() for x in outputs if x.get("channel")) or "none"
 
     top_output = outputs[0] if outputs else {}
     out_dims = top_output.get("output_dimensions") or []
-    out_ratio = ratio_from_dimensions(out_dims) if out_dims else "unknown"
+    out_ratio = top_output.get("ratio") or ratio_from_dimensions(out_dims)
     render_mode = str(top_output.get("render_mode", "unknown"))
 
     reasons_html = "".join(f"<li>{html.escape(str(x))}</li>" for x in reasons[:4]) or "<li>none</li>"
-    img_src = html.escape(str(row.get("image_path_for_html", "")))
+    image_abs = parse_image_path(row.get("image_path"), page_base)
+    img_src = html.escape(relpath(image_abs, page_base)) if image_abs and image_abs.exists() else ""
 
     scores = row.get("scores") or {}
     qa_breakdown = " ".join(
@@ -144,147 +183,197 @@ def row_card(row: Dict[str, Any]) -> str:
     )
 
     return (
-        f"<article class=\"card decision-{html.escape(decision)} qa-{html.escape(qa_status)}\" "
-        f"data-decision=\"{html.escape(decision)}\" data-qa=\"{html.escape(qa_status)}\" data-channels=\"{html.escape(channels.lower())}\" "
-        f"data-name=\"{html.escape(str(row.get('shot_name', '')).lower())}\">"
-        "<div class=\"card-head\">"
-        f"<h3>{html.escape(str(row.get('asset_id', '')))} - {html.escape(str(row.get('shot_name', '')))}</h3>"
-        "<div class=\"badges\">"
-        f"<span class=\"pill decision\">{html.escape(decision)}</span>"
-        f"<span class=\"pill qa\">{html.escape(qa_status)}</span>"
-        f"<span class=\"pill score\">score {html.escape(score_text)}</span>"
+        f'<article class="card generated-image-card decision-{html.escape(decision)} qa-{html.escape(qa_status)}" '
+        f'data-decision="{html.escape(decision)}" data-qa="{html.escape(qa_status)}" data-channels="{html.escape(channels)}" '
+        f'data-name="{html.escape(str(row.get("shot_name", "")).lower())}">'
+        '<div class="card-head">'
+        f"<h3>{html.escape(str(row.get('asset_id', '')))} · {html.escape(str(row.get('shot_name', '')))}</h3>"
+        '<div class="badges">'
+        f'<span class="pill decision">{html.escape(decision)}</span>'
+        f'<span class="pill qa">{html.escape(qa_status)}</span>'
+        f'<span class="pill score">QA {html.escape(score_text)}</span>'
         "</div></div>"
-        "<div class=\"media\">"
-        f"<img src=\"{img_src}\" alt=\"{html.escape(str(row.get('asset_id', '')))}\"/>"
+        '<div class="media">'
+        f'<img src="{img_src}" alt="{html.escape(str(row.get("asset_id", "")))}"/>'
         "</div>"
-        "<dl class=\"meta\">"
-        f"<div><dt>Decision reason</dt><dd>{html.escape(str(row.get('decision_reason', '')))}</dd></div>"
-        f"<div><dt>Channels</dt><dd>{html.escape(channels)}</dd></div>"
-        f"<div><dt>Source dims/ratio</dt><dd>{html.escape(' x '.join(str(v) for v in entry_dims) if entry_dims else 'unknown')} ({html.escape(entry_ratio)})</dd></div>"
-        f"<div><dt>Output dims/ratio</dt><dd>{html.escape(' x '.join(str(v) for v in out_dims) if out_dims else 'unknown')} ({html.escape(out_ratio)})</dd></div>"
-        f"<div><dt>Render mode</dt><dd>{html.escape(render_mode)}</dd></div>"
-        f"<div><dt>QA breakdown</dt><dd>{html.escape(qa_breakdown)}</dd></div>"
+        '<dl class="meta">'
+        f"<div><dt>Decision</dt><dd>{html.escape(str(row.get('decision_reason', '')))}</dd></div>"
+        f"<div><dt>Source</dt><dd>{html.escape(format_dims(entry_dims))} ({html.escape(entry_ratio)})</dd></div>"
+        f"<div><dt>Output</dt><dd>{html.escape(format_dims(out_dims))} ({html.escape(str(out_ratio))})</dd></div>"
+        f"<div><dt>Render</dt><dd>{html.escape(render_mode)}</dd></div>"
+        f"<div><dt>QA Breakdown</dt><dd>{html.escape(qa_breakdown)}</dd></div>"
+        f"<div><dt>Exports</dt><dd>{build_export_links(outputs, page_base)}</dd></div>"
         "</dl>"
-        "<div class=\"reasons\"><strong>Top reasons</strong><ul>"
+        '<div class="reasons"><strong>Top reasons</strong><ul>'
         f"{reasons_html}"
         "</ul></div>"
         "</article>"
     )
 
 
-def build_contact_sheet_html(
+def build_gallery_html(
     *,
     packet: Path,
-    out_dir: Path,
+    page_base: Path,
     rows: List[Dict[str, Any]],
+    scout: Dict[str, Any],
+    generation: Dict[str, Any],
     reference_image: Optional[Path],
     reference_image_url: Optional[str],
     export_manifest_path: Path,
     decision_counts: Dict[str, int],
     qa_counts: Dict[str, int],
+    primary_index: bool,
 ) -> str:
     timestamp = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
-    ref_html = "<p>Reference image: none</p>"
+    qa_summary = ", ".join(f"{k}: {v}" for k, v in sorted(qa_counts.items())) or "none"
+    cards = "\n".join(row_card(row, page_base) for row in rows)
+
+    brand = str(scout.get("brand_name") or scout.get("site_name") or "Unknown brand")
+    product = str(scout.get("product_name") or scout.get("title") or "Unknown product")
+    product_url = str(scout.get("url") or "")
+    model = str(generation.get("model") or "unknown")
+    provider = str(generation.get("provider") or "unknown")
+    endpoint = str(generation.get("openai_image_endpoint") or "unknown")
+    reference_path = str(reference_image) if reference_image else "none"
+    run_log = packet / "live-proof-commands.log"
+
+    ref_html = "<p class=\"muted\">Reference image: none</p>"
     if reference_image and reference_image.exists():
-        src = html.escape(relpath(reference_image, out_dir))
+        ref_src = html.escape(relpath(reference_image, page_base))
         ref_html = (
-            "<div class=\"ref\">"
-            "<h2>Reference</h2>"
-            f"<img src=\"{src}\" alt=\"reference image\"/>"
-            f"<p>Local: {html.escape(str(reference_image))}</p>"
-            f"<p>URL: {html.escape(reference_image_url or 'none')}</p>"
+            '<div class="reference-block">'
+            "<h2>Reference Image</h2>"
+            f'<img src="{ref_src}" alt="reference image"/>'
+            f"<p><strong>Local:</strong> {html.escape(reference_path)}</p>"
+            f"<p><strong>Source URL:</strong> {html.escape(reference_image_url or 'none')}</p>"
             "</div>"
         )
 
-    cards = "\n".join(row_card(row) for row in rows)
+    magic_link = html.escape(relpath(packet / "index.html", page_base))
+    contact_link = html.escape(relpath(packet / "assets" / "review" / "contact-sheet.html", page_base))
+    packet_rel = html.escape(relpath(packet, page_base))
 
-    qa_summary = ", ".join(f"{k} {v}" for k, v in sorted(qa_counts.items())) or "none"
+    primary_badge = "Magic Moment" if primary_index else "Legacy Contact Sheet"
 
     return f"""<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Brand Shoot Review Dashboard</title>
+  <title>Brand Shoot Kit Review Frontend</title>
   <style>
     :root {{
-      --bg: #f2eee7;
-      --panel: #fffdf9;
-      --ink: #1d1a17;
-      --muted: #6f665c;
-      --line: #d9cec0;
-      --ok: #1f7a47;
-      --warn: #8d5d00;
-      --bad: #9d1f1f;
-      --accent: #5b3d1d;
+      --bg: #0d121a;
+      --panel: #141d2a;
+      --panel-soft: #1a2636;
+      --ink: #f4f7fb;
+      --muted: #9fb2c9;
+      --line: #2d3e56;
+      --ok: #47d98d;
+      --warn: #ffc066;
+      --bad: #ff7b7b;
+      --accent: #7dd3fc;
     }}
     * {{ box-sizing: border-box; }}
-    body {{ margin: 0; background: radial-gradient(circle at 20% 10%, #f7f4ee, var(--bg)); color: var(--ink); font-family: "IBM Plex Sans", "Avenir Next", sans-serif; }}
-    .wrap {{ max-width: 1320px; margin: 0 auto; padding: 20px; }}
-    h1, h2, h3 {{ margin: 0; }}
-    .top {{ display: grid; gap: 12px; grid-template-columns: 2fr 1fr; align-items: start; }}
-    .panel {{ background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; }}
-    .meta p {{ margin: 0 0 6px 0; color: var(--muted); font-size: 13px; }}
-    .summary {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }}
-    .kpi {{ border: 1px solid var(--line); border-radius: 10px; padding: 8px; background: #fff; }}
-    .kpi .label {{ color: var(--muted); font-size: 12px; }}
-    .kpi .value {{ font-size: 20px; font-weight: 700; }}
+    body {{ margin: 0; color: var(--ink); font-family: "Space Grotesk", "Avenir Next", sans-serif; background: radial-gradient(circle at 10% 5%, #1f2b3b 0, var(--bg) 45%), linear-gradient(150deg, #0d121a 0, #111a25 100%); }}
+    a {{ color: #9cd9ff; }}
+    .shell {{ max-width: 1320px; margin: 0 auto; padding: 24px 18px 40px; }}
+    .hero {{ border: 1px solid var(--line); background: linear-gradient(145deg, rgba(125,211,252,0.14), rgba(71,217,141,0.08) 35%, rgba(20,29,42,0.9) 100%); border-radius: 18px; padding: 18px; display: grid; gap: 14px; grid-template-columns: 2fr 1fr; }}
+    .hero h1 {{ margin: 0; font-size: clamp(26px, 3vw, 38px); line-height: 1.04; }}
+    .hero p {{ margin: 6px 0 0; color: var(--muted); }}
+    .hero-grid {{ display: grid; gap: 10px; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 12px; }}
+    .kpi {{ background: rgba(20,29,42,0.86); border: 1px solid var(--line); border-radius: 12px; padding: 10px; }}
+    .kpi .label {{ font-size: 11px; text-transform: uppercase; color: var(--muted); letter-spacing: 0.08em; }}
+    .kpi .value {{ font-size: 24px; margin-top: 4px; font-weight: 700; }}
     .kpi.approve .value {{ color: var(--ok); }}
     .kpi.reroll .value {{ color: var(--warn); }}
     .kpi.reject .value {{ color: var(--bad); }}
-    .ref img {{ width: 100%; max-width: 360px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }}
-    .controls {{ margin-top: 14px; display: grid; gap: 8px; grid-template-columns: 1fr 1fr 1fr 2fr; }}
-    .controls select, .controls input {{ width: 100%; border-radius: 8px; border: 1px solid var(--line); padding: 8px; font-size: 13px; }}
-    .cards {{ margin-top: 14px; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); }}
-    .card {{ border: 1px solid var(--line); border-radius: 12px; background: var(--panel); padding: 10px; box-shadow: 0 2px 0 rgba(0,0,0,0.02); }}
-    .card-head {{ display: flex; justify-content: space-between; gap: 8px; align-items: start; }}
-    .card-head h3 {{ font-size: 15px; line-height: 1.2; }}
-    .badges {{ display: flex; gap: 6px; flex-wrap: wrap; justify-content: end; }}
-    .pill {{ display: inline-flex; border-radius: 999px; border: 1px solid var(--line); padding: 2px 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }}
-    .decision-approve .pill.decision {{ background: #e8f6ee; border-color: #bee6ce; color: var(--ok); }}
-    .decision-reroll .pill.decision {{ background: #fff4de; border-color: #efd69b; color: var(--warn); }}
-    .decision-reject .pill.decision {{ background: #fde8e8; border-color: #f2baba; color: var(--bad); }}
-    .media {{ margin-top: 8px; }}
-    .media img {{ width: 100%; aspect-ratio: 1 / 1; object-fit: contain; background: #fff; border: 1px solid var(--line); border-radius: 10px; }}
-    .meta {{ margin-top: 8px; display: grid; gap: 4px; }}
-    .meta div {{ display: grid; grid-template-columns: 140px 1fr; gap: 8px; font-size: 12px; }}
+    .kpi.total .value {{ color: var(--accent); }}
+    .pill {{ display: inline-flex; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); background: rgba(13,18,26,0.8); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }}
+    .panel {{ border: 1px solid var(--line); background: var(--panel); border-radius: 16px; padding: 14px; }}
+    .panel h2 {{ margin: 0 0 8px; font-size: 16px; }}
+    .meta-list {{ margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }}
+    .meta-list li {{ font-size: 13px; color: var(--muted); }}
+    .reference-block img {{ width: 100%; border-radius: 12px; border: 1px solid var(--line); background: #fff; max-height: 280px; object-fit: contain; }}
+    .reference-block p {{ margin: 8px 0 0; font-size: 12px; color: var(--muted); }}
+    .toolbar {{ margin-top: 14px; display: grid; gap: 8px; grid-template-columns: 1fr 1fr 1fr 2fr; }}
+    .toolbar select, .toolbar input {{ width: 100%; border-radius: 10px; border: 1px solid var(--line); background: var(--panel-soft); color: var(--ink); padding: 10px; font-size: 13px; }}
+    .gallery {{ margin-top: 14px; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }}
+    .card {{ border: 1px solid var(--line); border-radius: 14px; background: var(--panel); padding: 10px; }}
+    .card-head {{ display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }}
+    .card-head h3 {{ margin: 0; font-size: 14px; line-height: 1.25; }}
+    .badges {{ display: flex; flex-wrap: wrap; gap: 6px; justify-content: end; }}
+    .decision-approve .pill.decision {{ border-color: rgba(71,217,141,0.4); color: var(--ok); }}
+    .decision-reroll .pill.decision {{ border-color: rgba(255,192,102,0.5); color: var(--warn); }}
+    .decision-reject .pill.decision {{ border-color: rgba(255,123,123,0.5); color: var(--bad); }}
+    .media {{ margin-top: 10px; }}
+    .media img {{ width: 100%; aspect-ratio: 1 / 1; object-fit: contain; background: #0d121a; border: 1px solid var(--line); border-radius: 12px; }}
+    .meta {{ margin-top: 8px; display: grid; gap: 5px; }}
+    .meta div {{ display: grid; grid-template-columns: 118px 1fr; gap: 8px; font-size: 12px; }}
     .meta dt {{ color: var(--muted); }}
     .meta dd {{ margin: 0; }}
-    .reasons {{ margin-top: 8px; font-size: 12px; }}
-    .reasons ul {{ margin: 6px 0 0 16px; padding: 0; }}
+    .reasons {{ margin-top: 8px; font-size: 12px; color: var(--muted); }}
+    .reasons ul {{ margin: 4px 0 0 16px; padding: 0; }}
     .hidden {{ display: none !important; }}
-    @media (max-width: 1020px) {{
-      .top {{ grid-template-columns: 1fr; }}
-      .controls {{ grid-template-columns: 1fr 1fr; }}
+    .stack {{ display: grid; gap: 12px; }}
+    .muted {{ color: var(--muted); }}
+    @media (max-width: 1040px) {{
+      .hero {{ grid-template-columns: 1fr; }}
+      .toolbar {{ grid-template-columns: 1fr 1fr; }}
+      .hero-grid {{ grid-template-columns: repeat(2, minmax(0, 1fr)); }}
     }}
     @media (max-width: 640px) {{
-      .controls {{ grid-template-columns: 1fr; }}
-      .cards {{ grid-template-columns: 1fr; }}
+      .toolbar {{ grid-template-columns: 1fr; }}
+      .gallery {{ grid-template-columns: 1fr; }}
       .meta div {{ grid-template-columns: 1fr; }}
     }}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="top">
-      <section class="panel meta">
-        <h1>Brand Shoot Review Dashboard</h1>
-        <p>Generated: {html.escape(timestamp)}</p>
-        <p>Packet: {html.escape(str(packet))}</p>
-        <p>Export manifest: {html.escape(str(export_manifest_path))}</p>
-        <p>QA status mix: {html.escape(qa_summary)}</p>
-        <div class="summary">
-          <div class="kpi approve"><div class="label">Suggest approve</div><div class="value">{decision_counts.get('approve', 0)}</div></div>
-          <div class="kpi reroll"><div class="label">Suggest reroll</div><div class="value">{decision_counts.get('reroll', 0)}</div></div>
-          <div class="kpi reject"><div class="label">Suggest reject</div><div class="value">{decision_counts.get('reject', 0)}</div></div>
+  <div class="shell" data-bsk-magic-moment="true" data-frontend-marker="generated-review-frontend">
+    <section class="hero">
+      <div>
+        <span class="pill">{html.escape(primary_badge)}</span>
+        <h1>{html.escape(brand)} · {html.escape(product)}</h1>
+        <p>{html.escape(run_status(decision_counts))}</p>
+        <p><strong>Product URL:</strong> <a href="{html.escape(product_url)}">{html.escape(product_url or 'none')}</a></p>
+        <div class="hero-grid">
+          <div class="kpi total"><div class="label">Generated</div><div class="value">{len(rows)}</div></div>
+          <div class="kpi approve"><div class="label">Suggest Approve</div><div class="value">{decision_counts.get('approve', 0)}</div></div>
+          <div class="kpi reroll"><div class="label">Suggest Reroll</div><div class="value">{decision_counts.get('reroll', 0)}</div></div>
+          <div class="kpi reject"><div class="label">Suggest Reject</div><div class="value">{decision_counts.get('reject', 0)}</div></div>
         </div>
-      </section>
-      <section class="panel">
-        {ref_html}
-      </section>
-    </div>
+      </div>
+      <div class="stack">
+        <section class="panel">
+          <h2>Open Links</h2>
+          <ul class="meta-list">
+            <li><a href="{magic_link}">Magic moment index.html</a></li>
+            <li><a href="{contact_link}">Legacy contact-sheet.html</a></li>
+            <li>Packet root: <code>{packet_rel}</code></li>
+          </ul>
+        </section>
+        <section class="panel">
+          {ref_html}
+        </section>
+      </div>
+    </section>
 
-    <section class="panel controls">
+    <section class="panel" style="margin-top:14px;">
+      <h2>Provenance Summary</h2>
+      <ul class="meta-list">
+        <li><strong>Generated At:</strong> {html.escape(timestamp)}</li>
+        <li><strong>Provider:</strong> {html.escape(provider)}</li>
+        <li><strong>Model:</strong> {html.escape(model)}</li>
+        <li><strong>Image Endpoint:</strong> {html.escape(endpoint)}</li>
+        <li><strong>Export Manifest:</strong> {html.escape(str(export_manifest_path))}</li>
+        <li><strong>Command Log:</strong> {html.escape(str(run_log))} ({'present' if run_log.exists() else 'missing'})</li>
+        <li><strong>QA Mix:</strong> {html.escape(qa_summary)}</li>
+      </ul>
+    </section>
+
+    <section class="toolbar panel" style="margin-top:14px;">
       <select id="filter-decision">
         <option value="">All decisions</option>
         <option value="approve">Approve</option>
@@ -292,24 +381,24 @@ def build_contact_sheet_html(
         <option value="reject">Reject</option>
       </select>
       <select id="filter-qa">
-        <option value="">All QA</option>
+        <option value="">All QA statuses</option>
         <option value="pass">pass</option>
         <option value="manual_review">manual_review</option>
         <option value="fail">fail</option>
         <option value="unscored">unscored</option>
       </select>
-      <input id="filter-channel" type="text" placeholder="Filter channel (instagram, pdp, amazon...)" />
-      <input id="filter-name" type="text" placeholder="Filter by shot name or asset id" />
+      <input id="filter-channel" type="text" placeholder="Filter channel (pdp, social, amazon...)" />
+      <input id="filter-name" type="text" placeholder="Filter shot name or asset id" />
     </section>
 
-    <section id="cards" class="cards">
+    <section id="generated-gallery" class="gallery" data-gallery="generated-images" data-card-count="{len(rows)}">
       {cards}
     </section>
   </div>
 
   <script>
     (function () {{
-      const cards = Array.from(document.querySelectorAll('.card'));
+      const cards = Array.from(document.querySelectorAll('.generated-image-card'));
       const decision = document.getElementById('filter-decision');
       const qa = document.getElementById('filter-qa');
       const channel = document.getElementById('filter-channel');
@@ -325,7 +414,7 @@ def build_contact_sheet_html(
           const passDecision = !d || card.dataset.decision === d;
           const passQa = !q || card.dataset.qa === q;
           const passChannel = !c || (card.dataset.channels || '').includes(c);
-          const text = card.dataset.name + ' ' + card.querySelector('h3').textContent.toLowerCase();
+          const text = (card.dataset.name || '') + ' ' + (card.querySelector('h3')?.textContent || '').toLowerCase();
           const passName = !n || text.includes(n);
           card.classList.toggle('hidden', !(passDecision && passQa && passChannel && passName));
         }});
@@ -356,6 +445,8 @@ def main() -> int:
     qa = load_json(qa_path)
     reroll = load_json(reroll_path) if reroll_path.exists() else {"shots": [], "summary": {}}
     export_manifest = load_json(export_path)
+    scout_path = packet / "scout.json"
+    scout = load_json(scout_path) if scout_path.exists() else {}
 
     qa_by_asset = qa_index(qa)
     reroll_by_asset = reroll_index(reroll)
@@ -368,7 +459,7 @@ def main() -> int:
     for entry in generation.get("entries", []):
         asset_id = str(entry.get("asset_id", ""))
         shot_name = str(entry.get("shot_name", asset_id))
-        image_path = Path(str(entry.get("image_path", "")))
+        image_path = parse_image_path(entry.get("image_path", ""), packet)
         qa_row = qa_by_asset.get(asset_id, {})
         reroll_row = reroll_by_asset.get(asset_id, {})
         export_row = export_by_asset.get(asset_id, {})
@@ -378,18 +469,16 @@ def main() -> int:
         decision, reason = decision_for(
             qa_status=qa_status,
             reroll_final_status=reroll_status,
-            image_exists=image_path.exists(),
+            image_exists=bool(image_path and image_path.exists()),
         )
         decision_counts[decision] += 1
         qa_counts[qa_status] = qa_counts.get(qa_status, 0) + 1
 
-        image_for_html = relpath(image_path, out_dir) if image_path.exists() else ""
         rows.append(
             {
                 "asset_id": asset_id,
                 "shot_name": shot_name,
-                "image_path": str(image_path),
-                "image_path_for_html": image_for_html,
+                "image_path": str(image_path) if image_path else "",
                 "qa_status": qa_status,
                 "scores": qa_row.get("scores") or {},
                 "weighted_score": qa_row.get("weighted_score"),
@@ -404,12 +493,13 @@ def main() -> int:
         )
 
     reference_image_path = generation.get("reference_image_path")
-    reference_image = Path(str(reference_image_path)).resolve() if reference_image_path else None
+    reference_image = parse_image_path(reference_image_path, packet) if reference_image_path else None
     if reference_image and not reference_image.exists():
         reference_image = None
 
     template_path = out_dir / "human-review-template.json"
-    html_path = out_dir / "contact-sheet.html"
+    contact_path = out_dir / "contact-sheet.html"
+    magic_index_path = packet / "index.html"
     manifest_path = out_dir / "artifact-pack-manifest.json"
 
     template = {
@@ -417,7 +507,7 @@ def main() -> int:
             "review_date": "YYYY-MM-DD",
             "reviewer": "Name",
             "packet_dir": str(packet),
-            "product_url": str(load_json(packet / "scout.json").get("url", "")),
+            "product_url": str(scout.get("url", "")),
             "run_mode": str(generation.get("provider", "unknown")),
             "generated_at_utc": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
         },
@@ -458,17 +548,34 @@ def main() -> int:
     }
     dump_json(template_path, template)
 
-    html_payload = build_contact_sheet_html(
+    magic_html = build_gallery_html(
         packet=packet,
-        out_dir=out_dir,
+        page_base=packet,
         rows=rows,
+        scout=scout,
+        generation=generation,
         reference_image=reference_image,
         reference_image_url=generation.get("reference_image_url"),
         export_manifest_path=export_path,
         decision_counts=decision_counts,
         qa_counts=qa_counts,
+        primary_index=True,
     )
-    html_path.write_text(html_payload, encoding="utf-8")
+    contact_html = build_gallery_html(
+        packet=packet,
+        page_base=out_dir,
+        rows=rows,
+        scout=scout,
+        generation=generation,
+        reference_image=reference_image,
+        reference_image_url=generation.get("reference_image_url"),
+        export_manifest_path=export_path,
+        decision_counts=decision_counts,
+        qa_counts=qa_counts,
+        primary_index=False,
+    )
+    magic_index_path.write_text(magic_html, encoding="utf-8")
+    contact_path.write_text(contact_html, encoding="utf-8")
 
     manifest = {
         "run": {
@@ -482,6 +589,7 @@ def main() -> int:
             "reference_image_path": str(reference_image) if reference_image else None,
             "reference_image_url": generation.get("reference_image_url"),
             "out_dir": str(out_dir),
+            "magic_index_html": str(magic_index_path),
         },
         "summary": {
             "total_assets": len(rows),
@@ -490,8 +598,9 @@ def main() -> int:
             "packaged_for_review": len(rows),
         },
         "artifacts": {
+            "magic_index_html": str(magic_index_path),
             "human_review_template": str(template_path),
-            "contact_sheet_html": str(html_path),
+            "contact_sheet_html": str(contact_path),
         },
     }
     dump_json(manifest_path, manifest)

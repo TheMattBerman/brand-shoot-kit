@@ -1,6 +1,6 @@
 {
-  "run_id": "gen-20260427T215451Z",
-  "timestamp_utc": "20260427T215451Z",
+  "run_id": "gen-20260427T220656Z",
+  "timestamp_utc": "20260427T220656Z",
   "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast",
   "prompts_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/04-generation-prompts.md",
   "output_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/coffee-roast/assets/generated",

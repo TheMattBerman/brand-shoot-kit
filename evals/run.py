@@ -436,12 +436,19 @@ def eval_review_artifact_packager(errors: List[str]) -> None:
         assert_true(proc.returncode == 0, f"command succeeds: {label}", errors)
 
     review_root = packet / "assets" / "review"
+    magic_index = packet / "index.html"
     template = review_root / "human-review-template.json"
     contact = review_root / "contact-sheet.html"
     manifest = review_root / "artifact-pack-manifest.json"
+    assert_true(magic_index.exists(), "review artifact exists: packet-root index.html", errors)
     assert_true(template.exists(), "review artifact exists: human-review-template.json", errors)
     assert_true(contact.exists(), "review artifact exists: contact-sheet.html", errors)
     assert_true(manifest.exists(), "review artifact exists: artifact-pack-manifest.json", errors)
+    if magic_index.exists():
+        html_text = magic_index.read_text(encoding="utf-8")
+        assert_true("id=\"generated-gallery\"" in html_text, "magic frontend has generated gallery marker", errors)
+        assert_true("generated-image-card" in html_text, "magic frontend has generated image cards", errors)
+        assert_true("data-bsk-magic-moment=\"true\"" in html_text, "magic frontend has magic moment marker", errors)
     if manifest.exists():
         payload = load_json(manifest)
         summary = payload.get("summary", {})
@@ -482,6 +489,12 @@ def eval_live_proof_no_spend_defaults(errors: List[str]) -> None:
     summary = load_json(out / "assets" / "review" / "artifact-pack-manifest.json").get("summary", {})
     decision_keys = set((summary.get("suggested_decisions") or {}).keys())
     assert_true({"approve", "reroll", "reject"}.issubset(decision_keys), "live-proof review pack has decision summary keys", errors)
+    magic_index = out / "index.html"
+    assert_true(magic_index.exists(), "live-proof packet-root index.html exists", errors)
+    if magic_index.exists():
+        html_text = magic_index.read_text(encoding="utf-8")
+        assert_true("id=\"generated-gallery\"" in html_text, "live-proof index has generated gallery marker", errors)
+        assert_true("generated-image-card" in html_text, "live-proof index has generated image cards", errors)
 
 
 def eval_golden_bundle_completeness(errors: List[str]) -> None:

@@ -1,7 +1,7 @@
 {
   "run": {
-    "run_id": "reroll-20260427T215452Z",
-    "timestamp_utc": "20260427T215452Z",
+    "run_id": "reroll-20260427T220658Z",
+    "timestamp_utc": "20260427T220658Z",
     "mode": "dry-run-simulated",
     "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens",
     "qa_results": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/qa-results.json",

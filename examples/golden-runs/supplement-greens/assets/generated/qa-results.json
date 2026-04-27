@@ -1,7 +1,7 @@
 {
   "run": {
-    "run_id": "qa-20260427T215452Z",
-    "timestamp_utc": "20260427T215452Z",
+    "run_id": "qa-20260427T220658Z",
+    "timestamp_utc": "20260427T220658Z",
     "mode": "deterministic-manual",
     "manifest_path": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens/assets/generated/generation-manifest.json",
     "packet_dir": "/home/matt/clawd/projects/brand-shoot-kit/examples/golden-runs/supplement-greens",
