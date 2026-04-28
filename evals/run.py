@@ -463,6 +463,16 @@ def eval_review_artifact_packager(errors: List[str]) -> None:
             errors,
         )
 
+    # Scout scraper provenance is rendered onto index.html
+    index_html = packet / "index.html"
+    if index_html.exists():
+        content = index_html.read_text(encoding="utf-8")
+        assert_true(
+            "Scout: " in content and ("curl" in content.lower() or "firecrawl" in content.lower()),
+            "index.html includes scout scraper provenance",
+            errors,
+        )
+
 
 def eval_live_proof_no_spend_defaults(errors: List[str]) -> None:
     out = TMP / "live-proof-no-spend"

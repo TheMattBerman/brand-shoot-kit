@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 from datetime import datetime, timezone
 
 UTC = timezone.utc
@@ -19,6 +20,32 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from packet_utils import dump_json, ensure_packet_dir, load_json
+
+
+def _scout_scraper_label(packet_dir: Path) -> str:
+    """Render a one-line scout scraper provenance label for the review frontend."""
+    scout_path = packet_dir / "scout.json"
+    if not scout_path.exists():
+        return "Scout: unknown"
+    try:
+        scout = json.loads(scout_path.read_text(encoding="utf-8"))
+    except Exception:
+        return "Scout: unknown"
+    prov = scout.get("scrape_provenance") or {}
+    name = prov.get("scraper") or scout.get("scraper") or "unknown"
+    if name == "firecrawl":
+        meta = prov.get("firecrawl_meta") or {}
+        ms = meta.get("response_ms")
+        credits = meta.get("credits_used")
+        bits = ["Firecrawl /v2/scrape"]
+        if ms:
+            bits.append(f"{ms / 1000:.1f}s")
+        if credits is not None:
+            bits.append(f"~{credits} credit" + ("s" if credits != 1 else ""))
+        return "Scout: " + " · ".join(bits)
+    if name == "curl":
+        return "Scout: curl"
+    return f"Scout: {name}"
 
 
 def parse_args() -> argparse.Namespace:
@@ -372,6 +399,7 @@ def build_gallery_html(
         <li><strong>Export Manifest:</strong> {html.escape(str(export_manifest_path))}</li>
         <li><strong>Command Log:</strong> {html.escape(str(run_log))} ({'present' if run_log.exists() else 'missing'})</li>
         <li><strong>QA Mix:</strong> {html.escape(qa_summary)}</li>
+        <li><strong>{html.escape(_scout_scraper_label(packet))}</strong></li>
       </ul>
     </section>
 
