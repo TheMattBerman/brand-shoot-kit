@@ -674,8 +674,6 @@ def enrich_scout(base: Dict[str, Any]) -> Dict[str, Any]:
     for field, value in overrides.items():
         if not value:
             continue
-        if isinstance(value, list) and not value:
-            continue
         scout[field] = value
 
     # Insert Firecrawl main_image_url as a high-confidence image_evidence entry.
