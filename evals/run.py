@@ -551,6 +551,21 @@ def eval_scraper_adapters(errors: List[str]) -> None:
         assert_true(True, "adapters package importable", errors)
     except Exception as exc:
         assert_true(False, f"adapters package importable ({exc})", errors)
+        return
+
+    # Curl adapter: smoke test against a static HTML fixture (file:// URL works via curl).
+    fixture_html = ROOT / "evals" / "fixtures" / "html" / "shopify-coffee.html"
+    if not fixture_html.exists():
+        # Skip cleanly if the HTML fixture isn't created yet (Task 2 step 3).
+        return
+
+    from adapters import curl_scrape
+    payload = curl_scrape.scrape(f"file://{fixture_html}")
+    assert_true(payload.get("scraper") == "curl", "curl adapter sets scraper field", errors)
+    assert_true(payload.get("degraded_mode") is True, "curl adapter sets degraded_mode=true", errors)
+    assert_true(isinstance(payload.get("image_urls"), list), "curl adapter returns image_urls list", errors)
+    assert_true(isinstance(payload.get("json_ld"), list), "curl adapter returns json_ld list", errors)
+    assert_true(payload.get("url") == f"file://{fixture_html}", "curl adapter echoes input url", errors)
 
 
 def main() -> int:
