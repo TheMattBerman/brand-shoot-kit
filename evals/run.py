@@ -48,7 +48,9 @@ MODULE_CMDS = [
 
 def run(cmd: List[str]) -> subprocess.CompletedProcess[str]:
     full = [str(ROOT / cmd[0]), *cmd[1:]]
-    return subprocess.run(full, cwd=ROOT, text=True, capture_output=True)
+    env = os.environ.copy()
+    env["BSK_FORCE_SCRAPER"] = "curl"  # Evals must never make live Firecrawl calls.
+    return subprocess.run(full, cwd=ROOT, text=True, capture_output=True, env=env)
 
 
 def assert_true(condition: bool, message: str, errors: List[str]) -> None:
@@ -639,6 +641,25 @@ def eval_scraper_adapters(errors: List[str]) -> None:
     assert_true(proc.returncode == 2, "dispatcher --scraper firecrawl without key exits 2", errors)
     assert_true("--scraper curl" in proc.stderr, "dispatcher error message includes --scraper curl recovery hint", errors)
 
+    # Eval harness contract: run() forces BSK_FORCE_SCRAPER=curl on subprocess scout calls,
+    # so even with FIRECRAWL_API_KEY set in the parent shell, evals never make live Firecrawl calls.
+    saved_key = os.environ.pop("FIRECRAWL_API_KEY", None)
+    os.environ["FIRECRAWL_API_KEY"] = "fake-key-evals-must-not-use"
+    try:
+        proc2 = run([
+            "scripts/modules/brand_scout.py",
+            "--url", f"file://{ROOT}/evals/fixtures/html/shopify-coffee.html",
+            "--out", str(TMP / "harness-force-curl.json"),
+        ])
+        assert_true(proc2.returncode == 0, "harness run() with key set: brand_scout exits 0", errors)
+        assert_true("scraper=curl" in proc2.stderr,
+                    "harness run() forces BSK_FORCE_SCRAPER=curl on subprocess scout calls", errors)
+    finally:
+        if saved_key is not None:
+            os.environ["FIRECRAWL_API_KEY"] = saved_key
+        else:
+            os.environ.pop("FIRECRAWL_API_KEY", None)
+
 
 def eval_firecrawl_structured_preference(errors: List[str]) -> None:
     """When Firecrawl populates structured_product, enrich_scout prefers those values."""
@@ -697,7 +718,8 @@ def main() -> int:
         print(f"FAIL harness runtime error: {exc}")
         errors.append(f"runtime error: {exc}")
 
-    print(f"\nSummary: {len(errors)} failures")
+    print("\nScrape policy: BSK_FORCE_SCRAPER=curl (evals never call Firecrawl live)")
+    print(f"Summary: {len(errors)} failures")
     return 0 if not errors else 1
 
 
