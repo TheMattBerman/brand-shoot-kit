@@ -208,6 +208,11 @@ for v in OPENAI_API_KEY GOOGLE_AI_API_KEY FIRECRAWL_API_KEY APIFY_API_TOKEN REPL
   fi
 done
 
+if [[ -n "${FIRECRAWL_API_KEY:-}" ]]; then
+  echo "  Note: Firecrawl will be the default scraper for any keyed run."
+  echo "        Pass --scraper curl on run-brand-shoot.py / run-live-proof.sh to opt out per-run."
+fi
+
 echo
 echo "Summary: PASS=${PASS} FAIL=${FAIL} WARN=${WARN}"
 if [[ "$FAIL" -gt 0 ]]; then
