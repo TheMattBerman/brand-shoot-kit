@@ -1340,8 +1340,9 @@ Responsibilities:
 
 Implementation options:
 
-- simple `curl`/Node fetch first
-- optional Firecrawl when configured
+- `scripts/adapters/curl_scrape.py` — default when `FIRECRAWL_API_KEY` is unset; `curl` fetch + regex/JSON-LD extraction.
+- `scripts/adapters/firecrawl_scrape.py` — default when `FIRECRAWL_API_KEY` is set; uses Firecrawl `/v2/scrape` with JSON-schema product extraction and image filtering (`onlyMainContent` + `excludeTags`). Failures hard-fail with exit 2 and a `--scraper curl` recovery hint.
+- Dispatch lives in `scripts/modules/brand_scout.py` and honors `--scraper {auto,curl,firecrawl}` → `BSK_FORCE_SCRAPER` env → `FIRECRAWL_API_KEY` env → curl default precedence.
 - optional social extraction later
 
 Exit criteria:

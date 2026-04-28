@@ -52,8 +52,8 @@ Each stage must complete before the next begins. Artifacts flow through the pack
 
 **Purpose:** Pull product facts, page evidence, source images, and structured extraction from a product URL.
 **Scripts:** `scripts/scout-structured.py`, `scripts/modules/brand_scout.py`
-**Data Sources:** Direct fetch, optional Firecrawl, structured JSON-LD / Shopify product JSON.
-**Output:** `scout.json` plus `00-brand-analysis.md`.
+**Data Sources:** Dispatched between `scripts/adapters/curl_scrape.py` (regex over `curl`-fetched HTML) and `scripts/adapters/firecrawl_scrape.py` (Firecrawl `/v2/scrape` with JSON-schema extraction). Selection follows `--scraper` flag → `BSK_FORCE_SCRAPER` env → `FIRECRAWL_API_KEY` env → curl default. Output adds a top-level `scrape_provenance` object recording which adapter ran.
+**Output:** `scout.json` (with `scrape_provenance`) plus `00-brand-analysis.md`.
 **Mode:** Deterministic, confidence-gated.
 
 ### skills/product-preservation — Must-Preserve Brief

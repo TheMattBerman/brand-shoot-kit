@@ -26,10 +26,17 @@ Produce `scout.json` with:
   `visible_packaging_text_candidates`, `image_evidence`, `field_confidence`,
   `extraction_warnings`
 - `degraded_mode` and `note`
+- `scrape_provenance` (object) recording which adapter ran:
+  `{scraper, scraper_version, scraped_at, request_url, fixture_used, forced_by, firecrawl_meta?}`.
 
 Executable module owner path:
 - `scripts/modules/brand_scout.py --url <product-url> --packet <packet-dir>` -> `scout.json`
 - `scripts/scout-structured.py --in <scout.json> --out <scout.json>` for structured enrichment only.
+
+Scraper selection on the module:
+- `--scraper {auto,curl,firecrawl}` (default `auto`).
+- `auto` follows env precedence: `BSK_FORCE_SCRAPER` (used by `./evals/run.py`) → `FIRECRAWL_API_KEY` → curl default.
+- Firecrawl failures exit code 2 with a one-line `--scraper curl` recovery hint.
 
 ## Rules
 

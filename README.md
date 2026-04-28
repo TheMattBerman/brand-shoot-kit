@@ -287,6 +287,30 @@ See `openclaw.example.json` for the full env shape. Start at $0 with `--dry-run`
 
 ---
 
+## Scrapers
+
+Brand Shoot Kit ships two scout scrapers behind a single dispatcher.
+
+- **curl** (default when `FIRECRAWL_API_KEY` is unset). Stdlib-only. Best for Shopify-like pages with embedded JSON-LD.
+- **firecrawl** (default when `FIRECRAWL_API_KEY` is set). Uses Firecrawl `/v2/scrape` with JSON-schema product extraction (`brand`, `product_name`, `price`, `variants`, `claims`, `ingredients`, `packaging_description`, `main_image_url`, `product_image_urls`) and image filtering via `onlyMainContent` + `excludeTags`. Better for JS-rendered, lazy-loaded, or non-Shopify sites.
+
+**Dispatcher precedence** (first match wins):
+
+1. `--scraper {auto,curl,firecrawl}` flag on `run-brand-shoot.py` / `run-live-proof.sh` / `scripts/modules/brand_scout.py`.
+2. `BSK_FORCE_SCRAPER` env var (also used by `./evals/run.py` to keep evals offline).
+3. `FIRECRAWL_API_KEY` set → `firecrawl`.
+4. Default → `curl`.
+
+**Live spend gate.** Setting `FIRECRAWL_API_KEY` engages Firecrawl on every keyed run. Each scout-stage run prints a banner: `[scout] scraper=firecrawl  endpoint=/v2/scrape  est_credits=~1  url=…` so the operator can see what's about to be charged before any other stage runs. `./doctor.sh` also flags this when the key is set.
+
+**On failure.** Firecrawl errors exit code 2 with a one-line recovery hint. Re-run with `--scraper curl` to use the curl fallback for that run, or `unset FIRECRAWL_API_KEY` to default to curl going forward.
+
+**Provenance.** Every `scout.json` carries a `scrape_provenance` object recording which adapter ran, when, with what cost. The packet's `index.html` review frontend renders a one-line "Scout: …" label so the deliverable proves what produced it.
+
+**Catalog mode (future).** This adapter pattern is the foundation for multi-product fan-out from a domain or collection URL. Out of scope for this release.
+
+---
+
 ## Category Coverage
 
 Deterministic fixtures and golden runs currently cover:
