@@ -591,6 +591,25 @@ def extract_structured_product_fields(base: Dict[str, Any], product_name: str, b
     }
 
 
+def _structured_overrides(base: Dict[str, Any]) -> Dict[str, Any]:
+    """Pull values from base['structured_product'] for use as preferred extractions."""
+    sp = base.get("structured_product") or {}
+    if not isinstance(sp, dict) or not sp:
+        return {}
+    return {
+        "brand_name": sp.get("brand") or "",
+        "product_name": sp.get("product_name") or "",
+        "price": sp.get("price") or "",
+        "variants": list(sp.get("variants") or []),
+        "claims_benefits": list(sp.get("claims") or []),
+        "ingredients_materials_specs": list(sp.get("ingredients") or []),
+        "visible_packaging_text_candidates": (
+            [sp["packaging_description"]] if sp.get("packaging_description") else []
+        ),
+        "product_category": sp.get("category_hint") or "",
+    }
+
+
 def enrich_scout(base: Dict[str, Any]) -> Dict[str, Any]:
     scout = dict(base)
     brand_name, product_name = infer_brand_product(scout)
@@ -649,6 +668,29 @@ def enrich_scout(base: Dict[str, Any]) -> Dict[str, Any]:
             "extraction_warnings": warnings,
         }
     )
+
+    # Prefer Firecrawl schema-extracted values when present.
+    overrides = _structured_overrides(base)
+    for field, value in overrides.items():
+        if not value:
+            continue
+        if isinstance(value, list) and not value:
+            continue
+        scout[field] = value
+
+    # Insert Firecrawl main_image_url as a high-confidence image_evidence entry.
+    main_image = base.get("main_image_url")
+    if main_image:
+        img_evidence = scout.get("image_evidence") or []
+        if not any(str(e.get("url", "")) == main_image for e in img_evidence):
+            img_evidence.insert(0, {
+                "url": main_image,
+                "source": "firecrawl.main_image_url",
+                "confidence": 0.95,
+                "rank": 0,
+            })
+        scout["image_evidence"] = img_evidence
+
     return scout
 
 

@@ -640,6 +640,35 @@ def eval_scraper_adapters(errors: List[str]) -> None:
     assert_true("--scraper curl" in proc.stderr, "dispatcher error message includes --scraper curl recovery hint", errors)
 
 
+def eval_firecrawl_structured_preference(errors: List[str]) -> None:
+    """When Firecrawl populates structured_product, enrich_scout prefers those values."""
+    out = TMP / "firecrawl-structured-preference.json"
+    env = os.environ.copy()
+    env["BSK_FIRECRAWL_FIXTURE_DIR"] = str(ROOT / "evals" / "fixtures" / "firecrawl")
+    proc = subprocess.run(
+        [
+            str(ROOT / "scripts" / "modules" / "brand_scout.py"),
+            "--url", "https://example.com/products/sample",
+            "--out", str(out),
+            "--scraper", "firecrawl",
+        ],
+        cwd=ROOT, text=True, capture_output=True, env=env,
+    )
+    assert_true(proc.returncode == 0, "brand_scout firecrawl-fixture run exits 0", errors)
+    if proc.returncode != 0:
+        return
+    scout = load_json(out)
+    assert_true(scout.get("brand_name", "").lower() == "sample roastery",
+                "enrich_scout uses Firecrawl structured_product.brand", errors)
+    assert_true(scout.get("product_name", "").lower() == "sample coffee",
+                "enrich_scout uses Firecrawl structured_product.product_name", errors)
+    assert_true(str(scout.get("price", "")).startswith("$18"),
+                "enrich_scout uses Firecrawl structured_product.price", errors)
+    image_evidence = scout.get("image_evidence") or []
+    assert_true(any("sample-coffee-hero" in str(e.get("url", "")) for e in image_evidence),
+                "enrich_scout image_evidence includes Firecrawl main_image_url", errors)
+
+
 def main() -> int:
     errors: List[str] = []
     if TMP.exists():
@@ -653,6 +682,7 @@ def main() -> int:
         eval_category_taxonomy_baselines(errors)
         eval_prompt_scale_human_context_guidance(errors)
         eval_scraper_adapters(errors)
+        eval_firecrawl_structured_preference(errors)
         eval_module_entrypoints(errors)
         eval_dry_run_loop(errors)
         eval_export_rendering_metadata(errors)
