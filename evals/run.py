@@ -567,6 +567,26 @@ def eval_scraper_adapters(errors: List[str]) -> None:
     assert_true(isinstance(payload.get("json_ld"), list), "curl adapter returns json_ld list", errors)
     assert_true(payload.get("url") == f"file://{fixture_html}", "curl adapter echoes input url", errors)
 
+    # Firecrawl adapter: fixture mode
+    fixture_dir = ROOT / "evals" / "fixtures" / "firecrawl"
+    if not (fixture_dir / "README.md").exists():
+        return  # adapter not yet built
+
+    from adapters import firecrawl_scrape
+    fixture_url = "https://example.com/products/sample"
+    payload = firecrawl_scrape.scrape(fixture_url, fixture_dir=fixture_dir)
+    assert_true(payload.get("scraper") == "firecrawl", "firecrawl adapter sets scraper field", errors)
+    assert_true(payload.get("degraded_mode") is False, "firecrawl adapter sets degraded_mode=false", errors)
+    assert_true(payload.get("url") == fixture_url, "firecrawl adapter echoes input url", errors)
+    assert_true(isinstance(payload.get("image_urls"), list), "firecrawl adapter returns image_urls list", errors)
+    assert_true(isinstance(payload.get("structured_product"), dict), "firecrawl adapter populates structured_product", errors)
+    sp = payload.get("structured_product") or {}
+    assert_true(sp.get("brand") == "Sample Roastery", "firecrawl structured_product.brand from fixture", errors)
+    assert_true(payload.get("main_image_url", "").startswith("https://"), "firecrawl adapter populates main_image_url", errors)
+    prov = payload.get("scrape_provenance") or {}
+    assert_true(prov.get("scraper") == "firecrawl", "firecrawl scrape_provenance.scraper", errors)
+    assert_true(prov.get("fixture_used") is not None, "firecrawl scrape_provenance.fixture_used set in fixture mode", errors)
+
 
 def main() -> int:
     errors: List[str] = []

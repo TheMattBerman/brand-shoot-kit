@@ -1,0 +1,37 @@
+{
+  "request": {
+    "url": "https://example.com/products/sample",
+    "recorded_at": "2026-04-27T12:00:00Z",
+    "firecrawl_endpoint": "/v2/scrape"
+  },
+  "response": {
+    "success": true,
+    "data": {
+      "html": "<html><head><title>Sample Coffee — Sample Roastery</title></head><body><h1>Sample Coffee</h1></body></html>",
+      "links": ["https://example.com/about", "https://example.com/contact"],
+      "metadata": {
+        "title": "Sample Coffee — Sample Roastery",
+        "description": "Single origin Ethiopian coffee.",
+        "ogTitle": "Sample Coffee",
+        "ogDescription": "Single origin Ethiopian coffee.",
+        "sourceURL": "https://example.com/products/sample",
+        "statusCode": 200
+      },
+      "json": {
+        "brand": "Sample Roastery",
+        "product_name": "Sample Coffee",
+        "category_hint": "coffee",
+        "price": "$18.00",
+        "variants": ["Whole Bean — 12oz", "Ground — 12oz"],
+        "ingredients": ["100% Arabica", "Single origin Ethiopia"],
+        "claims": ["Fresh roasted", "Direct trade"],
+        "packaging_description": "Matte black 12oz bag with copper foil label.",
+        "main_image_url": "https://cdn.example.com/sample-coffee-hero.jpg",
+        "product_image_urls": [
+          "https://cdn.example.com/sample-coffee-hero.jpg",
+          "https://cdn.example.com/sample-coffee-back.jpg"
+        ]
+      }
+    }
+  }
+}
