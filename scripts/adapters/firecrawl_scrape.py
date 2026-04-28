@@ -63,6 +63,11 @@ def _build_request_body(url: str) -> dict:
 
 
 def _post(url: str, *, api_key: str, timeout_s: float = 30.0) -> tuple[dict, int]:
+    if any(ch in api_key for ch in "\r\n\t\x00"):
+        raise FirecrawlScrapeError(
+            "missing_api_key",
+            "FIRECRAWL_API_KEY contains control characters; refusing to send.",
+        )
     body = json.dumps(_build_request_body(url)).encode("utf-8")
     req = urllib.request.Request(
         f"{FIRECRAWL_API}{FIRECRAWL_ENDPOINT}",
@@ -76,8 +81,24 @@ def _post(url: str, *, api_key: str, timeout_s: float = 30.0) -> tuple[dict, int
     )
     try:
         with urllib.request.urlopen(req, timeout=timeout_s) as resp:
-            payload = json.loads(resp.read().decode("utf-8"))
-            return payload, resp.status
+            raw = resp.read()
+            status = resp.status
+        try:
+            payload = json.loads(raw.decode("utf-8"))
+        except UnicodeDecodeError as e:
+            raise FirecrawlScrapeError(
+                "response_invalid",
+                f"Firecrawl response was not UTF-8: {e}",
+                http_status=status,
+            ) from e
+        except json.JSONDecodeError as e:
+            preview = raw[:200].decode("utf-8", errors="replace")
+            raise FirecrawlScrapeError(
+                "response_invalid",
+                f"Firecrawl response was not valid JSON: {e}. First 200 bytes: {preview!r}",
+                http_status=status,
+            ) from e
+        return payload, status
     except urllib.error.HTTPError as e:
         try:
             detail = e.read().decode("utf-8", errors="ignore")
@@ -217,7 +238,7 @@ def scrape(url: str, *, fixture_dir: Path | None = None) -> dict:
     firecrawl_meta = {
         "endpoint": FIRECRAWL_ENDPOINT,
         "request_id": payload.get("scrapeId") or payload.get("id") or "",
-        "credits_used": payload.get("creditsUsed") or 1,
+        "credits_used": payload.get("creditsUsed", 0),
         "response_ms": elapsed_ms,
     }
     return _normalize(url, data, fixture_path=None, firecrawl_meta=firecrawl_meta)
