@@ -34,7 +34,6 @@ from pipeline_stages import (
 from scout_structured import enrich_scout
 
 ROOT = Path(__file__).resolve().parent.parent
-SCOUT_URL = ROOT / "scripts" / "scout-url.sh"
 VALIDATE_PACKET = ROOT / "scripts" / "validate-packet.py"
 
 
@@ -61,6 +60,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--stage", choices=["all", "scout", "preservation", "visual-gaps", "shoot-plan", "prompts", "render"], default="all", help="Run full pipeline or a single stage")
     p.add_argument("--save-config", help="Optional path to write derived config JSON")
     p.add_argument("--skip-validate", action="store_true", help="Skip packet structure validation")
+    p.add_argument("--scraper", choices=("auto", "curl", "firecrawl"), default="auto",
+                   help="Scraper selection: auto follows env precedence; curl or firecrawl forces.")
     return p.parse_args()
 
 
@@ -108,8 +109,20 @@ def scout_from_args(args: argparse.Namespace) -> Dict[str, Any]:
     if args.scout_json:
         return enrich_scout(load_json(Path(args.scout_json).resolve()))
     if args.url:
-        scout_output = run_cmd([str(SCOUT_URL), "--url", args.url], capture=True)
-        return enrich_scout(json.loads(scout_output))
+        # Route through the brand_scout dispatcher so --scraper / BSK_FORCE_SCRAPER /
+        # FIRECRAWL_API_KEY precedence rules apply.
+        sys.path.insert(0, str(ROOT / "scripts" / "modules"))
+        from brand_scout import pick_scraper, print_banner, print_failure, run_scrape
+        from adapters.firecrawl_scrape import FirecrawlScrapeError
+
+        scraper, forced_by = pick_scraper(args.scraper)
+        print_banner(scraper, args.url)
+        try:
+            base = run_scrape(args.url, scraper, forced_by)
+        except FirecrawlScrapeError as e:
+            print_failure(args.url, e)
+            raise SystemExit(2)
+        return enrich_scout(base)
     raise SystemExit("error: provide --url or --scout-json")
 
 

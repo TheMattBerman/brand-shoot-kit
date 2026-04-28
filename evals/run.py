@@ -641,6 +641,22 @@ def eval_scraper_adapters(errors: List[str]) -> None:
     assert_true(proc.returncode == 2, "dispatcher --scraper firecrawl without key exits 2", errors)
     assert_true("--scraper curl" in proc.stderr, "dispatcher error message includes --scraper curl recovery hint", errors)
 
+    # run-brand-shoot.py forwards --scraper to the dispatcher.
+    suite_out = TMP / "suite-scraper-curl"
+    proc_suite = run([
+        "scripts/run-brand-shoot.py",
+        "--url", f"file://{ROOT}/evals/fixtures/html/shopify-coffee.html",
+        "--out", str(suite_out),
+        "--scraper", "curl",
+        "--stage", "scout",
+        "--skip-validate",
+    ])
+    assert_true(proc_suite.returncode == 0,
+                f"run-brand-shoot --scraper curl exits 0 ({proc_suite.stderr.strip()[:200]})", errors)
+    if proc_suite.returncode == 0:
+        scout_json = suite_out / "scout.json"
+        assert_true(scout_json.exists(), "run-brand-shoot writes scout.json with --scraper", errors)
+
     # Eval harness contract: run() forces BSK_FORCE_SCRAPER=curl on subprocess scout calls,
     # so even with FIRECRAWL_API_KEY set in the parent shell, evals never make live Firecrawl calls.
     saved_key = os.environ.pop("FIRECRAWL_API_KEY", None)
