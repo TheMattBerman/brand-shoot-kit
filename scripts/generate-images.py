@@ -20,7 +20,9 @@ import sys
 import urllib.error
 import urllib.request
 import zlib
-from datetime import UTC, datetime
+from datetime import datetime, timezone
+
+UTC = timezone.utc
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urlparse
