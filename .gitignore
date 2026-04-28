@@ -16,3 +16,6 @@ __pycache__/
 
 # Local design docs / specs (kept out of repo per operator preference)
 docs/superpowers/
+
+# Git worktrees for parallel feature work
+.worktrees/
