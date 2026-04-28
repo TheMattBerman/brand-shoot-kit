@@ -513,7 +513,11 @@ def eval_golden_bundle_completeness(errors: List[str]) -> None:
         "golden bundles include coffee/skincare/supplement/cleaning",
         errors,
     )
+    # firecrawl-baseline is a scout-only golden run; skip full-pipeline artifact checks.
+    SCOUT_ONLY_BUNDLES = {"firecrawl-baseline"}
     for bundle in bundles:
+        if bundle.name in SCOUT_ONLY_BUNDLES:
+            continue
         required = [
             bundle / "input" / "scout-fixture.json",
             bundle / "scout.json",
@@ -706,6 +710,34 @@ def eval_firecrawl_structured_preference(errors: List[str]) -> None:
                 "enrich_scout image_evidence includes Firecrawl main_image_url", errors)
 
 
+def eval_firecrawl_golden_run(errors: List[str]) -> None:
+    """Run examples/golden-runs/firecrawl-baseline/run.sh and verify scout output."""
+    golden_dir = GOLDEN_ROOT / "firecrawl-baseline"
+    run_script = golden_dir / "run.sh"
+    if not run_script.exists():
+        assert_true(False, "firecrawl-baseline golden run script exists", errors)
+        return
+    out = TMP / "firecrawl-baseline"
+    if out.exists():
+        shutil.rmtree(out)
+    proc = subprocess.run(
+        [str(run_script), str(out)],
+        cwd=ROOT, text=True, capture_output=True,
+    )
+    assert_true(proc.returncode == 0, f"firecrawl-baseline run.sh exits 0 ({proc.stderr.strip()[:200]})", errors)
+    if proc.returncode != 0:
+        return
+    scout_path = out / "scout.json"
+    assert_true(scout_path.exists(), "firecrawl-baseline produces scout.json", errors)
+    if not scout_path.exists():
+        return
+    scout = load_json(scout_path)
+    assert_true(scout.get("brand_name", "").lower() == "sample roastery",
+                "firecrawl-baseline scout brand from fixture", errors)
+    assert_true(scout.get("product_name", "").lower() == "sample coffee",
+                "firecrawl-baseline scout product_name from fixture", errors)
+
+
 def main() -> int:
     errors: List[str] = []
     if TMP.exists():
@@ -720,6 +752,7 @@ def main() -> int:
         eval_prompt_scale_human_context_guidance(errors)
         eval_scraper_adapters(errors)
         eval_firecrawl_structured_preference(errors)
+        eval_firecrawl_golden_run(errors)
         eval_module_entrypoints(errors)
         eval_dry_run_loop(errors)
         eval_export_rendering_metadata(errors)

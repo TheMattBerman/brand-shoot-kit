@@ -1,0 +1,7 @@
+{
+  "brand_name": "Sample Roastery",
+  "product_name": "Sample Coffee",
+  "scraper": "firecrawl",
+  "fixture_used": "evals/fixtures/firecrawl/1e3e0685f77c774db4dd73adc8623740d288417ecd3a2e3702b8c5bb4afd592b.json",
+  "note": "Human-readable summary of expected scout fields. The eval harness asserts against scout.json directly via eval_firecrawl_golden_run."
+}
