@@ -25,6 +25,9 @@ Cost controls:
 
 Other:
   --qa-threshold N       QA pass threshold 0-100 (default: 80)
+  --scraper MODE         Scout scraper: auto | curl | firecrawl (default: auto)
+                         auto follows env precedence: BSK_FORCE_SCRAPER then
+                         FIRECRAWL_API_KEY; curl forces the no-key fallback.
   --help                 Show this help
 USAGE
 }
@@ -36,6 +39,7 @@ QA_THRESHOLD=80
 REROLL_MODE="dry"
 DRY_RUN=false
 LIVE_CONFIRM=false
+SCRAPER="auto"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -67,6 +71,10 @@ while [[ $# -gt 0 ]]; do
       LIVE_CONFIRM=true
       shift
       ;;
+    --scraper)
+      SCRAPER="${2:-}"
+      shift 2
+      ;;
     --help|-h)
       usage
       exit 0
@@ -94,6 +102,14 @@ case "$REROLL_MODE" in
   off|dry|live) ;;
   *)
     echo "error: --reroll must be one of: off, dry, live" >&2
+    exit 1
+    ;;
+esac
+
+case "$SCRAPER" in
+  auto|curl|firecrawl) ;;
+  *)
+    echo "error: --scraper must be one of: auto, curl, firecrawl" >&2
     exit 1
     ;;
 esac
@@ -201,7 +217,16 @@ if [[ "$MODE" == "dry-run" ]]; then
   fi
   run_cmd "$ROOT_DIR/scripts/run-brand-shoot.py" --scout-json "$TMP_SCOUT" --url "$URL" --out "$OUT"
 else
-  run_cmd "$ROOT_DIR/scripts/run-brand-shoot.py" --url "$URL" --out "$OUT"
+  set +e
+  run_cmd "$ROOT_DIR/scripts/run-brand-shoot.py" --url "$URL" --out "$OUT" --scraper "$SCRAPER"
+  RC=$?
+  set -e
+  if [[ "$RC" -eq 2 ]]; then
+    echo "[live-proof] scout failed (exit 2); recovery: re-run with --scraper curl" >&2
+    exit 2
+  elif [[ "$RC" -ne 0 ]]; then
+    exit "$RC"
+  fi
 fi
 
 # 2) generate
