@@ -605,6 +605,40 @@ def eval_scraper_adapters(errors: List[str]) -> None:
         if saved_dir is not None:
             os.environ["BSK_FIRECRAWL_FIXTURE_DIR"] = saved_dir
 
+    # Dispatcher: --scraper curl forces curl regardless of env
+    saved_key = os.environ.pop("FIRECRAWL_API_KEY", None)
+    os.environ["FIRECRAWL_API_KEY"] = "fake-key-should-not-be-used"
+    try:
+        proc = run([
+            "scripts/modules/brand_scout.py",
+            "--url", f"file://{ROOT}/evals/fixtures/html/shopify-coffee.html",
+            "--out", str(TMP / "dispatcher-curl-forced.json"),
+            "--scraper", "curl",
+        ])
+        assert_true(proc.returncode == 0, "dispatcher --scraper curl exits 0 even with key set", errors)
+        if proc.returncode == 0:
+            payload = load_json(TMP / "dispatcher-curl-forced.json")
+            assert_true(payload.get("scrape_provenance", {}).get("scraper") == "curl",
+                        "dispatcher --scraper curl produces curl provenance", errors)
+            assert_true(payload.get("scrape_provenance", {}).get("forced_by") == "--scraper",
+                        "dispatcher records forced_by=--scraper", errors)
+    finally:
+        if saved_key is not None:
+            os.environ["FIRECRAWL_API_KEY"] = saved_key
+        else:
+            os.environ.pop("FIRECRAWL_API_KEY", None)
+
+    # Dispatcher: --scraper firecrawl without key fails loudly with exit 2
+    os.environ.pop("FIRECRAWL_API_KEY", None)
+    proc = run([
+        "scripts/modules/brand_scout.py",
+        "--url", "https://example.com/products/sample",
+        "--out", str(TMP / "dispatcher-firecrawl-no-key.json"),
+        "--scraper", "firecrawl",
+    ])
+    assert_true(proc.returncode == 2, "dispatcher --scraper firecrawl without key exits 2", errors)
+    assert_true("--scraper curl" in proc.stderr, "dispatcher error message includes --scraper curl recovery hint", errors)
+
 
 def main() -> int:
     errors: List[str] = []
