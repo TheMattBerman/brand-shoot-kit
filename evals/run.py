@@ -544,6 +544,15 @@ def eval_live_proof_tooling(errors: List[str]) -> None:
     assert_true(proc2.returncode == 0, "review packager help command succeeds", errors)
 
 
+def eval_scraper_adapters(errors: List[str]) -> None:
+    sys.path.insert(0, str(ROOT / "scripts"))
+    try:
+        import adapters  # noqa: F401
+        assert_true(True, "adapters package importable", errors)
+    except Exception as exc:
+        assert_true(False, f"adapters package importable ({exc})", errors)
+
+
 def main() -> int:
     errors: List[str] = []
     if TMP.exists():
@@ -556,6 +565,7 @@ def main() -> int:
         eval_prompt_differentiation(errors)
         eval_category_taxonomy_baselines(errors)
         eval_prompt_scale_human_context_guidance(errors)
+        eval_scraper_adapters(errors)
         eval_module_entrypoints(errors)
         eval_dry_run_loop(errors)
         eval_export_rendering_metadata(errors)
