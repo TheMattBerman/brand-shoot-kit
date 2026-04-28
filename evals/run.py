@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import struct
 import subprocess
@@ -586,6 +587,23 @@ def eval_scraper_adapters(errors: List[str]) -> None:
     prov = payload.get("scrape_provenance") or {}
     assert_true(prov.get("scraper") == "firecrawl", "firecrawl scrape_provenance.scraper", errors)
     assert_true(prov.get("fixture_used") is not None, "firecrawl scrape_provenance.fixture_used set in fixture mode", errors)
+
+    # Firecrawl adapter: live path requires a key
+    saved_key = os.environ.pop("FIRECRAWL_API_KEY", None)
+    saved_dir = os.environ.pop("BSK_FIRECRAWL_FIXTURE_DIR", None)
+    try:
+        from adapters.firecrawl_scrape import FirecrawlScrapeError
+        try:
+            firecrawl_scrape.scrape("https://example.com/no-fixture-no-key")
+            assert_true(False, "firecrawl adapter without key/fixture raises", errors)
+        except FirecrawlScrapeError as e:
+            assert_true("api_key" in e.kind or "fixture_missing" in e.kind,
+                        "firecrawl adapter raises clear error without key/fixture", errors)
+    finally:
+        if saved_key is not None:
+            os.environ["FIRECRAWL_API_KEY"] = saved_key
+        if saved_dir is not None:
+            os.environ["BSK_FIRECRAWL_FIXTURE_DIR"] = saved_dir
 
 
 def main() -> int:

@@ -10,11 +10,84 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import time
+import urllib.error
+import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
 FIRECRAWL_ENDPOINT = "/v2/scrape"
 FIRECRAWL_API = "https://api.firecrawl.dev"
+
+_PRODUCT_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "brand":                 {"type": "string"},
+        "product_name":          {"type": "string"},
+        "category_hint":         {"type": "string", "description": "e.g. coffee, skincare, supplement, cleaning_kit"},
+        "price":                 {"type": "string"},
+        "variants":              {"type": "array", "items": {"type": "string"}},
+        "ingredients":           {"type": "array", "items": {"type": "string"}},
+        "claims":                {"type": "array", "items": {"type": "string"}},
+        "packaging_description": {"type": "string"},
+        "main_image_url":        {"type": "string", "description": "The single primary product hero image"},
+        "product_image_urls":    {"type": "array", "items": {"type": "string"},
+                                   "description": "Real product photos only — no logos, badges, review widgets, nutrition panels, cross-sells"},
+    },
+}
+
+_DEFAULT_EXCLUDE_TAGS = [
+    "nav", "footer", "header",
+    "[role=banner]", "[role=contentinfo]",
+    ".announcement", ".reviews", ".cross-sell", ".related-products",
+]
+
+
+def _build_request_body(url: str) -> dict:
+    return {
+        "url": url,
+        "formats": [
+            "html",
+            "links",
+            {
+                "type": "json",
+                "prompt": "Extract the product as listed on this page. Use only what's literally visible on the PDP.",
+                "schema": _PRODUCT_SCHEMA,
+            },
+        ],
+        "onlyMainContent": True,
+        "excludeTags": _DEFAULT_EXCLUDE_TAGS,
+        "waitFor": 1500,
+        "timeout": 25000,
+    }
+
+
+def _post(url: str, *, api_key: str, timeout_s: float = 30.0) -> tuple[dict, int]:
+    body = json.dumps(_build_request_body(url)).encode("utf-8")
+    req = urllib.request.Request(
+        f"{FIRECRAWL_API}{FIRECRAWL_ENDPOINT}",
+        data=body,
+        method="POST",
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "User-Agent": "brand-shoot-kit/firecrawl-adapter",
+        },
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout_s) as resp:
+            payload = json.loads(resp.read().decode("utf-8"))
+            return payload, resp.status
+    except urllib.error.HTTPError as e:
+        try:
+            detail = e.read().decode("utf-8", errors="ignore")
+        except Exception:
+            detail = ""
+        raise FirecrawlScrapeError("api_error", detail or e.reason or str(e), http_status=e.code) from e
+    except urllib.error.URLError as e:
+        raise FirecrawlScrapeError("network_error", str(e.reason)) from e
+    except TimeoutError as e:
+        raise FirecrawlScrapeError("timeout", str(e)) from e
 
 
 def _format_fixture_path(fixture_path: Path) -> str:
@@ -121,9 +194,30 @@ def scrape(url: str, *, fixture_dir: Path | None = None) -> dict:
         }
         return _normalize(url, data, fixture_path=path, firecrawl_meta=firecrawl_meta)
 
-    # Live path lives in Task 4. Until then, fixture mode is required.
-    raise FirecrawlScrapeError(
-        "not_implemented",
-        "Live Firecrawl HTTP path is not yet implemented. "
-        "Set BSK_FIRECRAWL_FIXTURE_DIR or pass fixture_dir to use fixture replay.",
-    )
+    api_key = os.environ.get("FIRECRAWL_API_KEY")
+    if not api_key:
+        raise FirecrawlScrapeError(
+            "missing_api_key",
+            "FIRECRAWL_API_KEY is not set. Either set it, pass --scraper curl, or "
+            "provide a fixture_dir for replay testing.",
+        )
+
+    started = time.monotonic()
+    payload, status = _post(url, api_key=api_key)
+    elapsed_ms = int((time.monotonic() - started) * 1000)
+
+    if not isinstance(payload, dict) or not payload.get("success"):
+        detail = payload.get("error") if isinstance(payload, dict) else "non-dict response"
+        raise FirecrawlScrapeError("api_unsuccessful", str(detail), http_status=status)
+
+    data = payload.get("data")
+    if not isinstance(data, dict) or not data.get("metadata"):
+        raise FirecrawlScrapeError("empty_response", "Firecrawl returned 200 OK but data was empty.", http_status=status)
+
+    firecrawl_meta = {
+        "endpoint": FIRECRAWL_ENDPOINT,
+        "request_id": payload.get("scrapeId") or payload.get("id") or "",
+        "credits_used": payload.get("creditsUsed") or 1,
+        "response_ms": elapsed_ms,
+    }
+    return _normalize(url, data, fixture_path=None, firecrawl_meta=firecrawl_meta)
