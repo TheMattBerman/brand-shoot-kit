@@ -13,3 +13,6 @@ brand-shoot-output/
 __pycache__/
 **/__pycache__/
 *.pyc
+
+# Local design docs / specs (kept out of repo per operator preference)
+docs/superpowers/
