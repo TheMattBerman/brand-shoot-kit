@@ -1,7 +1,7 @@
 """Firecrawl /v2/scrape adapter.
 
 Live HTTP path (Task 4) and fixture-replay path (this task) share a single
-normalize_response() function so the adapter contract is identical regardless
+_normalize() function so the adapter contract is identical regardless
 of where the response came from.
 """
 
@@ -12,11 +12,22 @@ import json
 import os
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
-
 
 FIRECRAWL_ENDPOINT = "/v2/scrape"
 FIRECRAWL_API = "https://api.firecrawl.dev"
+
+
+def _format_fixture_path(fixture_path: Path) -> str:
+    """Return a CWD-relative path string when possible, absolute otherwise.
+
+    Path.relative_to raises ValueError if the fixture isn't under cwd or if
+    one side is relative — fall back to the absolute path so we never crash
+    just to record provenance.
+    """
+    try:
+        return str(fixture_path.resolve().relative_to(Path.cwd().resolve()))
+    except ValueError:
+        return str(fixture_path.resolve())
 
 
 class FirecrawlScrapeError(Exception):
@@ -68,8 +79,8 @@ def _normalize(url: str, data: dict, *, fixture_path: Path | None = None,
         "url": url,
         "title": metadata.get("title", "") or "",
         "meta_description": metadata.get("description", "") or "",
-        "og_title": metadata.get("ogTitle", "") or metadata.get("title", "") or "",
-        "og_description": metadata.get("ogDescription", "") or metadata.get("description", "") or "",
+        "og_title": metadata.get("ogTitle", "") or metadata.get("title", ""),
+        "og_description": metadata.get("ogDescription", "") or metadata.get("description", ""),
         "h1": [],  # Firecrawl doesn't separately surface h1s; leave to enrich_scout fallback if needed.
         "image_urls": product_imgs[:40],
         "json_ld": [],  # Firecrawl already extracted structured data via schema; json_ld stays empty.
@@ -88,7 +99,7 @@ def _normalize(url: str, data: dict, *, fixture_path: Path | None = None,
             "scraper_version": "v2",
             "scraped_at": datetime.now(timezone.utc).isoformat(),
             "request_url": url,
-            "fixture_used": str(fixture_path.relative_to(Path.cwd())) if fixture_path else None,
+            "fixture_used": _format_fixture_path(fixture_path) if fixture_path else None,
             "forced_by": forced_by,
             "firecrawl_meta": firecrawl_meta or {"endpoint": FIRECRAWL_ENDPOINT},
         },
