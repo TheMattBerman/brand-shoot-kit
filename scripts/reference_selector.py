@@ -67,6 +67,13 @@ STRONG_NEGATIVE_TOKENS = {
     "bundle",
     "spotwear",
     "eyeprep",
+    "widget",
+    "widgets",
+    "beamimpact",
+    "nonprofit",
+    "chainnonprofit",
+    "causedisplayicon",
+    "cause",
 }
 
 MILD_NEGATIVE_TOKENS = {
@@ -124,6 +131,8 @@ def _structured_product_image_urls(scout: Dict[str, Any]) -> set[str]:
 
 
 def is_safe_reference_url(url: str) -> bool:
+    if "..." in url:
+        return False
     parsed = urlparse(url)
     if parsed.scheme not in {"http", "https"}:
         return False
