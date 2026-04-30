@@ -2,7 +2,8 @@
 """Generate Brand Shoot images from packet prompts.
 
 Default behavior is dry-run to avoid API spend. Use `--live` with OPENAI_API_KEY
-for provider-backed generation.
+for provider-backed generation. Use `--provider codex-native` to write an
+agent handoff for Codex native image generation without calling an API.
 """
 
 from __future__ import annotations
@@ -267,6 +268,12 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--prompts", help="Path to 04-generation-prompts.md")
     p.add_argument("--out", help="Generated assets directory (default: <packet>/assets/generated)")
     p.add_argument("--manifest", help="Generation manifest path (default: <out>/generation-manifest.json)")
+    p.add_argument(
+        "--provider",
+        choices=["dry-run", "codex-native"],
+        default="dry-run",
+        help="Generation provider mode (default: dry-run). `codex-native` writes an agent handoff.",
+    )
     p.add_argument("--live", action="store_true", help="Call OpenAI Images API (requires OPENAI_API_KEY)")
     p.add_argument("--model", default="gpt-image-2", help="OpenAI image model (live mode)")
     p.add_argument(
@@ -280,14 +287,18 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--prompt-overrides", help="JSON map of asset_id -> prompt override")
     p.add_argument(
         "--reference-image",
-        help="Reference image file path or URL; used in live mode and cached inside the packet",
+        help="Reference image file path or URL; cached inside the packet for live and codex-native runs",
     )
     p.add_argument(
         "--auto-reference-image",
         dest="auto_reference_image",
         action=argparse.BooleanOptionalAction,
         default=None,
-        help="Auto-select reference from scout.json image_evidence/image_urls for live packet runs",
+        help="Auto-select reference from scout.json image_evidence/image_urls for live/codex-native packet runs",
+    )
+    p.add_argument(
+        "--native-requests",
+        help="Codex native request handoff path (default: <out>/native-generation-requests.json)",
     )
     return p.parse_args()
 
@@ -436,24 +447,22 @@ def resolve_reference_image(
     source: Optional[str] = args.reference_image
     auto_selected = False
 
-    auto_default = bool(args.live and args.packet)
+    auto_default = bool(args.packet and mode in {"live", "codex-native"})
     auto_enabled = args.auto_reference_image if args.auto_reference_image is not None else auto_default
 
-    if not source and auto_enabled and mode == "live":
+    if not source and auto_enabled and mode in {"live", "codex-native"}:
         source = pick_auto_reference_url(packet_dir)
         if source:
             auto_selected = True
             notes.append("auto_reference_image:selected_from_scout")
         else:
             notes.append("auto_reference_image:no_safe_candidate_found")
-    elif not source and auto_enabled and mode != "live":
-        notes.append("auto_reference_image:skipped_non_live_mode")
 
     if not source:
         return None, None, notes, "none"
 
     try:
-        cached = cache_reference_image(source, packet_dir=packet_dir, allow_network=(mode == "live"))
+        cached = cache_reference_image(source, packet_dir=packet_dir, allow_network=(mode in {"live", "codex-native"}))
     except Exception as exc:
         notes.append(f"reference_image_error:{exc}")
         return None, source if is_url(source) else None, notes, "none"
@@ -464,8 +473,45 @@ def resolve_reference_image(
     return ref_path, ref_url, notes, source_mode
 
 
+def build_codex_native_request(
+    *,
+    shot: Dict[str, Any],
+    image_path: Path,
+    requested_ratio: str,
+    provider_size: str,
+    final_dimensions: Tuple[int, int],
+    reference_image_path: Optional[Path],
+    reference_image_url: Optional[str],
+) -> Dict[str, Any]:
+    return {
+        "asset_id": shot.get("asset_id"),
+        "shot_name": shot.get("shot_name"),
+        "channel": shot.get("channel") or shot.get("use_case"),
+        "ratio": shot.get("ratio"),
+        "requested_ratio": requested_ratio,
+        "provider_size": provider_size,
+        "final_dimensions": list(final_dimensions),
+        "prompt": shot.get("prompt"),
+        "negative_constraints": shot.get("negative_constraints", []),
+        "reference_image_path": str(reference_image_path) if reference_image_path else None,
+        "reference_image_url": reference_image_url,
+        "output_path": str(image_path),
+        "agent_instruction": (
+            "Codex: generate this product image using native image generation, preserve the "
+            "reference product exactly, write the PNG to output_path, then update generation-manifest.json "
+            "with status=generated, image_sha256, and postprocess/provenance notes."
+        ),
+    }
+
+
 def main() -> int:
     args = parse_args()
+    if args.live and args.provider != "dry-run":
+        print("error: --live cannot be combined with --provider codex-native", file=sys.stderr)
+        return 2
+    if args.live:
+        args.provider = "live"
+
     if args.size != "auto":
         try:
             parse_size(args.size)
@@ -478,6 +524,11 @@ def main() -> int:
     prompts_path = paths["prompts_path"]
     out_dir = paths["out_dir"]
     manifest_path = paths["manifest_path"]
+    native_requests_path = (
+        Path(args.native_requests).resolve()
+        if args.native_requests
+        else out_dir / "native-generation-requests.json"
+    )
 
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -507,13 +558,12 @@ def main() -> int:
     brand_product = read_brand_product(packet_dir / "00-brand-analysis.md")
 
     provider = None
-    mode = "dry-run"
-    if args.live:
+    mode = args.provider
+    if mode == "live":
         if not os.environ.get("OPENAI_API_KEY"):
             print("error: --live set but OPENAI_API_KEY is not available", file=sys.stderr)
             return 2
         provider = OpenAIImageProvider(os.environ["OPENAI_API_KEY"], args.model)
-        mode = "live"
 
     reference_image_path, reference_image_url, reference_notes, reference_mode = resolve_reference_image(
         args=args,
@@ -523,6 +573,7 @@ def main() -> int:
 
     run_stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     entries: List[Dict[str, Any]] = []
+    native_requests: List[Dict[str, Any]] = []
 
     for shot in shots:
         render_spec = resolve_render_spec(ratio=str(shot.get("ratio", "1:1")), requested_size=args.size)
@@ -539,7 +590,7 @@ def main() -> int:
                     **shot,
                     "status": "skipped-existing",
                     "provider": mode,
-                    "dry_run": mode != "live",
+                    "dry_run": mode == "dry-run",
                     "image_path": str(image_path),
                     "requested_ratio": requested_ratio,
                     "provider_size": provider_size,
@@ -554,7 +605,7 @@ def main() -> int:
             **shot,
             "status": "generated",
             "provider": mode,
-            "dry_run": mode != "live",
+            "dry_run": mode == "dry-run",
             "image_path": str(image_path),
             "requested_ratio": requested_ratio,
             "provider_size": provider_size,
@@ -579,6 +630,22 @@ def main() -> int:
             except Exception as exc:  # pragma: no cover
                 entry["status"] = "error"
                 entry["error"] = str(exc)
+        elif mode == "codex-native":
+            entry["status"] = "awaiting_agent_generation"
+            entry["requires_agent"] = True
+            entry["image_sha256"] = None
+            entry["postprocess_mode"] = "pending:codex-native-agent"
+            native_requests.append(
+                build_codex_native_request(
+                    shot=shot,
+                    image_path=image_path,
+                    requested_ratio=requested_ratio,
+                    provider_size=provider_size,
+                    final_dimensions=final_dimensions,
+                    reference_image_path=reference_image_path,
+                    reference_image_url=reference_image_url,
+                )
+            )
         else:
             write_placeholder(image_path, shot, final_dimensions)
             placeholder_bytes = image_path.read_bytes()
@@ -596,6 +663,7 @@ def main() -> int:
         "provider": mode,
         "model": args.model if mode == "live" else "none",
         "size": args.size,
+        "native_generation_requests_path": str(native_requests_path) if mode == "codex-native" else None,
         "reference_image_mode": reference_mode,
         "reference_image_path": str(reference_image_path) if reference_image_path else None,
         "reference_image_url": reference_image_url,
@@ -607,6 +675,30 @@ def main() -> int:
     }
 
     dump_json(manifest_path, run_payload)
+    if mode == "codex-native":
+        dump_json(
+            native_requests_path,
+            {
+                "run_id": run_payload["run_id"],
+                "timestamp_utc": run_stamp,
+                "provider": "codex-native",
+                "status": "awaiting_agent_generation",
+                "packet_dir": str(packet_dir),
+                "manifest_path": str(manifest_path),
+                "output_dir": str(out_dir),
+                "reference_image_mode": reference_mode,
+                "reference_image_path": str(reference_image_path) if reference_image_path else None,
+                "reference_image_url": reference_image_url,
+                "reference_image_notes": reference_notes,
+                "instructions": [
+                    "Use Codex native image generation for each request.",
+                    "Write each PNG to output_path at final_dimensions.",
+                    "Preserve product packaging, label hierarchy, geometry, and claims from the reference.",
+                    "After files are written, update generation-manifest.json entries from awaiting_agent_generation to generated.",
+                ],
+                "requests": native_requests,
+            },
+        )
     print(str(manifest_path))
     return 0
 

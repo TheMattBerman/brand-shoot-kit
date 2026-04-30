@@ -151,6 +151,7 @@ Manual override is always available via `--reference-image` on `generate-images.
 ## Live Spend Gates
 
 - Generation is dry by default. Live requires `--live` (`generate-images.py`) or `--live-confirm` (`run-live-proof.sh`).
+- Codex native generation is agent-mediated. Use `generate-images.py --provider codex-native` to write `assets/generated/native-generation-requests.json`; Codex must then generate files at the listed paths and update the manifest.
 - `run-live-proof.sh` requires both `--live-confirm` and `OPENAI_API_KEY`. Missing either fails fast.
 - `--max-shots` defaults small for proofs. Scaling to 12 is a deliberate choice after a 3-shot proof reads cleanly.
 - Reroll is dry by default. Use `--reroll live` only with intentional approval.

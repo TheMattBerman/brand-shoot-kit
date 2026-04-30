@@ -120,7 +120,7 @@ A packet is one run, one directory. Stage artifacts live at the packet root. Gen
 
 These exist so a single typo cannot accidentally bill a customer's API key.
 
-- **Generation is dry-run by default.** Live mode requires `--live` on `generate-images.py` or `--live-confirm` on `run-live-proof.sh`.
+- **Generation is dry-run by default.** Live mode requires `--live` on `generate-images.py` or `--live-confirm` on `run-live-proof.sh`. Codex native generation uses `--provider codex-native` and writes an agent handoff instead of calling a local API.
 - **`run-live-proof.sh` requires both `--live-confirm` and `OPENAI_API_KEY`.** Missing either one fails fast.
 - **`--max-shots` defaults to a small number for proofs.** Scaling to 12 shots is a deliberate choice after a 3-shot proof reads cleanly.
 - **Reroll is dry by default.** Use `--reroll live` only when you intentionally approve live reroll spend.
@@ -133,7 +133,7 @@ If you add a new stage that can spend money, follow the same pattern: dry by def
 These are product constraints, not style preferences. Violating them breaks the kit's core positioning around product truth.
 
 - **Reference imagery is real product imagery or the run does not start.** The reference selector prefers JSON-LD / Shopify product images and suppresses logos, nutrition panels, trust badges, review graphics, cross-sells, story / tout art, mug-or-beans-only coffee context, and accessories. If no real reference is available, surface that — do not fabricate.
-- **Generated images record their provenance.** Each generation entry must include `requested_ratio`, `provider_size`, `final_dimensions`, `postprocess_mode`, `reference_image_path`, `reference_image_url`, and `image_sha256`. The frontend reads these to prove what was made and what it was made from.
+- **Generated images record their provenance.** Each completed generation entry must include `requested_ratio`, `provider_size`, `final_dimensions`, `postprocess_mode`, `reference_image_path`, `reference_image_url`, and `image_sha256`. Codex native handoff entries may keep `image_sha256` null while `status=awaiting_agent_generation`. The frontend reads these to prove what was made and what it was made from.
 - **QA is the gate, not a suggestion.** Failures route to the reroll queue. Do not pass shots that fail the rubric just because the run is "almost done."
 - **Category guardrails travel with the prompt.** Coffee prompts enforce bag label / artwork dominance. Skincare prompts protect primary product fidelity. Supplements cover pouch / sachet / gummy formats. Cleaning kits preserve multi-product packaging consistency. New categories add a fixture, a few rules, and an eval — they do not touch the pipeline.
 - **The frontend is the deliverable.** If `index.html` does not exist or does not render the run cleanly, the packet is not done.

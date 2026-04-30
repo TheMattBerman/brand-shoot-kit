@@ -231,6 +231,17 @@ Manual override is always available:
   --reference-image ./path/to/product.png
 ```
 
+Codex native image generation is agent-mediated, not a local API call. To prepare a native handoff without spending API credits:
+
+```bash
+./scripts/generate-images.py \
+  --packet <packet-dir> \
+  --provider codex-native \
+  --limit 3
+```
+
+This writes `assets/generated/generation-manifest.json` plus `assets/generated/native-generation-requests.json`. Entries stay `awaiting_agent_generation` until Codex generates the files at the listed `output_path` values and updates provenance.
+
 ---
 
 ## QA + Reroll Loop

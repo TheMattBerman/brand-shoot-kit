@@ -9,6 +9,8 @@ import shutil
 import struct
 import subprocess
 import sys
+import importlib.util
+from argparse import Namespace
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -400,6 +402,98 @@ def eval_reference_image_manifest(errors: List[str]) -> None:
         assert_true(cache_path.exists(), "cached reference image file exists", errors)
 
 
+def eval_codex_native_handoff(errors: List[str]) -> None:
+    packet = run_packet_from_fixture("codex-native-handoff", FIXTURES / "scout-coffee.json")
+    proc = run(
+        [
+            "scripts/generate-images.py",
+            "--packet",
+            str(packet),
+            "--limit",
+            "2",
+            "--provider",
+            "codex-native",
+        ]
+    )
+    assert_true(proc.returncode == 0, "codex-native generation handoff command succeeds", errors)
+    if proc.returncode != 0:
+        return
+
+    manifest_path = packet / "assets" / "generated" / "generation-manifest.json"
+    requests_path = packet / "assets" / "generated" / "native-generation-requests.json"
+    assert_true(manifest_path.exists(), "codex-native manifest exists", errors)
+    assert_true(requests_path.exists(), "codex-native request handoff exists", errors)
+    if not manifest_path.exists() or not requests_path.exists():
+        return
+
+    manifest = load_json(manifest_path)
+    handoff = load_json(requests_path)
+    entries = manifest.get("entries") or []
+    requests = handoff.get("requests") or []
+    assert_true(manifest.get("provider") == "codex-native", "codex-native manifest records provider", errors)
+    assert_true(handoff.get("status") == "awaiting_agent_generation", "codex-native handoff awaits agent", errors)
+    assert_true(len(entries) == 2, "codex-native manifest respects shot limit", errors)
+    assert_true(len(requests) == 2, "codex-native handoff respects shot limit", errors)
+    assert_true(manifest.get("native_generation_requests_path") == str(requests_path), "manifest links native handoff", errors)
+
+    for entry, request in zip(entries, requests):
+        image_path = Path(str(entry.get("image_path", "")))
+        assert_true(entry.get("status") == "awaiting_agent_generation", "codex-native entry is pending", errors)
+        assert_true(entry.get("requires_agent") is True, "codex-native entry requires agent", errors)
+        assert_true(entry.get("dry_run") is False, "codex-native entry is not dry-run placeholder", errors)
+        assert_true(entry.get("postprocess_mode") == "pending:codex-native-agent", "codex-native entry has pending postprocess mode", errors)
+        assert_true(not image_path.exists(), "codex-native does not create placeholder image", errors)
+        assert_true(request.get("output_path") == str(image_path), "codex-native request points to entry image_path", errors)
+        assert_true(isinstance(request.get("prompt"), str) and request.get("prompt"), "codex-native request includes prompt", errors)
+
+
+def eval_codex_native_preserves_auto_reference(errors: List[str]) -> None:
+    module_path = ROOT / "scripts" / "generate-images.py"
+    if str(ROOT / "scripts") not in sys.path:
+        sys.path.insert(0, str(ROOT / "scripts"))
+    spec = importlib.util.spec_from_file_location("generate_images_for_eval", module_path)
+    assert_true(spec is not None and spec.loader is not None, "generate-images module loadable for reference eval", errors)
+    if spec is None or spec.loader is None:
+        return
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)  # type: ignore[union-attr]
+
+    packet = TMP / "codex-native-auto-reference"
+    packet.mkdir(parents=True, exist_ok=True)
+    cached_reference = packet / "assets" / "reference-images" / "cached-product.png"
+    cached_reference.parent.mkdir(parents=True, exist_ok=True)
+    cached_reference.write_bytes(b"reference")
+
+    original_pick = module.pick_auto_reference_url
+    original_cache = module.cache_reference_image
+    try:
+        module.pick_auto_reference_url = lambda _packet_dir: "https://cdn.example.com/images/product-packshot.png"
+        module.cache_reference_image = lambda source, *, packet_dir, allow_network: {
+            "reference_image_path": str(cached_reference),
+            "reference_image_url": source,
+        }
+        ref_path, ref_url, notes, source_mode = module.resolve_reference_image(
+            args=Namespace(reference_image=None, auto_reference_image=None, packet=str(packet)),
+            packet_dir=packet,
+            mode="codex-native",
+        )
+    finally:
+        module.pick_auto_reference_url = original_pick
+        module.cache_reference_image = original_cache
+
+    assert_true(ref_path == cached_reference, "codex-native auto reference is cached locally", errors)
+    assert_true(ref_url == "https://cdn.example.com/images/product-packshot.png", "codex-native auto reference keeps source URL", errors)
+    assert_true(source_mode == "auto", "codex-native auto reference records source mode", errors)
+    assert_true("reference_image_url:not_cached_for_codex_native_handoff" not in notes, "codex-native no longer skips URL caching", errors)
+
+
+def eval_live_generation_requires_live_flag(errors: List[str]) -> None:
+    packet = run_packet_from_fixture("provider-live-rejected", FIXTURES / "scout-coffee.json")
+    proc = run(["scripts/generate-images.py", "--packet", str(packet), "--provider", "live"])
+    assert_true(proc.returncode != 0, "--provider live is not accepted as a live-spend gate", errors)
+    assert_true("invalid choice" in proc.stderr, "--provider live reports invalid choice", errors)
+
+
 def eval_reference_selection_ranking(errors: List[str]) -> None:
     sys.path.insert(0, str(ROOT / "scripts"))
     from reference_selector import pick_auto_reference_url_from_scout  # type: ignore
@@ -408,6 +502,7 @@ def eval_reference_selection_ranking(errors: List[str]) -> None:
         "product_name": "Summit Roast Coffee",
         "brand_name": "Alpine Goods",
         "image_evidence": [
+            {"url": "https://production-beam-widgets.beamimpact.com/chains/img/chainNonprofit/causeDisplayIcon/c...", "confidence": 0.99, "rank": 0},
             {"url": "https://cdn.example.com/assets/logo.svg", "confidence": 0.97, "rank": 1},
             {"url": "https://cdn.example.com/images/nutrition-facts-panel.jpg", "confidence": 0.96, "rank": 2},
             {"url": "https://cdn.example.com/images/summit-roast-front-packshot.jpg", "confidence": 0.81, "rank": 4},
@@ -771,6 +866,9 @@ def main() -> int:
         eval_export_rendering_metadata(errors)
         eval_ratio_aware_generation_manifest(errors)
         eval_reference_image_manifest(errors)
+        eval_codex_native_handoff(errors)
+        eval_codex_native_preserves_auto_reference(errors)
+        eval_live_generation_requires_live_flag(errors)
         eval_reference_selection_ranking(errors)
         eval_review_artifact_packager(errors)
         eval_golden_bundle_completeness(errors)

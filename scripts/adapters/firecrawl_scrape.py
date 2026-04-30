@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import ssl
 import time
 import urllib.error
 import urllib.request
@@ -18,6 +19,11 @@ from pathlib import Path
 
 FIRECRAWL_ENDPOINT = "/v2/scrape"
 FIRECRAWL_API = "https://api.firecrawl.dev"
+
+try:  # pragma: no cover - depends on local Python install
+    import certifi  # type: ignore
+except Exception:  # pragma: no cover - certifi is optional
+    certifi = None  # type: ignore
 
 _PRODUCT_SCHEMA = {
     "type": "object",
@@ -79,8 +85,9 @@ def _post(url: str, *, api_key: str, timeout_s: float = 30.0) -> tuple[dict, int
             "User-Agent": "brand-shoot-kit/firecrawl-adapter",
         },
     )
+    context = ssl.create_default_context(cafile=certifi.where()) if certifi else None
     try:
-        with urllib.request.urlopen(req, timeout=timeout_s) as resp:
+        with urllib.request.urlopen(req, timeout=timeout_s, context=context) as resp:
             raw = resp.read()
             status = resp.status
         try:
